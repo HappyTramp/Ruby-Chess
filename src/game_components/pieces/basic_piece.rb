@@ -2,7 +2,7 @@
 class BasicPiece
   attr_reader :position, :color
 
-  def initialize(position, color=nil)
+  def initialize(position, color)
     @position = position
     @color = color
   end

@@ -26,8 +26,12 @@ class Board
   end
 
   def [](x, y)
-
+    return false if isIndexOutBoundarys?(x, y)
     @grid[x][y]
+  end
+
+  def []=(x, y, value)
+    @grid[x][y] = value unless isIndexOutBoundarys?(x, y)
   end
 
   ROW_SEPARATION = "  ├#{'───┼' * 7}───┤"
@@ -55,8 +59,8 @@ class Board
 
   private
 
-  def isIndexInBoundarys?(x, y)
-    return false if x < 0 || x > 7 || y < 0 || y > 7
-    return true
+  def isIndexOutBoundarys?(x, y)
+    return true if x < 0 || x > 7 || y < 0 || y > 7
+    false
   end
 end
