@@ -30,6 +30,7 @@ class Board
           when *knightPositions then Piece::Knight.new [i, j], color
           when *bishopPositions then Piece::Bishop.new [i, j], color
           when *pawnPositions   then Piece::Pawn.new [i, j], color
+          else EmptyCell.new [i, j]
         end
       end
     end

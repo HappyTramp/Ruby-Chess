@@ -9,10 +9,10 @@ require_relative '../test/game_components/testing_helpers'
 # out.map! { |el| el.to_s }
 # puts out.inspect
 
-r1 = [nil, Piece::King.new([3, 1], 'black'), Piece::Rook.new([3, 4], 'white')]
-r2 = [nil, Piece::King.new([3, 1], 'black'), Piece::Rook.new([3, 4], 'white')]
+r1 = [EmptyCell.new([1, 1]), Piece::King.new([3, 1], 'black'), Piece::Rook.new([3, 4], 'white')]
+r2 = [EmptyCell.new([1, 1]), Piece::King.new([3, 1], 'black'), Piece::Rook.new([3, 4], 'white')]
 
 puts deepPieceArrayEqual(r1, r2)
 
-# b = Board.new
-# puts b
+b = Board.new
+puts b[0, 3]

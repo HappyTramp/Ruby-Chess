@@ -13,4 +13,19 @@ module Piece
   Knight = Knight
   Bishop = Bishop
   Pawn = Pawn
+
+end
+
+
+class EmptyCell
+
+  attr_reader :position
+
+  def initialize(position)
+    @position = position
+  end
+
+  def nil?() true end
+
+  def to_s() '' end
 end
