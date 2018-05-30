@@ -1,0 +1,1 @@
+-P test/**/tc_*.rb -I src

@@ -5,6 +5,7 @@ require_relative './chess_pieces/knight'
 require_relative './chess_pieces/bishop'
 require_relative './chess_pieces/pawn'
 
+
 module Piece
   King = King
   Queen = Queen

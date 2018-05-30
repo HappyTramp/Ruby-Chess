@@ -1,22 +1,103 @@
 require 'game_components/pieces/basic_piece'
+require_relative '../testing_helpers.rb'
+require 'game_components/pieces/chess_pieces/king'
+
 
 describe BasicPiece do
-  describe '.initialize' do
-    basic_piece = BasicPiece.new([0, 0], 'black')
+  subject { BasicPiece.new [3, 3], 'black' } 
 
-    describe 'position attr' do
-      context 'with the position [0, 0]' do
+  describe '#initialize' do
+    it { expect(subject.position).to eql([3, 3]) }
+    it { expect(subject.color).to eql('black') }
+  end
 
-        it 'has the right position param' do
-          expect(basic_piece.position).to eql([0, 0])
-        end
-      end
+  describe 'private methods' do
+    let(:testing_board) do
+      TestingBoard.new(
+        rookModifiedPositions: [[3, 3]],
+        kingModifiedPositions: [[3, 1], [3, 6], [1, 3], [6, 3]])
+    end
+    before do
+      @left_side, @right_side =
+        subject.send(:horizontalCellsFromPosition, testing_board)
+      @up_side, @bellow_side =
+        subject.send(:verticalCellsFromPosition, testing_board)
     end
 
-    describe 'color attr' do
-      context 'with black color' do
-        it 'has the "black" color' do
-          expect(basic_piece.color).to eql('black')
+    describe '#horizontalCellsFromPosition' do
+      context '3rd element from the 3rd row' do
+        it 'return two list of cells (left and right) from the position' do
+          expect(
+            deepPieceArrayEqual(
+              [nil, King.new([3, 1], 'black'), nil],
+              @left_side)
+            ).to be true
+          
+          expect(
+            deepPieceArrayEqual(
+              [nil, nil, King.new([3, 6], 'black'), nil],
+              @right_side)
+            ).to be true
+          end
+        end
+      end
+      
+      describe '#verticalCellsFromPositions' do
+        context '3rd element from the 3rd' do
+          it 'return two list of cells (above and bellow) from the position' do
+            expect(
+              deepPieceArrayEqual(
+                [nil, King.new([1, 3], 'black'), nil],
+                @up_side)
+              ).to be true
+              
+            expect(
+              deepPieceArrayEqual(
+                [nil, nil, King.new([6, 3], 'white'), nil],
+                @bellow_side)
+              ).to be true
+            end
+          end
+        end
+        
+      describe '#filterSide' do
+        context 'left side' do
+          it 'return the cells with a possible movement' do
+            expect(
+              deepPieceArrayEqual(
+                [nil],
+                subject.send(:filterSide, @left_side))
+              ).to be true
+          end
+        end
+      
+      context 'right side' do
+        it 'return the cells with a possible movement' do
+          expect(
+            deepPieceArrayEqual(
+              [nil, nil],
+              subject.send(:filterSide, @right_side))
+            ).to be true
+        end
+      end
+          
+      context 'up side' do
+        it 'return the cells with a possible movement' do
+          expect(
+            deepPieceArrayEqual(
+              [nil],
+              subject.send(:filterSide, @up_side))
+            ).to be true
+        end
+      end
+           
+      context 'bellow side' do
+        it 'return the cells with a possible movement' do
+          expect(
+            deepPieceArrayEqual(
+              [nil, nil, King.new([6, 3], 'white')],
+              subject.send(:filterSide, @bellow_side))
+            ).to be true
         end
       end
     end
