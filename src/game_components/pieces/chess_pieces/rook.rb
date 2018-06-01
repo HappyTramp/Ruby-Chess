@@ -1,6 +1,5 @@
 require_relative '../basic_piece'
 
-
 # class of a Rook
 class Rook < BasicPiece
   def to_s
@@ -8,17 +7,15 @@ class Rook < BasicPiece
   end
 
   # @returns the list of position where the rook can move
-  def possibilitiesList(board)
-    left_side, right_side = horizontalCellsFromPosition(board)
-    up_side, bellow_side = verticalCellsFromPosition(board)
+  def get_possible_moves(board)
+    left_side, right_side = horizontal_cells_from_position(board)
+    up_side, bellow_side = vertical_cells_from_position(board)
 
     [
-      *filterSide(left_side),
-      *filterSide(right_side),
-      *filterSide(up_side),
-      *filterSide(bellow_side)
-    ].map do |cell|
-      cell.position
-    end
+      *filter_side(left_side),
+      *filter_side(right_side),
+      *filter_side(up_side),
+      *filter_side(bellow_side)
+    ].map(&:position)
   end
 end

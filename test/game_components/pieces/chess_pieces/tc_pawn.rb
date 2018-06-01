@@ -8,7 +8,7 @@ describe Pawn do
         expect(pawn.to_s).to eql('♟')
       end
     end
-    
+
     context 'white color' do
       it 'return a correct repr' do
         pawn = Pawn.new([0, 0], 'white')
@@ -16,5 +16,4 @@ describe Pawn do
       end
     end
   end
-
 end

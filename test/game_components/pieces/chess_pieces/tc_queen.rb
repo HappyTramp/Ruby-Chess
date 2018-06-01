@@ -8,7 +8,7 @@ describe Queen do
         expect(queen.to_s).to eql('♛')
       end
     end
-    
+
     context 'white color' do
       it 'return a correct repr' do
         queen = Queen.new([0, 0], 'white')
@@ -16,5 +16,4 @@ describe Queen do
       end
     end
   end
-
 end

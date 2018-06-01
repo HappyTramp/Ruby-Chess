@@ -7,7 +7,7 @@ class Bishop < BasicPiece
   end
 
   # @returns the list of position where the queen can move
-  def possibilitiesList(board)
-
-  end  
+  def get_possible_moves(board)
+    
+  end
 end

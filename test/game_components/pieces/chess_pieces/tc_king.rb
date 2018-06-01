@@ -8,7 +8,7 @@ describe King do
         expect(king.to_s).to eql('♚')
       end
     end
-    
+
     context 'white color' do
       it 'return a correct repr' do
         king = King.new([0, 0], 'white')
@@ -16,5 +16,4 @@ describe King do
       end
     end
   end
-
 end

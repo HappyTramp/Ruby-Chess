@@ -7,7 +7,7 @@ class Queen < BasicPiece
   end
 
   # @returns the list of position where the queen can move
-  def possibilitiesList(board)
+  def get_possible_moves(board)
 
   end
 end

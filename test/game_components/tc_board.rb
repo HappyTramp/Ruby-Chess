@@ -2,10 +2,9 @@ require 'game_components/board.rb'
 require 'game_components/pieces/pieces'
 require_relative './testing_helpers.rb'
 
-
 describe Board do
   describe '#initialize' do
-    let (:initial_grid) do
+    let(:initial_grid) do
       [
         [
           Piece::Rook.new([0, 0], 'black'),
@@ -39,7 +38,7 @@ describe Board do
       it 'create a 8x8 empty board (2D array)' do
         subject.grid.each.with_index do |row, i|
           row.each.with_index do |cell, j|
-            if !cell.nil?
+            unless cell.nil?
               expect(cell.class).to eql(initial_grid[i][j].class)
               expect(cell.position).to eql(initial_grid[i][j].position)
               expect(cell.color).to eql(initial_grid[i][j].color)
@@ -53,10 +52,10 @@ describe Board do
         expect(subject.grid[1][0]).to_not be true
       end
     end
-    
+
     context 'modified pieces configuration' do
       it 'create a grid with the given positions' do
-        modified_grid = Board.new(queenPositions: [[0, 0]], rookPositions: []).grid
+        modified_grid = Board.new(queen_positions: [[0, 0]], rook_positions: []).grid
         initial_modified_grid =
           initial_grid.map do |row|
             row.map do |cell|
@@ -64,10 +63,10 @@ describe Board do
             end
           end
         initial_modified_grid[0][0] = Piece::Queen.new [0, 0], 'black'
-    
+
         modified_grid.each.with_index do |row, i|
           row.each.with_index do |cell, j|
-            if !cell.nil?
+            unless cell.nil?
               expect(cell.class).to eql(initial_modified_grid[i][j].class)
               expect(cell.position).to eql(initial_modified_grid[i][j].position)
               expect(cell.color).to eql(initial_modified_grid[i][j].color)
@@ -98,7 +97,7 @@ describe Board do
         end
       end
     end
-    
+
     describe '#[]=' do
       context 'happy path' do
         it 'set the cell to the given value' do
@@ -113,8 +112,7 @@ describe Board do
           subject_copy = subject.clone
           subject[-1, 0] = nil
           expect(subject_copy.grid).to eql subject.grid
-          
-          subject_copy2 = subject.clone
+
           subject[0, 8] = nil
           expect(subject_copy.grid).to eql subject.grid
         end
@@ -122,73 +120,81 @@ describe Board do
     end
   end
 
-  describe '#getRow' do
+  describe '#get_row' do
     context 'with row 0' do
       it 'return the first row' do
-        expect(subject.getRow(0)).to eql(subject.grid[0])
+        expect(subject.get_row(0)).to eql(subject.grid[0])
       end
     end
   end
 
-  describe '#getColumn' do
+  describe '#get_column' do
     context 'with col 0' do
       it 'return the first col' do
-        expect(subject.getColumn(0)).to eql(subject.grid.transpose[0])
+        expect(subject.get_column(0)).to eql(subject.grid.transpose[0])
       end
     end
   end
 
-  describe '#getDiagonal' do
-    let(:diagonal33) { [
-      Piece::Pawn.new([6, 0], 'white'),
-      nil, nil, nil, nil,
-      Piece::Pawn.new([1, 5], 'black'), Piece::Knight.new([0, 6], 'black')
-    ] }
-    let(:diagonal52) { [
-      Piece::Rook.new([7, 0], 'white'), Piece::Pawn.new([6, 1], 'white'),
-      nil, nil, nil, nil,
-      Piece::Pawn.new([1, 6], 'black'), Piece::Rook.new([0, 7], 'black')
-    ] }
-
+  describe '#get_diagonal' do
+    let(:diagonal33) do
+      [
+        Piece::Pawn.new([6, 0], 'white'),
+        nil, nil, nil, nil,
+        Piece::Pawn.new([1, 5], 'black'), Piece::Knight.new([0, 6], 'black')
+      ]
+    end
+    let(:diagonal52) do
+      [
+        Piece::Rook.new([7, 0], 'white'), Piece::Pawn.new([6, 1], 'white'),
+        nil, nil, nil, nil,
+        Piece::Pawn.new([1, 6], 'black'), Piece::Rook.new([0, 7], 'black')
+      ]
+    end
     context 'with position [3, 3]' do
       it 'return the diagonal that pass throught it' do
         expect(
-          pieceArrayDeepEqual(
+          piece_array_deep_equal(
             diagonal33,
-            subject.getDiagonal(3, 3))
+            subject.get_diagonal(3, 3)
+          )
         ).to be true
       end
     end
-    
+
     context 'with position [5, 2]' do
       it 'return the diagonal that pass throught it' do
         expect(
-          pieceArrayDeepEqual(
+          piece_array_deep_equal(
             diagonal52,
-            subject.getDiagonal(5, 2))
+            subject.get_diagonal(5, 2)
+          )
         ).to be true
       end
     end
   end
-  
-  
-  describe '#getAntiDiagonal' do
-    let(:diagonal06) { [
-      Piece::Knight.new([0, 6], 'black'),
-      Piece::Pawn.new([1, 7], 'black')
-    ] }
-    let(:diagonal45) { [
-      Piece::Knight.new([0, 1], 'black'), Piece::Pawn.new([1, 2], 'black'),
-      nil, nil, nil, nil,
-      Piece::Pawn.new([6, 7], 'white')
-    ] }
 
+  describe '#get_anti_diagonal' do
+    let(:diagonal06) do
+      [
+        Piece::Knight.new([0, 6], 'black'),
+        Piece::Pawn.new([1, 7], 'black')
+      ]
+    end
+    let(:diagonal45) do
+      [
+        Piece::Knight.new([0, 1], 'black'), Piece::Pawn.new([1, 2], 'black'),
+        nil, nil, nil, nil,
+        Piece::Pawn.new([6, 7], 'white')
+      ]
+    end
     context 'with position [0, 6]' do
       it 'return the anti diagonal that pass throught it' do
         expect(
-          pieceArrayDeepEqual(
+          piece_array_deep_equal(
             diagonal06,
-            subject.getAntiDiagonal(0, 6))
+            subject.get_anti_diagonal(0, 6)
+          )
         ).to be true
       end
     end
@@ -196,92 +202,91 @@ describe Board do
     context 'with position [4, 5]' do
       it 'return the anti diagonal that pass throught it' do
         expect(
-          pieceArrayDeepEqual(
+          piece_array_deep_equal(
             diagonal45,
-            subject.getAntiDiagonal(4, 5))
+            subject.get_anti_diagonal(4, 5)
+          )
         ).to be true
       end
     end
   end
-  
 
   describe 'private methods' do
-
-    describe '#indexIsOutBorder?' do
+    describe '#index_out_border?' do
       context 'out of borders indexs' do
         it 'return true' do
-          expect(subject.send :indexIsOutBorder?, -1, 0)
+          expect(subject.send(:index_out_border?, -1, 0))
             .to be true
-          expect(subject.send :indexIsOutBorder?, 0, -1)
+          expect(subject.send(:index_out_border?, 0, -1))
             .to be true
-          expect(subject.send :indexIsOutBorder?, 8, 0)
+          expect(subject.send(:index_out_border?, 8, 0))
             .to be true
-          expect(subject.send :indexIsOutBorder?, 0, 8)
+          expect(subject.send(:index_out_border?, 0, 8))
             .to be true
         end
       end
-      
+
       context 'in borders indexs' do
         it 'return false' do
-          expect(subject.send :indexIsOutBorder?, 0, 0)
+          expect(subject.send(:index_out_border?, 0, 0))
             .to be false
-          expect(subject.send :indexIsOutBorder?, 7, 0)
+          expect(subject.send(:index_out_border?, 7, 0))
             .to be false
-          expect(subject.send :indexIsOutBorder?, 0, 7)
+          expect(subject.send(:index_out_border?, 0, 7))
             .to be false
         end
       end
     end
 
-    describe '#findDiagonalOrigin' do
+    describe '#find_diagonal_origin' do
       context 'diagonal' do
         it '[3, 3] index' do
-          expect(subject.send :findDiagonalOrigin, 3, 3)
+          expect(subject.send(:find_diagonal_origin, 3, 3))
             .to eql [6, 0]
-          end
+        end
         it '[6, 7] index' do
-          expect(subject.send :findDiagonalOrigin, 6, 7)
+          expect(subject.send(:find_diagonal_origin, 6, 7))
             .to eql [7, 6]
         end
       end
 
       context 'anti diagonal' do
         it '[5, 7] index' do
-          expect(subject.send :findDiagonalOrigin, 5, 7, anti: true)
+          expect(subject.send(:find_diagonal_origin, 5, 7, anti: true))
             .to eql [0, 2]
         end
         it '[6, 2]' do
-          expect(subject.send :findDiagonalOrigin, 6, 2, anti: true)
+          expect(subject.send(:find_diagonal_origin, 6, 2, anti: true))
             .to eql [4, 0]
         end
       end
     end
   end
 
-
   describe '#to_s' do
     subject = Board.new
     context 'initial configuration' do
       it 'return stringify grid' do
         expect(subject.to_s).to eql(
-            "     a   b   c   d   e   f   g   h\n"\
-            "   ┌───┬───┬───┬───┬───┬───┬───┬───┐\n"\
-            " 1 │ ♜ │ ♞ │ ♝ │ ♛ │ ♚ │ ♝ │ ♞ │ ♜ │\n"\
-            "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-            " 2 │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │\n"\
-            "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-            " 3 │   │   │   │   │   │   │   │   │\n"\
-            "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-            " 4 │   │   │   │   │   │   │   │   │\n"\
-            "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-            " 5 │   │   │   │   │   │   │   │   │\n"\
-            "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-            " 6 │   │   │   │   │   │   │   │   │\n"\
-            "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-            " 7 │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │\n"\
-            "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-            " 8 │ ♖ │ ♘ │ ♗ │ ♕ │ ♔ │ ♗ │ ♘ │ ♖ │\n"\
-            "   └───┴───┴───┴───┴───┴───┴───┴───┘")
+          "     a   b   c   d   e   f   g   h\n"\
+          "   ┌───┬───┬───┬───┬───┬───┬───┬───┐\n"\
+          " 1 │ ♜ │ ♞ │ ♝ │ ♛ │ ♚ │ ♝ │ ♞ │ ♜ │\n"\
+          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+          " 2 │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │\n"\
+          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+          " 3 │   │   │   │   │   │   │   │   │\n"\
+          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+          " 4 │   │   │   │   │   │   │   │   │\n"\
+          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+          " 5 │   │   │   │   │   │   │   │   │\n"\
+          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+          " 6 │   │   │   │   │   │   │   │   │\n"\
+          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+          " 7 │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │\n"\
+          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+          " 8 │ ♖ │ ♘ │ ♗ │ ♕ │ ♔ │ ♗ │ ♘ │ ♖ │\n"\
+          "   └───┴───┴───┴───┴───┴───┴───┴───┘"
+        )
       end
     end
 
@@ -308,7 +313,8 @@ describe Board do
           " 7 │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │\n"\
           "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
           " 8 │ ♖ │ ♘ │ ♗ │ ♕ │ ♔ │ ♗ │ ♘ │ ♖ │\n"\
-          "   └───┴───┴───┴───┴───┴───┴───┴───┘")
+          "   └───┴───┴───┴───┴───┴───┴───┴───┘"
+        )
       end
     end
   end
