@@ -25,6 +25,20 @@ describe Rook do
         kingModifiedPositions: [[3, 1], [3, 6], [1, 3], [6, 3]]
       )
     end
+    let(:corner_up_left_rook) { Rook.new [0, 0], 'black' }
+    let(:corner_up_left_board) do
+      TestingBoard.new(
+        rookModifiedPositions: [[0, 0]],
+        kingModifiedPositions: [[0, 3], [3, 0]]
+        )
+    end
+    let(:corner_down_right_rook) { Rook.new [7, 7], 'white' }
+    let(:corner_down_right_board) do
+      TestingBoard.new(
+        rookModifiedPositions: [[7, 7]],
+        kingModifiedPositions: [[7, 5], [5, 7]]
+      )
+    end
 
     context 'alone in the middle of the board' do
       it 'return a list on the vertical and horizontal axes of the rook' do
@@ -37,7 +51,7 @@ describe Rook do
       end
     end
     
-    context 'alone, enemy blocking border cell' do
+    context 'pieces blocking border cells' do
       it 'return a list of position with the enemy pieces'\
          ' and without the ally one and the cell on the borders' do
         expected_possibilities_list =
@@ -46,6 +60,20 @@ describe Rook do
         
         expect(rook.possibilitiesList(pieces_blocking_board))
         .to contain_exactly(*expected_possibilities_list)
+      end
+    end
+
+    context 'in the up left corner, pieces blocking' do
+      it 'not fail because of the boarder' do
+        expect(corner_up_left_rook.possibilitiesList(corner_up_left_board))
+        .to contain_exactly([0, 1], [0, 2], [1, 0], [2, 0])
+      end
+    end
+    
+    context 'in the down right corner, pieces blocking' do
+      it 'not fail because of the boarder' do
+        expect(corner_down_right_rook.possibilitiesList(corner_down_right_board))
+        .to contain_exactly([7, 6], [6, 7])
       end
     end
   end

@@ -15,4 +15,4 @@ r2 = [EmptyCell.new([1, 1]), Piece::King.new([3, 1], 'black'), Piece::Rook.new([
 puts deepPieceArrayEqual(r1, r2)
 
 b = Board.new
-puts b[0, 3]
+puts b

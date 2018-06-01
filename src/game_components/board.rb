@@ -21,7 +21,7 @@ class Board
 
     @grid.map!.with_index do |row, i|
       row.map!.with_index do |_, j|
-        color = i < 5 ? 'black' : 'white'
+        color = i <= 4 ? 'black' : 'white'
 
         case [i, j]
           when *kingPositions   then Piece::King.new [i, j], color
@@ -60,6 +60,7 @@ class Board
 
   # string representation of the board
   def to_s
+    # array of row string representation
     grid_to_string = [
       "     #{('a'..'h').to_a.join('   ')}",
       "   ┌#{'───┬' * 7}───┐"
@@ -69,12 +70,12 @@ class Board
       row_to_string = " #{i + 1} │"
 
       row.each.with_index do |cell, j|
-        row_to_string << " #{cell.nil? ? ' ' : cell} │"
+        row_to_string << " #{cell} │"
       end
 
       grid_to_string.push(
         row_to_string,
-        i == 7 ? "   └#{'───┴' * 7}───┘" : ROW_SEPARATION
+        i != 7 ? ROW_SEPARATION : "   └#{'───┴' * 7}───┘"
       )
     end
 

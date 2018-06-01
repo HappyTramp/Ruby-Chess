@@ -195,7 +195,7 @@ describe Board do
 
     context 'some pieces moved' do
       it 'return an accurate stringify grid according to the changes' do
-        subject.grid[0][0] = nil
+        subject.grid[0][0] = EmptyCell.new [0, 0]
         subject.grid[1][1] = Piece::Rook.new [1, 1], 'white'
         subject.grid[3][3] = Piece::King.new [3, 3], 'black'
         expect(subject.to_s).to eql(

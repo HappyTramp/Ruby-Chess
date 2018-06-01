@@ -17,10 +17,12 @@ class BasicPiece
   def horizontalCellsFromPosition(board)
     row = board.getRow(@position[0])
     
-    left_side = row.reverse[-@position[1]..-1]
-    right_side = row[-@position[1] - 1..-1]
+    # /!\ in ruby, there is a difference between a[i, j] and a[i..j]
+    # (https://devdocs.io/ruby~2.4/array#method-i-5B-5D)
+    left_side = row.reverse[@position[1] != 0 ? -@position[1] : 7, 7]    
+    right_side = row[@position[1] + 1..7]
     
-    [left_side, right_side]    
+    [left_side, right_side]   
   end
   
   # @returns two arrays of the cell up and bellow
@@ -28,10 +30,10 @@ class BasicPiece
   def verticalCellsFromPosition(board)
     column = board.getColumn(@position[1])
 
-    up_side = column.reverse[-@position[0]..-1]
-    bellow_side = column[-position[0] - 1..-1]
+    up_side = column.reverse[@position[0] != 0 ? -@position[0] : 7, 7]
+    down_side = column[@position[0] + 1..7]
 
-    [up_side, bellow_side]
+    [up_side, down_side]
   end
 
   # @returns the cell that are accessible from the piece position
