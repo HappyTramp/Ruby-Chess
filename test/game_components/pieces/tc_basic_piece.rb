@@ -1,6 +1,6 @@
 require 'game_components/pieces/basic_piece'
-require_relative '../testing_helpers.rb'
 require 'game_components/pieces/chess_pieces/king'
+require_relative '../testing_helpers.rb'
 
 
 describe BasicPiece do
@@ -28,13 +28,13 @@ describe BasicPiece do
       context '3rd element from the 3rd row' do
         it 'return two list of cells (left and right) from the position' do
           expect(
-            deepPieceArrayEqual(
+            pieceArrayDeepEqual(
               [nil, King.new([3, 1], 'black'), nil],
               @left_side)
             ).to be true
           
           expect(
-            deepPieceArrayEqual(
+            pieceArrayDeepEqual(
               [nil, nil, King.new([3, 6], 'black'), nil],
               @right_side)
             ).to be true
@@ -46,13 +46,13 @@ describe BasicPiece do
         context '3rd element from the 3rd' do
           it 'return two list of cells (above and bellow) from the position' do
             expect(
-              deepPieceArrayEqual(
+              pieceArrayDeepEqual(
                 [nil, King.new([1, 3], 'black'), nil],
                 @up_side)
               ).to be true
               
             expect(
-              deepPieceArrayEqual(
+              pieceArrayDeepEqual(
                 [nil, nil, King.new([6, 3], 'white'), nil],
                 @bellow_side)
               ).to be true
@@ -64,7 +64,7 @@ describe BasicPiece do
         context 'left side' do
           it 'return the cells with a possible movement' do
             expect(
-              deepPieceArrayEqual(
+              pieceArrayDeepEqual(
                 [nil],
                 subject.send(:filterSide, @left_side))
               ).to be true
@@ -74,7 +74,7 @@ describe BasicPiece do
       context 'right side' do
         it 'return the cells with a possible movement' do
           expect(
-            deepPieceArrayEqual(
+            pieceArrayDeepEqual(
               [nil, nil],
               subject.send(:filterSide, @right_side))
             ).to be true
@@ -84,7 +84,7 @@ describe BasicPiece do
       context 'up side' do
         it 'return the cells with a possible movement' do
           expect(
-            deepPieceArrayEqual(
+            pieceArrayDeepEqual(
               [nil],
               subject.send(:filterSide, @up_side))
             ).to be true
@@ -94,7 +94,7 @@ describe BasicPiece do
       context 'bellow side' do
         it 'return the cells with a possible movement' do
           expect(
-            deepPieceArrayEqual(
+            pieceArrayDeepEqual(
               [nil, nil, King.new([6, 3], 'white')],
               subject.send(:filterSide, @bellow_side))
             ).to be true

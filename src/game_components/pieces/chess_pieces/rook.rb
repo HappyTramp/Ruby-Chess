@@ -7,6 +7,7 @@ class Rook < BasicPiece
     @color == 'white' ? '♖' : '♜'
   end
 
+  # @returns the list of position where the rook can move
   def possibilitiesList(board)
     left_side, right_side = horizontalCellsFromPosition(board)
     up_side, bellow_side = verticalCellsFromPosition(board)

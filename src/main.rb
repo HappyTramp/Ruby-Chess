@@ -12,7 +12,7 @@ require_relative '../test/game_components/testing_helpers'
 r1 = [EmptyCell.new([1, 1]), Piece::King.new([3, 1], 'black'), Piece::Rook.new([3, 4], 'white')]
 r2 = [EmptyCell.new([1, 1]), Piece::King.new([3, 1], 'black'), Piece::Rook.new([3, 4], 'white')]
 
-puts deepPieceArrayEqual(r1, r2)
+puts pieceArrayDeepEqual(r1, r2)
 
 b = Board.new
 puts b

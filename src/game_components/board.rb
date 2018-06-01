@@ -49,13 +49,39 @@ class Board
   end
 
   # @returns the row at the x index
-  def getRow(index)
-    @grid[index]
+  def getRow(x)
+    @grid[x]
   end
   
   # @returns the column at the y index
-  def getColumn(index)
-    @grid.transpose[index]
+  def getColumn(y)
+    @grid.transpose[y]
+  end
+
+  # @returns the diagonal at the x, y index
+  def getDiagonal(x, y)
+    x, y = findDiagonalOrigin(x, y)
+    diag = [self[x, y]]
+    until x == 0 || y == 7
+      x -= 1
+      y += 1
+      diag << self[x, y]
+    end
+
+    diag
+  end
+  
+  # @returns the anti diagonal at the x, y index
+  def getAntiDiagonal(x, y)
+    x, y = findDiagonalOrigin(x, y, anti: true)
+    a_diag = [self[x, y]]
+    until x == 7 || y == 7
+      x += 1
+      y += 1
+      a_diag << self[x, y]
+    end
+
+    a_diag
   end
 
   # string representation of the board
@@ -90,4 +116,17 @@ class Board
     return true if x < 0 || x > 7 || y < 0 || y > 7
     false
   end
+
+  # @returns the origin of the (anti) diagonal at the [x, y] index
+  def findDiagonalOrigin(x, y, anti: false)
+    x_min, x_modifier = anti ? [0, -1] : [7, 1]
+    # looping backward in diagonal until the origin is found
+    until x == x_min || y == 0
+      x += x_modifier
+      y -= 1
+    end
+
+    [x, y]
+  end
+
 end

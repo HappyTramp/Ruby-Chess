@@ -49,7 +49,7 @@ end
 
 # deeply compare two array of pieces.
 # @returns true if they are deep equal
-def deepPieceArrayEqual(array1, array2)
+def pieceArrayDeepEqual(array1, array2)
   array1.zip(array2).each do |zip_elts|
     return false unless comparePieces(*zip_elts)
   end

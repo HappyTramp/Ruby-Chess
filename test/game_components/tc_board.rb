@@ -1,5 +1,7 @@
 require 'game_components/board.rb'
 require 'game_components/pieces/pieces'
+require_relative './testing_helpers.rb'
+
 
 describe Board do
   describe '#initialize' do
@@ -135,6 +137,72 @@ describe Board do
       end
     end
   end
+
+  describe '#getDiagonal' do
+    let(:diagonal33) { [
+      Piece::Pawn.new([6, 0], 'white'),
+      nil, nil, nil, nil,
+      Piece::Pawn.new([1, 5], 'black'), Piece::Knight.new([0, 6], 'black')
+    ] }
+    let(:diagonal52) { [
+      Piece::Rook.new([7, 0], 'white'), Piece::Pawn.new([6, 1], 'white'),
+      nil, nil, nil, nil,
+      Piece::Pawn.new([1, 6], 'black'), Piece::Rook.new([0, 7], 'black')
+    ] }
+
+    context 'with position [3, 3]' do
+      it 'return the diagonal that pass throught it' do
+        expect(
+          pieceArrayDeepEqual(
+            diagonal33,
+            subject.getDiagonal(3, 3))
+        ).to be true
+      end
+    end
+    
+    context 'with position [5, 2]' do
+      it 'return the diagonal that pass throught it' do
+        expect(
+          pieceArrayDeepEqual(
+            diagonal52,
+            subject.getDiagonal(5, 2))
+        ).to be true
+      end
+    end
+  end
+  
+  
+  describe '#getAntiDiagonal' do
+    let(:diagonal06) { [
+      Piece::Knight.new([0, 6], 'black'),
+      Piece::Pawn.new([1, 7], 'black')
+    ] }
+    let(:diagonal45) { [
+      Piece::Knight.new([0, 1], 'black'), Piece::Pawn.new([1, 2], 'black'),
+      nil, nil, nil, nil,
+      Piece::Pawn.new([6, 7], 'white')
+    ] }
+
+    context 'with position [0, 6]' do
+      it 'return the anti diagonal that pass throught it' do
+        expect(
+          pieceArrayDeepEqual(
+            diagonal06,
+            subject.getAntiDiagonal(0, 6))
+        ).to be true
+      end
+    end
+
+    context 'with position [4, 5]' do
+      it 'return the anti diagonal that pass throught it' do
+        expect(
+          pieceArrayDeepEqual(
+            diagonal45,
+            subject.getAntiDiagonal(4, 5))
+        ).to be true
+      end
+    end
+  end
   
 
   describe 'private methods' do
@@ -161,6 +229,30 @@ describe Board do
             .to be false
           expect(subject.send :indexIsOutBorder?, 0, 7)
             .to be false
+        end
+      end
+    end
+
+    describe '#findDiagonalOrigin' do
+      context 'diagonal' do
+        it '[3, 3] index' do
+          expect(subject.send :findDiagonalOrigin, 3, 3)
+            .to eql [6, 0]
+          end
+        it '[6, 7] index' do
+          expect(subject.send :findDiagonalOrigin, 6, 7)
+            .to eql [7, 6]
+        end
+      end
+
+      context 'anti diagonal' do
+        it '[5, 7] index' do
+          expect(subject.send :findDiagonalOrigin, 5, 7, anti: true)
+            .to eql [0, 2]
+        end
+        it '[6, 2]' do
+          expect(subject.send :findDiagonalOrigin, 6, 2, anti: true)
+            .to eql [4, 0]
         end
       end
     end
