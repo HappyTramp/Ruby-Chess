@@ -11,7 +11,6 @@ class BasicPiece
   private
 
   def get_grouped_sides_of(board, *orientations)
-    puts orientations
     orientations.flat_map do |orientation|
       get_sides_of(board, orientation)
     end
@@ -62,5 +61,15 @@ class BasicPiece
     end
 
     filtered_side
+  end
+
+  def valid_cell?(cell)
+    return false if cell == false
+
+    case
+    when cell.nil? then true
+    when cell.color == @color then false
+    when cell.color != @color then true
+    end
   end
 end

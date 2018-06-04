@@ -2,20 +2,6 @@ require 'game_components/pieces/chess_pieces/rook'
 require_relative '../../testing_helpers'
 
 describe Rook do
-  describe 'representation' do
-    context 'black color' do
-      it 'return a correct repr' do
-        expect(Rook.new([0, 0], 'black').to_s).to eql('♜')
-      end
-    end
-
-    context 'white color' do
-      it 'return a correct repr' do
-        expect(Rook.new([0, 0], 'white').to_s).to eql('♖')
-      end
-    end
-  end
-
   describe '#get_possible_moves' do
     let(:rook) { Rook.new [3, 3], 'black' }
     let(:solo_board) { TestingBoard.new(rook_modified_positions: [[3, 3]]) }

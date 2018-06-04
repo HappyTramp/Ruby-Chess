@@ -30,7 +30,7 @@ describe BasicPiece do
     let(:right_side) { [nil, nil, King.new([3, 6], 'black'), nil] }
     let(:up_side) { [nil, King.new([1, 3], 'black'), nil] }
     let(:down_side) { [nil, nil, King.new([6, 3], 'white'), nil] }
-    let(:diag_up_side) {  [nil, King.new([1, 5], 'black'), nil] }
+    let(:diag_up_side) { [nil, King.new([1, 5], 'black'), nil] }
     let(:diag_down_side) { [nil, King.new([5, 1], 'white'), nil] }
     let(:anti_diag_up_side) { [nil, nil, King.new([0, 0], 'black')] }
     let(:anti_diag_down_side) { [nil, nil, King.new([6, 6], 'white'), nil] }
@@ -91,6 +91,17 @@ describe BasicPiece do
 
       context 'anti diagonal down side' do
         it { expect(filter_anti_diag_down_side).to equal_piece_array([nil, nil, King.new([6, 6], 'white')]) }
+      end
+    end
+
+    describe '#valid_cell?' do
+      context 'the cell is nil or enemy color' do
+        it { expect(subject.send(:valid_cell?, King.new([0, 0], 'white'))).to be true }
+        it { expect(subject.send(:valid_cell?, nil)).to be true }
+      end
+      context 'the cell is the same color or false' do
+        it { expect(subject.send(:valid_cell?, King.new([0, 0], 'black'))).to be false }
+        it { expect(subject.send(:valid_cell?, false)).to be false }
       end
     end
   end

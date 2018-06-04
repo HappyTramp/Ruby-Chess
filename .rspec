@@ -1,1 +1,1 @@
--P test/**/tc_*.rb -I src
+-I src -P test/**/tc_*.rb

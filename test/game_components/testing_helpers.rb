@@ -37,12 +37,19 @@ RSpec::Matchers.define :equal_piece_array do |expected|
   end
 
   failure_message do |actual|
-    "expected: #{piece_array_pretty(expected)}\ngot: #{piece_array_pretty(actual)}"
+    "expected: #{piece_array_pretty(expected)}\n"\
+    "got:      #{piece_array_pretty(actual)}"
   end
 
   def piece_array_pretty(piece_array)
     "[ #{piece_array.map { |el| el.nil? ? '*' : el.to_s }.join(', ')} ]"
   end
+end
+
+# matcher for pieces_equal?
+RSpec::Matchers.define :equal_piece do |expected|
+  match { |actual| pieces_equal?(expected, actual) }
+  failure_message { "fail: #{expected} != #{actual}" }
 end
 
 # compare two instance of BasicPiece or nil

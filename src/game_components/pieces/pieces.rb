@@ -17,10 +17,11 @@ end
 
 # An empty cell that respond to .nil? and as a position
 class EmptyCell
-  attr_reader :position
+  attr_reader :position, :color
 
   def initialize(position)
     @position = position
+    @color = nil
   end
 
   def nil?
