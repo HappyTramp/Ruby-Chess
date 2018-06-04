@@ -1,6 +1,7 @@
-require_relative '../../src/game_components/board'
+require 'rspec/expectations'
+require 'game_components/board'
 
-# Board class derivation for simpler testing purpose
+# custom Board for testing purpose
 class TestingBoard < Board
   def initialize(
     king_modified_positions: [],
@@ -26,9 +27,26 @@ class TestingBoard < Board
   end
 end
 
+# deeply compare two array of pieces.
+RSpec::Matchers.define :equal_piece_array do |expected|
+  match do |actual|
+    expected.zip(actual).each do |zipped_pieces|
+      return false unless pieces_equal?(*zipped_pieces)
+    end
+    true
+  end
+
+  failure_message do |actual|
+    "expected: #{piece_array_pretty(expected)}\ngot: #{piece_array_pretty(actual)}"
+  end
+
+  def piece_array_pretty(piece_array)
+    "[ #{piece_array.map { |el| el.nil? ? '*' : el.to_s }.join(', ')} ]"
+  end
+end
+
 # compare two instance of BasicPiece or nil
-# @returns true if they are equal
-def compare_pieces(piece1, piece2)
+def pieces_equal?(piece1, piece2)
   return true if piece1.nil? && piece2.nil?
   return false if piece1.nil? || piece2.nil?
 
@@ -41,14 +59,4 @@ def compare_pieces(piece1, piece2)
   end
 
   false
-end
-
-# deeply compare two array of pieces.
-# @returns true if they are deep equal
-def piece_array_deep_equal(array1, array2)
-  array1.zip(array2).each do |zip_elts|
-    return false unless compare_pieces(*zip_elts)
-  end
-
-  true
 end

@@ -20,141 +20,77 @@ describe BasicPiece do
         ]
       )
     end
-    before do
-      @left_side, @right_side =
-        subject.send(:horizontal_cells_from_position, testing_board)
-      @up_side, @down_side =
-        subject.send(:vertical_cells_from_position, testing_board)
-      @diag_up_side, @diag_down_side =
-        subject.send(:diagonal_cells_from_position, testing_board)
-      @anti_diag_up_side, @anti_diag_down_side =
-        subject.send(:anti_diagonal_cells_from_position, testing_board)
-    end
+    subject { testing_board[3, 3] }
+    let(:horizontal_sides) { subject.send(:get_sides_of, testing_board, 'horizontal') }
+    let(:vertical_sides) { subject.send(:get_sides_of, testing_board, 'vertical') }
+    let(:diag_sides) { subject.send(:get_sides_of, testing_board, 'diagonal') }
+    let(:anti_diag_sides) { subject.send(:get_sides_of, testing_board, 'anti_diagonal') }
+    # can't test with contain_exactly since nil != EmptyCell
+    let(:left_side) { [nil, Piece::King.new([3, 1], 'black'), nil] }
+    let(:right_side) { [nil, nil, King.new([3, 6], 'black'), nil] }
+    let(:up_side) { [nil, King.new([1, 3], 'black'), nil] }
+    let(:down_side) { [nil, nil, King.new([6, 3], 'white'), nil] }
+    let(:diag_up_side) {  [nil, King.new([1, 5], 'black'), nil] }
+    let(:diag_down_side) { [nil, King.new([5, 1], 'white'), nil] }
+    let(:anti_diag_up_side) { [nil, nil, King.new([0, 0], 'black')] }
+    let(:anti_diag_down_side) { [nil, nil, King.new([6, 6], 'white'), nil] }
 
-    describe '#horizontal_cells_from_position' do
-      context 'rook at [3, 3]' do
-        it 'return a correct list of cells at the left from the position' do
-          expect(
-            piece_array_deep_equal(
-              [nil, King.new([3, 1], 'black'), nil],
-              @left_side
-            )
-          ).to be true
-        end
-        it 'return a correct list of cells at the right from the position' do
-          expect(
-            piece_array_deep_equal(
-              [nil, nil, King.new([3, 6], 'black'), nil],
-              @right_side
-            )
-          ).to be true
-        end
+    describe '#get_sides_of' do
+      context 'orientation = horizontal' do
+        it { expect(horizontal_sides[0]).to equal_piece_array(left_side) }
+        it { expect(horizontal_sides[1]).to equal_piece_array(right_side) }
+      end
+      context 'orientation = vertical' do
+        it { expect(vertical_sides[0]).to equal_piece_array(up_side) }
+        it { expect(vertical_sides[1]).to equal_piece_array(down_side) }
+      end
+      context 'orientation = diagonal' do
+        it { expect(diag_sides[0]).to equal_piece_array(diag_up_side) }
+        it { expect(diag_sides[1]).to equal_piece_array(diag_down_side) }
       end
     end
-
-    describe '#vertical_cells_from_position' do
-      context 'rook at [3, 3]' do
-        it 'return a correct list of cells above the piece position' do
-          expect(
-            piece_array_deep_equal(
-              [nil, King.new([1, 3], 'black'), nil],
-              @up_side
-            )
-          ).to be true
-        end
-        it 'return a correct list of cells bellow the piece position' do
-          expect(
-            piece_array_deep_equal(
-              [nil, nil, King.new([6, 3], 'white'), nil],
-              @down_side
-            )
-          ).to be true
-        end
-      end
+    context 'orientation = anti_diagonal' do
+      it { expect(anti_diag_sides[0]).to equal_piece_array(anti_diag_up_side) }
+      it { expect(anti_diag_sides[1]).to equal_piece_array(anti_diag_down_side) }
     end
 
-    # describe '#diagonal_cells_from_position' do
-    #   context 'rook at [3, 3]' do
-    #     it 'return a correct list of the cells above the piece position in diagonal' do
-    #       puts @diag_up_side.inspect
-    #       expect(
-    #         piece_array_deep_equal(
-    #           [nil, nil, King.new([0, 0], 'black')],
-    #           @diag_up_side)
-    #       ).to be true
-    #     end
-    #     it 'return a correct list of the cells bellow the piece position in diagonal' do
-    #       expect(
-    #         piece_array_deep_equal(
-    #           [nil, nil, King.new([6, 6], 'white'), nil],
-    #           @diag_down_side)
-    #       ).to be true
-    #     end
-    #   end
-    # end
-
-    # describe '#anti_diagonal_cells_from_position' do
-    #   context 'rook at [3, 3]' do
-    #     it 'return a correct list of the cells above the piece position in anti diagonal' do
-    #       expect(
-    #         piece_array_deep_equal(
-    #           [nil, King.new([5, 1], 'white'), nil],
-    #           @anti_diag_up_side)
-    #       ).to be true
-    #     end
-    #     it 'return a correct list of the cells bellow the piece position in anti diagonal' do
-    #       expect(
-    #         piece_array_deep_equal(
-    #           [nil, King.new([1, 5], 'black'), nil],
-    #           @anti_diag_down_side)
-    #       ).to be true
-    #     end
-    #   end
-    # end
+    describe 'get_grouped_sides_of' do
+      it "orientations = ['horizontal', 'vertical']" do
+        expect(subject
+          .send(:get_grouped_sides_of, testing_board, 'horizontal', 'vertical'))
+          .to contain_exactly(*horizontal_sides, *vertical_sides)
+      end
+      it 'orientations = [diagonal, anti_diagonal]' do
+        expect(subject
+          .send(:get_grouped_sides_of, testing_board, 'diagonal', 'anti_diagonal'))
+          .to contain_exactly(*diag_sides, *anti_diag_sides)
+      end
+      it 'orientations = [vertical, horizontal, diagonal, anti_diagonal]' do
+        expect(subject
+          .send(:get_grouped_sides_of, testing_board,
+                'vertical', 'horizontal', 'diagonal', 'anti_diagonal'))
+          .to contain_exactly(*horizontal_sides, *vertical_sides, *diag_sides, *anti_diag_sides)
+      end
+    end
 
     describe '#filter_side' do
+      let(:filter_left_side) { subject.send(:filter_side, left_side) }
+      let(:filter_up_side) { subject.send(:filter_side, up_side) }
+      let(:filter_diag_down_side) { subject.send(:filter_side, diag_down_side) }
+      let(:filter_anti_diag_down_side) { subject.send(:filter_side, anti_diag_down_side) }
       context 'left side' do
-        it 'return the cells with a possible movement' do
-          expect(
-            piece_array_deep_equal(
-              [nil],
-              subject.send(:filter_side, @left_side)
-            )
-          ).to be true
-        end
+        it { expect(filter_left_side).to equal_piece_array([nil]) }
       end
-
-      context 'right side' do
-        it 'return the cells with a possible movement' do
-          expect(
-            piece_array_deep_equal(
-              [nil, nil],
-              subject.send(:filter_side, @right_side)
-            )
-          ).to be true
-        end
-      end
-
       context 'up side' do
-        it 'return the cells with a possible movement' do
-          expect(
-            piece_array_deep_equal(
-              [nil],
-              subject.send(:filter_side, @up_side)
-            )
-          ).to be true
-        end
+        it { expect(filter_up_side).to equal_piece_array([nil, nil]) }
       end
 
-      context 'bellow side' do
-        it 'return the cells with a possible movement' do
-          expect(
-            piece_array_deep_equal(
-              [nil, nil, King.new([6, 3], 'white')],
-              subject.send(:filter_side, @down_side)
-            )
-          ).to be true
-        end
+      context 'diagonal down side' do
+        it { expect(filter_diag_down_side).to equal_piece_array([nil, King.new([5, 1], 'white')]) }
+      end
+
+      context 'anti diagonal down side' do
+        it { expect(filter_anti_diag_down_side).to equal_piece_array([nil, nil, King.new([6, 6], 'white')]) }
       end
     end
   end

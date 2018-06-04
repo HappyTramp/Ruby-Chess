@@ -1,8 +1,5 @@
 # Styles
 
-Layout/CaseIndentation:
-  Enabled: false
-
 Style/EmptyCaseCondition:
   Enabled: false
 

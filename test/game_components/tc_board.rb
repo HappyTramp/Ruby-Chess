@@ -7,14 +7,10 @@ describe Board do
     let(:initial_grid) do
       [
         [
-          Piece::Rook.new([0, 0], 'black'),
-          Piece::Knight.new([0, 1], 'black'),
-          Piece::Bishop.new([0, 2], 'black'),
-          Piece::Queen.new([0, 3], 'black'),
-          Piece::King.new([0, 4], 'black'),
-          Piece::Bishop.new([0, 5], 'black'),
-          Piece::Knight.new([0, 6], 'black'),
-          Piece::Rook.new([0, 7], 'black')
+          Piece::Rook.new([0, 0], 'black'), Piece::Knight.new([0, 1], 'black'),
+          Piece::Bishop.new([0, 2], 'black'), Piece::Queen.new([0, 3], 'black'),
+          Piece::King.new([0, 4], 'black'), Piece::Bishop.new([0, 5], 'black'),
+          Piece::Knight.new([0, 6], 'black'), Piece::Rook.new([0, 7], 'black')
         ],
         (1..8).map.with_index { |_, i| Piece::Pawn.new([1, i], 'black') },
         [nil, nil, nil, nil, nil, nil, nil, nil],
@@ -23,14 +19,10 @@ describe Board do
         [nil, nil, nil, nil, nil, nil, nil, nil],
         (1..8).map.with_index { |_, i| Piece::Pawn.new([6, i], 'white') },
         [
-          Piece::Rook.new([7, 0], 'white'),
-          Piece::Knight.new([7, 1], 'white'),
-          Piece::Bishop.new([7, 2], 'white'),
-          Piece::Queen.new([7, 3], 'white'),
-          Piece::King.new([7, 4], 'white'),
-          Piece::Bishop.new([7, 5], 'white'),
-          Piece::Knight.new([7, 6], 'white'),
-          Piece::Rook.new([7, 7], 'white')
+          Piece::Rook.new([7, 0], 'white'), Piece::Knight.new([7, 1], 'white'),
+          Piece::Bishop.new([7, 2], 'white'), Piece::Queen.new([7, 3], 'white'),
+          Piece::King.new([7, 4], 'white'), Piece::Bishop.new([7, 5], 'white'),
+          Piece::Knight.new([7, 6], 'white'), Piece::Rook.new([7, 7], 'white')
         ]
       ]
     end
@@ -151,69 +143,56 @@ describe Board do
         Piece::Pawn.new([1, 6], 'black'), Piece::Rook.new([0, 7], 'black')
       ]
     end
-    context 'with position [3, 3]' do
-      it 'return the diagonal that pass throught it' do
-        expect(
-          piece_array_deep_equal(
-            diagonal33,
-            subject.get_diagonal(3, 3)
-          )
-        ).to be true
-      end
-    end
-
-    context 'with position [5, 2]' do
-      it 'return the diagonal that pass throught it' do
-        expect(
-          piece_array_deep_equal(
-            diagonal52,
-            subject.get_diagonal(5, 2)
-          )
-        ).to be true
-      end
-    end
-  end
-
-  describe '#get_anti_diagonal' do
-    let(:diagonal06) do
+    let(:anti_diagonal06) do
       [
         Piece::Knight.new([0, 6], 'black'),
         Piece::Pawn.new([1, 7], 'black')
       ]
     end
-    let(:diagonal45) do
+    let(:anti_diagonal45) do
       [
         Piece::Knight.new([0, 1], 'black'), Piece::Pawn.new([1, 2], 'black'),
         nil, nil, nil, nil,
         Piece::Pawn.new([6, 7], 'white')
       ]
     end
-    context 'with position [0, 6]' do
-      it 'return the anti diagonal that pass throught it' do
-        expect(
-          piece_array_deep_equal(
-            diagonal06,
-            subject.get_anti_diagonal(0, 6)
-          )
-        ).to be true
+
+    context 'with arg anti = false' do
+      context 'with position [3, 3]' do
+        it 'return the diagonal that pass through it' do
+          expect(subject.get_diagonal(3, 3))
+            .to equal_piece_array(diagonal33)
+        end
+      end
+
+      context 'with position [5, 2]' do
+        it 'return the diagonal that pass through it' do
+          expect(subject.get_diagonal(5, 2))
+            .to equal_piece_array(diagonal52)
+        end
       end
     end
 
-    context 'with position [4, 5]' do
-      it 'return the anti diagonal that pass throught it' do
-        expect(
-          piece_array_deep_equal(
-            diagonal45,
-            subject.get_anti_diagonal(4, 5)
-          )
-        ).to be true
+    context 'with arg anti == true' do
+      context 'with position [0, 6]' do
+        it 'return the anti diagonal that pass through it' do
+          expect(subject.get_diagonal(0, 6, anti: true))
+            .to equal_piece_array(anti_diagonal06)
+        end
+      end
+
+      context 'with position [4, 5]' do
+        it 'return the anti diagonal that pass through it' do
+          expect(subject.get_diagonal(4, 5, anti: true))
+            .to equal_piece_array(anti_diagonal45)
+        end
       end
     end
   end
 
   describe 'private methods' do
     describe '#index_out_border?' do
-      context 'out of borders indexs' do
+      context 'out of borders indexes' do
         it 'return true' do
           expect(subject.send(:index_out_border?, -1, 0))
             .to be true
@@ -226,7 +205,7 @@ describe Board do
         end
       end
 
-      context 'in borders indexs' do
+      context 'in borders indexes' do
         it 'return false' do
           expect(subject.send(:index_out_border?, 0, 0))
             .to be false
@@ -237,36 +216,12 @@ describe Board do
         end
       end
     end
-
-    describe '#find_diagonal_origin' do
-      context 'diagonal' do
-        it '[3, 3] index' do
-          expect(subject.send(:find_diagonal_origin, 3, 3))
-            .to eql [6, 0]
-        end
-        it '[6, 7] index' do
-          expect(subject.send(:find_diagonal_origin, 6, 7))
-            .to eql [7, 6]
-        end
-      end
-
-      context 'anti diagonal' do
-        it '[5, 7] index' do
-          expect(subject.send(:find_diagonal_origin, 5, 7, anti: true))
-            .to eql [0, 2]
-        end
-        it '[6, 2]' do
-          expect(subject.send(:find_diagonal_origin, 6, 2, anti: true))
-            .to eql [4, 0]
-        end
-      end
-    end
   end
 
   describe '#to_s' do
     subject = Board.new
     context 'initial configuration' do
-      it 'return stringify grid' do
+      it 'return stringified grid' do
         expect(subject.to_s).to eql(
           "     a   b   c   d   e   f   g   h\n"\
           "   ┌───┬───┬───┬───┬───┬───┬───┬───┐\n"\
@@ -291,7 +246,7 @@ describe Board do
     end
 
     context 'some pieces moved' do
-      it 'return an accurate stringify grid according to the changes' do
+      it 'return an accurate stringified grid according to the changes' do
         subject.grid[0][0] = EmptyCell.new [0, 0]
         subject.grid[1][1] = Piece::Rook.new [1, 1], 'white'
         subject.grid[3][3] = Piece::King.new [3, 3], 'black'

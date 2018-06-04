@@ -8,14 +8,9 @@ class Rook < BasicPiece
 
   # @returns the list of position where the rook can move
   def get_possible_moves(board)
-    left_side, right_side = horizontal_cells_from_position(board)
-    up_side, bellow_side = vertical_cells_from_position(board)
-
-    [
-      *filter_side(left_side),
-      *filter_side(right_side),
-      *filter_side(up_side),
-      *filter_side(bellow_side)
-    ].map(&:position)
+    get_grouped_sides_of(board, 'horizontal', 'vertical')
+      .map { |side| filter_side(side) }
+      .flatten
+      .map(&:position)
   end
 end
