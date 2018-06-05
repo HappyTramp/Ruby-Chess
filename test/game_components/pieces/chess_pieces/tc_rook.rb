@@ -1,7 +1,7 @@
 require 'game_components/pieces/chess_pieces/rook'
-require_relative '../../testing_helpers'
+require_relative '../../../testing_helper/h_board'
 
-describe Rook do
+describe Rook, for: 'rook' do
   describe '#get_possible_moves' do
     let(:rook) { Rook.new [3, 3], 'black' }
     let(:solo_board) { TestingBoard.new(rook_modified_positions: [[3, 3]]) }

@@ -1,8 +1,9 @@
 require 'game_components/pieces/basic_piece'
 require 'game_components/pieces/chess_pieces/king'
-require_relative '../testing_helpers.rb'
+require_relative '../../testing_helper/h_board'
+require_relative '../../testing_helper/h_piece'
 
-describe BasicPiece do
+describe BasicPiece, for: 'basicpiece' do
   subject { BasicPiece.new [3, 3], 'black' }
 
   describe '#initialize' do

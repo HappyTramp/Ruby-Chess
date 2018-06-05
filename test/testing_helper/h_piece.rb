@@ -1,29 +1,25 @@
 require 'rspec/expectations'
-require 'game_components/board'
 
-# custom Board for testing purpose
-class TestingBoard < Board
-  def initialize(
-    king_modified_positions: [],
-    queen_modified_positions: [],
-    rook_modified_positions: [],
-    knight_modified_positions: [],
-    bishop_modified_positions: [],
-    pawn_modified_positions: [],
-    normal_init: false
-  )
-    if normal_init
-      super()
-    else
-      super(
-        king_positions: king_modified_positions,
-        queen_positions: queen_modified_positions,
-        rook_positions: rook_modified_positions,
-        knight_positions: knight_modified_positions,
-        bishop_positions: bishop_modified_positions,
-        pawn_positions: pawn_modified_positions
-      )
-    end
+RSpec::Matchers.define :contain_exact_positions do |*positions|
+  match do |tb_and_piece|
+    tb, piece = tb_and_piece
+    piece.get_possible_moves(tb).sort == positions.sort
+  end
+
+  # print expected and actual board side by side
+  failure_message do |tb_and_piece|
+    tb, piece = tb_and_piece
+    actual_pos = piece.get_possible_moves(tb)
+    "expected: #{positions}\ngot:      #{actual_pos}\n\n" + \
+      tb.to_s_positions_highlight(*positions)
+        .split("\n")
+        .zip(tb.to_s_positions_highlight(*actual_pos).split("\n"))
+        .map { |lines| "#{lines[0]}   #{lines[1]}" }
+        .join("\n")
+  end
+
+  description do
+    "exactly contain positions: #{positions}"
   end
 end
 
@@ -42,7 +38,7 @@ RSpec::Matchers.define :equal_piece_array do |expected|
   end
 
   def piece_array_pretty(piece_array)
-    "[ #{piece_array.map { |el| el.nil? ? '*' : el.to_s }.join(', ')} ]"
+    "[ #{piece_array.map { |el| el.nil? ? '*' : el.to_s } * ', '} ]"
   end
 end
 

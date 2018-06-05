@@ -1,5 +1,5 @@
 require 'game_components/pieces/chess_pieces/pawn.rb'
 
-describe Pawn do
+describe Pawn, for: 'pawn' do
   
 end

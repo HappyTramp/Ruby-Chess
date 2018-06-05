@@ -1,8 +1,9 @@
 require 'game_components/board.rb'
 require 'game_components/pieces/pieces'
-require_relative './testing_helpers.rb'
+require_relative '../testing_helper/h_board'
+require_relative '../testing_helper/h_piece'
 
-describe Board do
+describe Board, for: 'board' do
   describe '#initialize' do
     let(:initial_grid) do
       [
@@ -151,21 +152,21 @@ describe Board do
   end
 
   describe 'private methods' do
-    describe '#index_out_border?' do
+    describe '#index_in_border?' do
       context 'out of borders indexes' do
-        it 'return true' do
-          expect(subject.send(:index_out_border?, -1, 0)).to be true
-          expect(subject.send(:index_out_border?, 0, -1)).to be true
-          expect(subject.send(:index_out_border?, 8, 0)).to be true
-          expect(subject.send(:index_out_border?, 0, 8)).to be true
+        it 'return false' do
+          expect(subject.send(:index_in_border?, -1, 0)).to be false
+          expect(subject.send(:index_in_border?, 0, -1)).to be false
+          expect(subject.send(:index_in_border?, 8, 0)).to be false
+          expect(subject.send(:index_in_border?, 0, 8)).to be false
         end
       end
 
       context 'in borders indexes' do
-        it 'return false' do
-          expect(subject.send(:index_out_border?, 0, 0)).to be false
-          expect(subject.send(:index_out_border?, 7, 0)).to be false
-          expect(subject.send(:index_out_border?, 0, 7)).to be false
+        it 'return true' do
+          expect(subject.send(:index_in_border?, 0, 0)).to be true
+          expect(subject.send(:index_in_border?, 7, 0)).to be true
+          expect(subject.send(:index_in_border?, 0, 7)).to be true
         end
       end
     end
@@ -176,7 +177,7 @@ describe Board do
     context 'initial configuration' do
       it 'return stringified grid' do
         expect(subject.to_s).to eql(
-          "     a   b   c   d   e   f   g   h\n"\
+          "     a   b   c   d   e   f   g   h  \n"\
           "   ┌───┬───┬───┬───┬───┬───┬───┬───┐\n"\
           " 1 │ ♜ │ ♞ │ ♝ │ ♛ │ ♚ │ ♝ │ ♞ │ ♜ │\n"\
           "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
@@ -204,7 +205,7 @@ describe Board do
         subject.grid[1][1] = Piece::Rook.new [1, 1], 'white'
         subject.grid[3][3] = Piece::King.new [3, 3], 'black'
         expect(subject.to_s).to eql(
-          "     a   b   c   d   e   f   g   h\n"\
+          "     a   b   c   d   e   f   g   h  \n"\
           "   ┌───┬───┬───┬───┬───┬───┬───┬───┐\n"\
           " 1 │   │ ♞ │ ♝ │ ♛ │ ♚ │ ♝ │ ♞ │ ♜ │\n"\
           "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\

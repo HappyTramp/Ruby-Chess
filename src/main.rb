@@ -14,5 +14,7 @@ require_relative './game_components/board'
 
 # puts piece_array_equal?(r1, r2)
 
-b = Board.new
-puts b
+if $PROGRAM_NAME == __FILE__
+  b = Board.new
+  puts b
+end

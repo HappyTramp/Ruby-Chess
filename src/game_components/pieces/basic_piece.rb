@@ -1,3 +1,5 @@
+require_relative '../../dev_helpers.rb'
+
 # Basic Piece Class meant to be inherited by the Real Pieces
 class BasicPiece
   attr_reader :position, :color
@@ -26,6 +28,7 @@ class BasicPiece
       else raise ArgumentError 'wrong orientation name'
       end
 
+    # on peut fusionner hor | ver et diag | antidiag.
     case orientation
     when 'horizontal' then [
       line.reverse[@position[1] != 0 ? -@position[1] : 7, 7],
@@ -35,14 +38,18 @@ class BasicPiece
       line.reverse[@position[0] != 0 ? -@position[0] : 7, 7],
       line[@position[0] + 1..7]
     ]
-    when 'diagonal' then [
-      line[-line.index(self), 7],
-      line.reverse[line.index(self) + 1..7]
-    ]
-    when 'anti_diagonal' then [
-      line.reverse[-line.index(self), 7],
-      line[line.index(self) + 1..7]
-    ]
+    when 'diagonal' then
+      index = line.index(self)
+      [
+        line[index + 1..7],
+        line.reverse[(index == 0 ? -1 : -index)..7]
+      ]
+    when 'anti_diagonal' then
+      index = line.index(self)
+      [
+        line.reverse[(index == 0 ? -1 : -index), 7],
+        line[index + 1..7]
+      ]
     end
   end
 
@@ -51,10 +58,10 @@ class BasicPiece
     filtered_side = []
 
     side.each do |cell|
-      case
-      when cell.nil? then filtered_side << cell
-      when cell.color == @color then break
-      when cell.color != @color then
+      case get_cell_type(cell)
+      when :empty then filtered_side << cell
+      when :ally  then break
+      when :enemy then
         filtered_side << cell
         break
       end
@@ -66,10 +73,18 @@ class BasicPiece
   def valid_cell?(cell)
     return false if cell == false
 
+    case get_cell_type(cell)
+    when :empty then true
+    when :ally  then false
+    when :enemy then true
+    end
+  end
+
+  def get_cell_type(cell)
     case
-    when cell.nil? then true
-    when cell.color == @color then false
-    when cell.color != @color then true
+    when cell.nil? then :empty
+    when cell.color == @color then :ally
+    when cell.color != @color then :enemy
     end
   end
 end

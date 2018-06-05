@@ -15,7 +15,7 @@ module Piece
   Pawn = Pawn
 end
 
-# An empty cell that respond to .nil? and as a position
+# An empty cell that respond true to .nil?
 class EmptyCell
   attr_reader :position, :color
 
