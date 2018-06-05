@@ -1,8 +1,5 @@
 # Styles
 
-Style/EmptyCaseCondition:
-  Enabled: false
-
 Style/NumericPredicate:
   Enabled: false
 

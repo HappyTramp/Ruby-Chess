@@ -9,21 +9,16 @@ class TestingBoard < Board
     rook_modified_positions: [],
     knight_modified_positions: [],
     bishop_modified_positions: [],
-    pawn_modified_positions: [],
-    normal_init: false
+    pawn_modified_positions: []
   )
-    if normal_init
-      super()
-    else
-      super(
-        king_positions: king_modified_positions,
-        queen_positions: queen_modified_positions,
-        rook_positions: rook_modified_positions,
-        knight_positions: knight_modified_positions,
-        bishop_positions: bishop_modified_positions,
-        pawn_positions: pawn_modified_positions
-      )
-    end
+    super(
+      king_positions: king_modified_positions,
+      queen_positions: queen_modified_positions,
+      rook_positions: rook_modified_positions,
+      knight_positions: knight_modified_positions,
+      bishop_positions: bishop_modified_positions,
+      pawn_positions: pawn_modified_positions
+    )
   end
 
   # highlight an array of cells or positions on the board
@@ -31,7 +26,7 @@ class TestingBoard < Board
     positions.map!(&:position) if cells
 
     lines = to_s.split("\n")
-    lines[0] + "\n" + \
+    "#{lines[0]}\n" + \
       lines[1, 40]
       .map.with_index do |line, i|
         if ['├', '└', '┌', ' '].include?(line[3])

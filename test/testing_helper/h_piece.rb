@@ -11,9 +11,9 @@ RSpec::Matchers.define :contain_exact_positions do |*positions|
     tb, piece = tb_and_piece
     actual_pos = piece.get_possible_moves(tb)
     "expected: #{positions}\ngot:      #{actual_pos}\n\n" + \
-      tb.to_s_positions_highlight(*positions)
+      tb.to_s_positions_highlight(*actual_pos)
         .split("\n")
-        .zip(tb.to_s_positions_highlight(*actual_pos).split("\n"))
+        .zip(tb.to_s_positions_highlight(*positions).split("\n"))
         .map { |lines| "#{lines[0]}   #{lines[1]}" }
         .join("\n")
   end

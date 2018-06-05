@@ -108,102 +108,81 @@ describe Board, for: 'board' do
   end
 
   describe '#get_diagonal' do
-    let(:diagonal33) do
+    let(:diag33) do
       [Piece::Pawn.new([6, 0], 'white'),
        nil, nil, nil, nil,
        Piece::Pawn.new([1, 5], 'black'), Piece::Knight.new([0, 6], 'black')]
     end
-    let(:diagonal52) do
+    let(:diag52) do
       [Piece::Rook.new([7, 0], 'white'), Piece::Pawn.new([6, 1], 'white'),
        nil, nil, nil, nil,
        Piece::Pawn.new([1, 6], 'black'), Piece::Rook.new([0, 7], 'black')]
     end
-    let(:anti_diagonal06) do
+    let(:a_diag06) do
       [Piece::Knight.new([0, 6], 'black'),
        Piece::Pawn.new([1, 7], 'black')]
     end
-    let(:anti_diagonal45) do
+    let(:a_diag45) do
       [Piece::Knight.new([0, 1], 'black'), Piece::Pawn.new([1, 2], 'black'),
        nil, nil, nil, nil,
        Piece::Pawn.new([6, 7], 'white')]
     end
-
-    context 'diagonal (with arg anti = false)' do
-      it 'with position [3, 3] return the diagonal that pass through it' do
-        expect(subject.get_diagonal(3, 3))
-          .to equal_piece_array(diagonal33)
-      end
-      it 'with position [5, 2] return the diagonal that pass through it' do
-        expect(subject.get_diagonal(5, 2))
-          .to equal_piece_array(diagonal52)
-      end
+    context 'diagonal (with arg anti: false)' do
+      it { expect(subject.get_diagonal(3, 3)).to equal_piece_array(diag33) }
+      it { expect(subject.get_diagonal(5, 2)).to equal_piece_array(diag52) }
     end
-
-    context 'anti diagonal (with arg anti == true)' do
-      it 'with position [0, 6] return the anti diagonal that pass through it' do
-        expect(subject.get_diagonal(0, 6, anti: true))
-          .to equal_piece_array(anti_diagonal06)
-      end
-      it 'with position [4, 5] return the anti diagonal that pass through it' do
-        expect(subject.get_diagonal(4, 5, anti: true))
-          .to equal_piece_array(anti_diagonal45)
-      end
+    context 'anti diagonal (with arg anti: true)' do
+      it { expect(subject.get_diagonal(0, 6, anti: true)).to equal_piece_array(a_diag06) }
+      it { expect(subject.get_diagonal(4, 5, anti: true)).to equal_piece_array(a_diag45) }
     end
   end
 
   describe 'private methods' do
     describe '#index_in_border?' do
       context 'out of borders indexes' do
-        it 'return false' do
-          expect(subject.send(:index_in_border?, -1, 0)).to be false
-          expect(subject.send(:index_in_border?, 0, -1)).to be false
-          expect(subject.send(:index_in_border?, 8, 0)).to be false
-          expect(subject.send(:index_in_border?, 0, 8)).to be false
-        end
+        it { expect(subject.send(:index_in_border?, -1, 0)).to be false }
+        it { expect(subject.send(:index_in_border?, 0, -1)).to be false }
+        it { expect(subject.send(:index_in_border?, 8, 0)).to be false }
+        it { expect(subject.send(:index_in_border?, 0, 8)).to be false }
       end
 
       context 'in borders indexes' do
-        it 'return true' do
-          expect(subject.send(:index_in_border?, 0, 0)).to be true
-          expect(subject.send(:index_in_border?, 7, 0)).to be true
-          expect(subject.send(:index_in_border?, 0, 7)).to be true
-        end
+        it { expect(subject.send(:index_in_border?, 0, 0)).to be true }
+        it { expect(subject.send(:index_in_border?, 7, 0)).to be true }
+        it { expect(subject.send(:index_in_border?, 0, 7)).to be true }
       end
     end
   end
 
   describe '#to_s' do
     subject = Board.new
-    context 'initial configuration' do
-      it 'return stringified grid' do
-        expect(subject.to_s).to eql(
-          "     a   b   c   d   e   f   g   h  \n"\
-          "   ┌───┬───┬───┬───┬───┬───┬───┬───┐\n"\
-          " 1 │ ♜ │ ♞ │ ♝ │ ♛ │ ♚ │ ♝ │ ♞ │ ♜ │\n"\
-          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-          " 2 │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │\n"\
-          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-          " 3 │   │   │   │   │   │   │   │   │\n"\
-          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-          " 4 │   │   │   │   │   │   │   │   │\n"\
-          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-          " 5 │   │   │   │   │   │   │   │   │\n"\
-          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-          " 6 │   │   │   │   │   │   │   │   │\n"\
-          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-          " 7 │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │\n"\
-          "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
-          " 8 │ ♖ │ ♘ │ ♗ │ ♕ │ ♔ │ ♗ │ ♘ │ ♖ │\n"\
-          "   └───┴───┴───┴───┴───┴───┴───┴───┘"
-        )
-      end
+    it 'initial configuration' do
+      expect(subject.to_s).to eql(
+        "     a   b   c   d   e   f   g   h  \n"\
+        "   ┌───┬───┬───┬───┬───┬───┬───┬───┐\n"\
+        " 1 │ ♜ │ ♞ │ ♝ │ ♛ │ ♚ │ ♝ │ ♞ │ ♜ │\n"\
+        "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+        " 2 │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │ ♟ │\n"\
+        "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+        " 3 │   │   │   │   │   │   │   │   │\n"\
+        "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+        " 4 │   │   │   │   │   │   │   │   │\n"\
+        "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+        " 5 │   │   │   │   │   │   │   │   │\n"\
+        "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+        " 6 │   │   │   │   │   │   │   │   │\n"\
+        "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+        " 7 │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │ ♙ │\n"\
+        "   ├───┼───┼───┼───┼───┼───┼───┼───┤\n"\
+        " 8 │ ♖ │ ♘ │ ♗ │ ♕ │ ♔ │ ♗ │ ♘ │ ♖ │\n"\
+        "   └───┴───┴───┴───┴───┴───┴───┴───┘"
+      )
     end
-
     context 'some pieces moved' do
       it 'return an accurate stringified grid according to the changes' do
-        subject.grid[0][0] = EmptyCell.new [0, 0]
-        subject.grid[1][1] = Piece::Rook.new [1, 1], 'white'
-        subject.grid[3][3] = Piece::King.new [3, 3], 'black'
+        subject[0, 0] = EmptyCell.new [0, 0]
+        subject[1, 1] = Piece::Rook.new [1, 1], 'white'
+        subject[3, 3] = Piece::King.new [3, 3], 'black'
         expect(subject.to_s).to eql(
           "     a   b   c   d   e   f   g   h  \n"\
           "   ┌───┬───┬───┬───┬───┬───┬───┬───┐\n"\

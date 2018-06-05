@@ -13,7 +13,7 @@ class Board
     bishop_positions: [[0, 2], [0, 5], [7, 2], [7, 5]],
     pawn_positions:   [1, 6].product((0..7).to_a)
   )
-    @grid = Array.new(8) { Array.new 8 }
+    @grid = Array.new(8) { Array.new(8) }
 
     @grid.map!.with_index do |row, i|
       row.map!.with_index do |_, j|
