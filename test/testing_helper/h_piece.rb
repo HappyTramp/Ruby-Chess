@@ -37,6 +37,10 @@ RSpec::Matchers.define :equal_piece_array do |expected|
     "got:      #{piece_array_pretty(actual)}"
   end
 
+  description do
+    "equal: #{piece_array_pretty(expected)}"
+  end
+
   def piece_array_pretty(piece_array)
     "[ #{piece_array.map { |el| el.nil? ? '*' : el.to_s } * ', '} ]"
   end

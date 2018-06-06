@@ -96,7 +96,7 @@ describe BasicPiece, for: 'basicpiece' do
       end
       context 'the cell is the same color or false' do
         it { expect(subject.send(:valid_cell?, King.new([0, 0], 'black'))).to be false }
-        it { expect(subject.send(:valid_cell?, false)).to be false }
+        it { expect(subject.send(:valid_cell?, false)).to be nil }
       end
     end
 

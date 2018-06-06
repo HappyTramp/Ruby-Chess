@@ -5,7 +5,7 @@ describe Rook, for: 'rook' do
   describe '#get_possible_moves' do
     let(:std_rook) { Rook.new [3, 3], 'black' }
     let(:std_tb) do
-      in_middle(
+      tb_constructor(
         std_rook,
         [3, 1], [3, 6], [1, 3], [6, 3]
       )

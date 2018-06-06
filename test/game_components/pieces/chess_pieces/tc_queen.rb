@@ -5,7 +5,7 @@ describe Queen, for: 'queen' do
   describe '#get_possible_moves' do
     let(:std_queen) { Queen.new [3, 3], 'black' }
     let(:std_tb) do
-      in_middle(
+      tb_constructor(
         std_queen,
         [1, 1], [1, 3], [1, 5], [3, 6],
         [6, 6], [6, 3], [5, 1], [3, 1]

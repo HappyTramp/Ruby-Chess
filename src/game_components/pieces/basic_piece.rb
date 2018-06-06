@@ -51,15 +51,17 @@ class BasicPiece
 
   # is the cell type valid for a move
   def valid_cell?(cell)
-    return false if cell == false # out of border
-
-    { empty: true,
+    {
+      empty: true,
       ally: false,
-      enemy: true }[get_cell_type(cell)]
+      enemy: true
+    }[get_cell_type(cell)]
   end
 
   # identify a cell type
   def get_cell_type(cell)
+    return nil if cell == false # out of border
+
     if cell.nil?
       :empty
     else

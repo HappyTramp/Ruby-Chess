@@ -46,9 +46,9 @@ class TestingBoard < Board
 end
 
 # in the middle of the board
-def in_middle(piece, *other_pieces_positions)
+def tb_constructor(piece, *other_pieces_positions)
   tb = TestingBoard.new(king_modified_positions: other_pieces_positions)
-  tb[3, 3] = piece
+  tb[*piece.position] = piece
   tb
 end
 

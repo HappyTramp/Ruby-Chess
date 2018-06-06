@@ -6,7 +6,7 @@ describe Knight, for: 'knight' do
   describe '#get_possible_moves' do
     let(:std_knight) { Knight.new [3, 3], 'black' }
     let(:std_tb) do
-      in_middle(
+      tb_constructor(
         std_knight,
         [2, 1], [1, 4], [2, 5], [4, 5], [5, 4], [4, 1]
       )

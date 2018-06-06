@@ -1,9 +1,8 @@
+require 'colorize'
 require_relative './pieces/pieces'
 
 # the chess board
 class Board
-  attr_accessor :grid
-
   # init the board with a grid on which the piece will be placed
   def initialize(
     king_positions:   [[0, 4], [7, 4]],
@@ -13,6 +12,7 @@ class Board
     bishop_positions: [[0, 2], [0, 5], [7, 2], [7, 5]],
     pawn_positions:   [1, 6].product((0..7).to_a)
   )
+    @historic = []
     @grid = Array.new(8) { Array.new(8) }
 
     @grid.map!.with_index do |row, i|
@@ -72,6 +72,8 @@ class Board
 
     diag
   end
+
+  def compute_all_possible_moves() end
 
   ROW_SEPARATION = "   ├#{'───┼' * 7}───┤".freeze
   # string representation of the board

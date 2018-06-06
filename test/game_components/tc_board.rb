@@ -3,6 +3,8 @@ require 'game_components/pieces/pieces'
 require_relative '../testing_helper/h_board'
 require_relative '../testing_helper/h_piece'
 
+class Board; attr_accessor :grid; end
+
 describe Board, for: 'board' do
   describe '#initialize' do
     let(:initial_grid) do

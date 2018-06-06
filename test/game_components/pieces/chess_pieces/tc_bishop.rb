@@ -4,7 +4,7 @@ require_relative '../../../testing_helper/h_board'
 describe Bishop, for: 'bishop' do
   describe '#get_possible_moves' do
     let(:std_bishop) { Bishop.new [3, 3], 'black' }
-    let(:std_tb) { in_middle(std_bishop, [1, 1], [1, 5], [5, 1], [6, 6]) }
+    let(:std_tb) { tb_constructor(std_bishop, [1, 1], [1, 5], [5, 1], [6, 6]) }
     it 'happy path' do
       expect([std_tb, std_bishop])
         .to contain_exact_positions(

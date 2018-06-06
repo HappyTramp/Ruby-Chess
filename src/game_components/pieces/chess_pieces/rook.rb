@@ -2,6 +2,11 @@ require_relative '../basic_piece'
 
 # class of a Rook
 class Rook < BasicPiece
+  def initialize(position, color)
+    super(position, color)
+    @first_move = true
+  end
+
   def to_s
     @color == 'white' ? '♖' : '♜'
   end
