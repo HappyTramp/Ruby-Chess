@@ -1,85 +1,83 @@
 require 'game_components/pieces/chess_pieces/pawn.rb'
-require_relative '../../../testing_helper/h_board.rb'
-require_relative '../../../testing_helper/h_piece.rb'
+require 'game_components/board.rb'
+require_relative '../../../test_helper/h_piece.rb'
 
 class Pawn; attr_accessor :first_move; end
 
 describe Pawn, for: 'pawn' do
   describe '#get_possible_moves' do
-    let(:white_start_pawn) { Pawn.new [6, 0], 'white' }
-    let(:white_start_board) { tb_constructor(white_start_pawn) }
+    let(:white_start_tb) { Board.new '8/8/8/8/8/8/P7/8' }
     it 'white start' do
-      expect([white_start_board, white_start_pawn])
+      expect([white_start_tb, white_start_tb[6, 0]])
         .to contain_exact_positions([5, 0], [4, 0])
     end
     it 'white after first move' do
-      white_start_pawn.first_move = false
-      expect([white_start_board, white_start_pawn])
+      white_start_tb[6, 0].first_move = false
+      expect([white_start_tb, white_start_tb[6, 0]])
         .to contain_exact_positions([5, 0])
     end
 
-    let(:black_start_pawn) { Pawn.new [1, 0], 'black' }
-    let(:black_start_board) { tb_constructor(black_start_pawn) }
+    let(:black_start_tb) { Board.new '8/p7/8/8/8/8/8/8' }
     it 'black start' do
-      expect([black_start_board, black_start_pawn])
+      expect([black_start_tb, black_start_tb[1, 0]])
         .to contain_exact_positions([2, 0], [3, 0])
     end
     it 'black after first move' do
-      black_start_pawn.first_move = false
-      expect([black_start_board, black_start_pawn])
+      black_start_tb[1, 0].first_move = false
+      expect([black_start_tb, black_start_tb[1, 0]])
         .to contain_exact_positions([2, 0])
     end
 
-    let(:std_white_pawn) { Pawn.new [4, 3], 'white', first_move: false }
-    let(:std_white_tb_e_left) { tb_constructor(std_white_pawn, [3, 2]) }
-    let(:std_white_tb_e_right) { tb_constructor(std_white_pawn, [3, 4]) }
-    let(:std_white_tb_e_left_right_front) { tb_constructor(std_white_pawn, [3, 2], [3, 3], [3, 4]) }
-    let(:std_white_tb_blocked) { tb_constructor(std_white_pawn, [3, 3]) }
+    let(:std_white_tb_e_left)  { Board.new '8/8/8/2p5/3P4/8/8/8' }
+    let(:std_white_tb_e_right) { Board.new '8/8/8/4p3/3P4/8/8/8' }
+    let(:std_white_tb_full)    { Board.new '8/8/8/2ppp3/3P4/8/8/8' }
+    let(:std_white_tb_blocked) { Board.new '8/8/8/3p4/3P4/8/8/8' }
     it 'can take enemy left and move up' do
-      expect([std_white_tb_e_left, std_white_pawn])
+      std_white_tb_e_left[4, 3].first_move = false
+      expect([std_white_tb_e_left, std_white_tb_e_left[4, 3]])
         .to contain_exact_positions([3, 2], [3, 3])
     end
     it 'can take enemy right and move up' do
-      expect([std_white_tb_e_right, std_white_pawn])
+      std_white_tb_e_right[4, 3].first_move = false
+      expect([std_white_tb_e_right, std_white_tb_e_right[4, 3]])
         .to contain_exact_positions([3, 3], [3, 4])
     end
     it 'can take enemy right and left' do
-      expect([std_white_tb_e_left_right_front, std_white_pawn])
+      expect([std_white_tb_full, std_white_tb_full[4, 3]])
         .to contain_exact_positions([3, 2], [3, 4])
     end
     it 'is blocked' do
-      expect([std_white_tb_blocked, std_white_pawn])
+      expect([std_white_tb_blocked, std_white_tb_blocked[4, 3]])
         .to contain_exact_positions
     end
 
-    let(:std_black_pawn) { Pawn.new [3, 3], 'black', first_move: false }
-    let(:std_black_tb_e_left) { tb_constructor(std_black_pawn, [4, 2]) }
-    let(:std_black_tb_e_right) { tb_constructor(std_black_pawn, [4, 4]) }
-    let(:std_black_tb_e_left_right_front) { tb_constructor(std_black_pawn, [4, 2], [4, 3], [4, 4]) }
-    let(:std_black_tb_blocked) { tb_constructor(std_black_pawn, [4, 3]) }
+    let(:std_black_tb_e_left)  { Board.new '8/8/8/3p4/2P5/8/8/8' }
+    let(:std_black_tb_e_right) { Board.new '8/8/8/3p4/4P3/8/8/8' }
+    let(:std_black_tb_full)    { Board.new '8/8/8/3p4/2PPP3/8/8/8' }
+    let(:std_black_tb_blocked) { Board.new '8/8/8/3p4/3P4/8/8/8' }
     it 'can take enemy left and move up' do
-      expect([std_black_tb_e_left, std_black_pawn])
+      std_black_tb_e_left[3, 3].first_move = false
+      expect([std_black_tb_e_left, std_black_tb_e_left[3, 3]])
         .to contain_exact_positions([4, 2], [4, 3])
     end
     it 'can take enemy right and move up' do
-      expect([std_black_tb_e_right, std_black_pawn])
+      std_black_tb_e_right[3, 3].first_move = false
+      expect([std_black_tb_e_right, std_black_tb_e_right[3, 3]])
         .to contain_exact_positions([4, 3], [4, 4])
     end
     it 'can take enemy right and left' do
-      expect([std_black_tb_e_left_right_front, std_black_pawn])
+      expect([std_black_tb_full, std_black_tb_full[3, 3]])
         .to contain_exact_positions([4, 2], [4, 4])
     end
     it 'is blocked' do
-      expect([std_black_tb_blocked, std_black_pawn])
+      expect([std_black_tb_blocked, std_black_tb_blocked[3, 3]])
         .to contain_exact_positions
     end
 
-    let(:corner_UL_pawn) { Pawn.new [0, 0], 'white', first_move: false }
-    let(:corner_UL_tb) { in_corner(:up_left, corner_UL_pawn) }
-    it { expect([corner_UL_tb, corner_UL_pawn]).to contain_exact_positions }
+    let(:corner_UL_tb) { Board.new 'P7/8/8/8/8/8/8/8' }
+    it { expect([corner_UL_tb, corner_UL_tb[0, 0]]).to contain_exact_positions }
 
-    let(:corner_DR_pawn) { Pawn.new [7, 7], 'black', first_move: false }
-    let(:corner_DR_tb) { in_corner(:down_right, corner_DR_pawn) }
-    it { expect([corner_DR_tb, corner_DR_pawn]).to contain_exact_positions }
+    let(:corner_DR_tb) { Board.new '8/8/8/8/8/8/8/7p'  }
+    it { expect([corner_DR_tb, corner_DR_tb[7, 7]]).to contain_exact_positions }
   end
 end

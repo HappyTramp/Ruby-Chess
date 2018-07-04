@@ -22,7 +22,7 @@ class Pawn < BasicPiece
     if get_cell_type(cell_front) == :empty
       pos_list << cell_front.position
 
-      if first_move
+      if @first_move
         cell_front_fm = board[pos_x_mod + x_mod, @position[1]]
         if get_cell_type(cell_front_fm) == :empty
           pos_list << cell_front_fm.position

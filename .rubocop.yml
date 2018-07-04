@@ -9,6 +9,13 @@ Naming/UncommunicativeMethodParamName:
 Style/StringLiterals:
   Enabled: false
 
+
+# Layout
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+
 # Metrics
 
 Metrics/AbcSize:

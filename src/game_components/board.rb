@@ -3,32 +3,30 @@ require_relative './pieces/pieces'
 
 # the chess board
 class Board
-  # init the board with a grid on which the piece will be placed
-  def initialize(
-    king_positions:   [[0, 4], [7, 4]],
-    queen_positions:  [[0, 3], [7, 3]],
-    rook_positions:   [[0, 0], [0, 7], [7, 0], [7, 7]],
-    knight_positions: [[0, 1], [0, 6], [7, 1], [7, 6]],
-    bishop_positions: [[0, 2], [0, 5], [7, 2], [7, 5]],
-    pawn_positions:   [1, 6].product((0..7).to_a)
-  )
-    @historic = []
-    @grid = Array.new(8) { Array.new(8) }
-
-    @grid.map!.with_index do |row, i|
-      row.map!.with_index do |_, j|
-        color = i < 4 ? 'black' : 'white'
-
-        case [i, j]
-        when *king_positions   then Piece::King.new [i, j], color
-        when *queen_positions  then Piece::Queen.new [i, j], color
-        when *rook_positions   then Piece::Rook.new [i, j], color
-        when *knight_positions then Piece::Knight.new [i, j], color
-        when *bishop_positions then Piece::Bishop.new [i, j], color
-        when *pawn_positions   then Piece::Pawn.new [i, j], color
-        else EmptyCell.new [i, j]
+  # init the board with a grid on which the piece are placed
+  def initialize(positions='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
+    @grid = positions.split('/').map.with_index do |row, i|
+      row
+        .chars.flat_map { |c| c.to_i == 0 ? c : Array.new(c.to_i) { '' } }
+        .map.with_index do |p_type, j|
+          color = /[A-Z]/.match(p_type).nil? ? 'black' : 'white'
+          case p_type.upcase
+          when 'K' then Piece::King.new [i, j], color
+          when 'Q' then Piece::Queen.new [i, j], color
+          when 'R' then Piece::Rook.new [i, j], color
+          when 'N' then Piece::Knight.new [i, j], color
+          when 'B' then Piece::Bishop.new [i, j], color
+          when 'P' then Piece::Pawn.new [i, j], color
+          else EmptyCell.new [i, j]
+          end
         end
-      end
+    end
+
+    if @grid[7].class == NilClass \
+       || @grid[7][7].class == NilClass \
+       || @grid[8].class != NilClass \
+       || @grid[7][8].class != NilClass
+      raise ArgumentError, 'wrong Board init string'
     end
   end
 
@@ -72,8 +70,6 @@ class Board
 
     diag
   end
-
-  def compute_all_possible_moves() end
 
   ROW_SEPARATION = "   ├#{'───┼' * 7}───┤".freeze
   # string representation of the board

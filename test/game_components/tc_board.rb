@@ -1,7 +1,7 @@
 require 'game_components/board.rb'
 require 'game_components/pieces/pieces'
-require_relative '../testing_helper/h_board'
-require_relative '../testing_helper/h_piece'
+require_relative '../test_helper/h_board'
+require_relative '../test_helper/h_piece'
 
 class Board; attr_accessor :grid; end
 
@@ -43,7 +43,7 @@ describe Board, for: 'board' do
 
     context 'modified pieces configuration' do
       it 'create a grid with the given positions' do
-        modified_grid = Board.new(queen_positions: [[0, 0]], rook_positions: []).grid
+        modified_grid = Board.new('qnb1kbn1/pppppppp/8/8/8/8/PPPPPPPP/1NB1KBN1').grid
         initial_grid.map! do |row|
           row.map! { |cell| [Piece::Queen, Piece::Rook].include?(cell.class) ? nil : cell }
         end

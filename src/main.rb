@@ -1,4 +1,5 @@
 require_relative './game_components/board'
+require_relative './game.rb'
 # require_relative './game_components/pieces/pieces'
 # require_relative './../test/game_components/testing_helpers'
 
@@ -14,7 +15,8 @@ require_relative './game_components/board'
 
 # puts piece_array_equal?(r1, r2)
 
-if $PROGRAM_NAME == __FILE__
-  b = Board.new
-  puts b
-end
+b = Board.new 
+puts b
+
+# g = Game.new
+# g.compute_all_possible_moves

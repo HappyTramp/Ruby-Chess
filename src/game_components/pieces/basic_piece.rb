@@ -1,5 +1,3 @@
-require_relative '../../dev_helpers.rb'
-
 # Basic Piece Class meant to be inherited by the Real Pieces
 class BasicPiece
   attr_reader :position, :color
@@ -61,11 +59,7 @@ class BasicPiece
   # identify a cell type
   def get_cell_type(cell)
     return nil if cell == false # out of border
-
-    if cell.nil?
-      :empty
-    else
-      cell.color == @color ? :ally : :enemy
-    end
+    return :empty if cell.nil?
+    cell.color == @color ? :ally : :enemy
   end
 end

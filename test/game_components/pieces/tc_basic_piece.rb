@@ -1,7 +1,7 @@
 require 'game_components/pieces/basic_piece'
 require 'game_components/pieces/chess_pieces/king'
-require_relative '../../testing_helper/h_board'
-require_relative '../../testing_helper/h_piece'
+require_relative '../../test_helper/h_board'
+require_relative '../../test_helper/h_piece'
 
 describe BasicPiece, for: 'basicpiece' do
   subject { BasicPiece.new [3, 3], 'black' }
@@ -12,29 +12,21 @@ describe BasicPiece, for: 'basicpiece' do
   end
 
   describe 'private methods' do
-    let(:tb) do
-      TestingBoard.new(
-        rook_modified_positions: [[3, 3]],
-        king_modified_positions: [
-          [3, 1], [3, 6], [1, 3], [6, 3],
-          [0, 0], [1, 5], [5, 1], [6, 6]
-        ]
-      )
-    end
+    let(:tb) { Board.new 'k7/3k1k2/8/1k1r2k1/8/1K6/3K2K1/8' }
     subject { tb[3, 3] }
-    let(:horz_sides)   { subject.send(:get_sides_of, tb, :horizontal) }
-    let(:vert_sides)   { subject.send(:get_sides_of, tb, :vertical) }
-    let(:diag_sides)   { subject.send(:get_sides_of, tb, :diagonal) }
+    let(:horz_sides)   { subject.send(:get_sides_of, tb, :horizontal)    }
+    let(:vert_sides)   { subject.send(:get_sides_of, tb, :vertical)      }
+    let(:diag_sides)   { subject.send(:get_sides_of, tb, :diagonal)      }
     let(:a_diag_sides) { subject.send(:get_sides_of, tb, :anti_diagonal) }
     # can't test with contain_exactly since nil != EmptyCell
     let(:horz_1s_side)   { [nil, Piece::King.new([3, 1], 'black'), nil] }
-    let(:horz_2n_side)   { [nil, nil, King.new([3, 6], 'black'), nil] }
-    let(:vert_1s_side)   { [nil, King.new([1, 3], 'black'), nil] }
-    let(:vert_2n_side)   { [nil, nil, King.new([6, 3], 'white'), nil] }
-    let(:diag_1s_side)   { [nil, King.new([5, 1], 'white'), nil] }
-    let(:diag_2n_side)   { [nil, King.new([1, 5], 'black'), nil] }
-    let(:a_diag_1s_side) { [nil, nil, King.new([0, 0], 'black')] }
-    let(:a_diag_2n_side) { [nil, nil, King.new([6, 6], 'white'), nil] }
+    let(:horz_2n_side)   { [nil, nil, King.new([3, 6], 'black'), nil]   }
+    let(:vert_1s_side)   { [nil, King.new([1, 3], 'black'), nil]        }
+    let(:vert_2n_side)   { [nil, nil, King.new([6, 3], 'white'), nil]   }
+    let(:diag_1s_side)   { [nil, King.new([5, 1], 'white'), nil]        }
+    let(:diag_2n_side)   { [nil, King.new([1, 5], 'black'), nil]        }
+    let(:a_diag_1s_side) { [nil, nil, King.new([0, 0], 'black')]        }
+    let(:a_diag_2n_side) { [nil, nil, King.new([6, 6], 'white'), nil]   }
 
     describe '#get_sides_of', getsides: true do
       context 'orientation = horizontal' do

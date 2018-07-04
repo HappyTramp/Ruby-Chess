@@ -1,4 +1,5 @@
 require 'rspec/expectations'
+require_relative './h_board'
 
 RSpec::Matchers.define :contain_exact_positions do |*positions|
   match do |tb_and_piece|
@@ -11,11 +12,11 @@ RSpec::Matchers.define :contain_exact_positions do |*positions|
     tb, piece = tb_and_piece
     actual_pos = piece.get_possible_moves(tb)
     "expected: #{positions}\ngot:      #{actual_pos}\n\n" + \
-      tb.to_s_positions_highlight(*actual_pos)
-        .split("\n")
-        .zip(tb.to_s_positions_highlight(*positions).split("\n"))
-        .map { |lines| "#{lines[0]}   #{lines[1]}" }
-        .join("\n")
+      board_to_s_positions_highlight(tb, *positions)
+      .split("\n")
+      .zip(board_to_s_positions_highlight(tb, *actual_pos).split("\n"))
+      .map { |lines| "#{lines[0]}   #{lines[1]}" }
+      .join("\n")
   end
 
   description do
