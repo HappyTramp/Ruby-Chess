@@ -9,6 +9,9 @@ Naming/UncommunicativeMethodParamName:
 Style/StringLiterals:
   Enabled: false
 
+Style/ParenthesesAroundCondition:
+  Enabled: false
+
 
 # Layout
 

@@ -43,7 +43,7 @@ RSpec::Matchers.define :equal_piece_array do |expected|
   end
 
   def piece_array_pretty(piece_array)
-    "[ #{piece_array.map { |el| el.nil? ? '*' : el.to_s } * ', '} ]"
+    "[ #{piece_array.map { |el| el.empty? ? '*' : el.to_s } * ', '} ]"
   end
 end
 
@@ -53,10 +53,10 @@ RSpec::Matchers.define :equal_piece do |expected|
   failure_message { "fail: #{expected} != #{actual}" }
 end
 
-# compare two instance of BasicPiece or nil
+# compare two instance of BasicPiece or EmptyCell
 def pieces_equal?(piece1, piece2)
-  return true if piece1.nil? && piece2.nil?
-  return false if piece1.nil? || piece2.nil?
+  return true if piece1.empty? && piece2.empty?
+  return false if piece1.empty? || piece2.empty?
 
   if piece1.class.superclass == BasicPiece && piece2.class.superclass == BasicPiece
     if piece1.class == piece2.class &&

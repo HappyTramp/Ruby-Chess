@@ -1,5 +1,5 @@
 require 'colorize'
-require_relative './pieces/pieces'
+require_relative './pieces/index'
 
 # the chess board
 class Board
@@ -22,10 +22,10 @@ class Board
         end
     end
 
-    if @grid[7].class == NilClass \
-       || @grid[7][7].class == NilClass \
-       || @grid[8].class != NilClass \
-       || @grid[7][8].class != NilClass
+    if (@grid[7].is_a?(NilClass) ||
+        @grid[7][7].is_a?(NilClass) ||
+        @grid[8].class != NilClass ||
+        @grid[7][8].class != NilClass)
       raise ArgumentError, 'wrong Board init string'
     end
   end

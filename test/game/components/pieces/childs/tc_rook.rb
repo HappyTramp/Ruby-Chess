@@ -1,5 +1,5 @@
-require 'game_components/pieces/chess_pieces/rook'
-require 'game_components/board'
+require 'game/components/pieces/childs/rook'
+require 'game/components/board'
 
 describe Rook, for: 'rook' do
   describe '#get_possible_moves' do

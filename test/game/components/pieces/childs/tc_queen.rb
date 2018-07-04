@@ -1,5 +1,6 @@
-require 'game_components/pieces/chess_pieces/queen.rb'
-require 'game_components/board'
+require 'game/components/pieces/childs/queen.rb'
+require 'game/components/board'
+require_relative '../../../../test_helper/h_piece'
 
 describe Queen, for: 'queen' do
   describe '#get_possible_moves' do

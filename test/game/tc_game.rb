@@ -1,8 +1,8 @@
-require 'game'
-require 'game_components/pieces/pieces'
-require 'game_components/board'
-require_relative './test_helper/h_board'
-require_relative './test_helper/h_piece'
+require 'game/index'
+require 'game/components/pieces/index'
+require 'game/components/board'
+require_relative '../test_helper/h_board'
+require_relative '../test_helper/h_piece'
 
 class Game; attr_accessor :board; end
 
@@ -33,14 +33,14 @@ describe Game do
     end
   end
 
-  # describe '#find_pawn_promotion' do
-  #   let(:no_promo_game) { Game.new Board.new(''Piece::King.new([3, 3], 'black')) }
-  #   it { expect(no_promo_game.find_pawn_promotion).to be nil }
-  #   let(:promo_white_game) { Game.new Board.new(''Piece::Pawn.new([0, 4], 'white')) }
-  #   it { expect(promo_white_game.find_pawn_promotion).to eql([0, 4]) }
-  #   let(:promo_black_game) { Game.new Board.new(''Piece::Pawn.new([7, 3], 'black')) }
-  #   it { expect(promo_black_game.find_pawn_promotion).to eql([7, 3]) }
-  # end
+  describe '#pawn_promotion' do
+    let(:no_promo_game) { Game.new Board.new('8/8/8/3k4/8/8/8/8') }
+    it { expect(no_promo_game.pawn_promotion).to be nil }
+    let(:promo_white_game) { Game.new Board.new('3P4/8/8/8/8/8/8/8') }
+    it { expect(promo_white_game.pawn_promotion).to eql([0, 3]) }
+    let(:promo_black_game) { Game.new Board.new('8/8/8/8/8/8/8/3p4') }
+    it { expect(promo_black_game.pawn_promotion).to eql([7, 3]) }
+  end
 
   # describe '#add_possible_castling' do
   #   let(:no_castling_game) { Game.new(tb_constructor(Piece::Rook.new([3, 3], 'black'), [0, 3])) }

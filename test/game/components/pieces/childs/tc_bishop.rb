@@ -1,6 +1,6 @@
-require 'game_components/pieces/chess_pieces/bishop.rb'
-require 'game_components/board'
-require_relative '../../../test_helper/h_piece.rb'
+require 'game/components/pieces/childs/bishop'
+require 'game/components/board'
+require_relative '../../../../test_helper/h_piece'
 
 describe Bishop, for: 'bishop' do
   describe '#get_possible_moves' do

@@ -1,6 +1,6 @@
-require 'game_components/pieces/chess_pieces/pawn.rb'
-require 'game_components/board.rb'
-require_relative '../../../test_helper/h_piece.rb'
+require 'game/components/pieces/childs/pawn.rb'
+require 'game/components/board.rb'
+require_relative '../../../../test_helper/h_piece.rb'
 
 class Pawn; attr_accessor :first_move; end
 

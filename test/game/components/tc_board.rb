@@ -1,9 +1,15 @@
-require 'game_components/board.rb'
-require 'game_components/pieces/pieces'
-require_relative '../test_helper/h_board'
-require_relative '../test_helper/h_piece'
+require 'game/components/board.rb'
+require 'game/components/pieces/index'
+require_relative '../../test_helper/h_board'
+require_relative '../../test_helper/h_piece'
 
 class Board; attr_accessor :grid; end
+
+class ECell
+  def self.empty?
+    true
+  end
+end
 
 describe Board, for: 'board' do
   describe '#initialize' do
@@ -16,10 +22,10 @@ describe Board, for: 'board' do
           Piece::Knight.new([0, 6], 'black'), Piece::Rook.new([0, 7], 'black')
         ],
         (1..8).map.with_index { |_, i| Piece::Pawn.new([1, i], 'black') },
-        [nil, nil, nil, nil, nil, nil, nil, nil],
-        [nil, nil, nil, nil, nil, nil, nil, nil],
-        [nil, nil, nil, nil, nil, nil, nil, nil],
-        [nil, nil, nil, nil, nil, nil, nil, nil],
+        [ECell, ECell, ECell, ECell, ECell, ECell, ECell, ECell],
+        [ECell, ECell, ECell, ECell, ECell, ECell, ECell, ECell],
+        [ECell, ECell, ECell, ECell, ECell, ECell, ECell, ECell],
+        [ECell, ECell, ECell, ECell, ECell, ECell, ECell, ECell],
         (1..8).map.with_index { |_, i| Piece::Pawn.new([6, i], 'white') },
         [
           Piece::Rook.new([7, 0], 'white'), Piece::Knight.new([7, 1], 'white'),
@@ -45,7 +51,7 @@ describe Board, for: 'board' do
       it 'create a grid with the given positions' do
         modified_grid = Board.new('qnb1kbn1/pppppppp/8/8/8/8/PPPPPPPP/1NB1KBN1').grid
         initial_grid.map! do |row|
-          row.map! { |cell| [Piece::Queen, Piece::Rook].include?(cell.class) ? nil : cell }
+          row.map! { |cell| [Piece::Queen, Piece::Rook].include?(cell.class) ? ECell : cell }
         end
         initial_grid[0][0] = Piece::Queen.new [0, 0], 'black'
 
@@ -59,13 +65,13 @@ describe Board, for: 'board' do
   describe 'grid elements getter and setter' do
     describe '#[]' do
       context 'happy path' do
-        it 'return a piece or nil if empty' do
+        it 'return a piece or ECell if empty' do
           expect(subject[0, 0]).to equal_piece(Piece::Rook.new([0, 0], 'black'))
           expect(subject[6, 5]).to equal_piece(Piece::Pawn.new([6, 5], 'white'))
         end
-        it 'return nil (EmptyCell) if the cell is empty' do
-          expect(subject[4, 0]).to be_nil
-          expect(subject[3, 3]).to be_nil
+        it 'return EmptyCell if the cell is empty' do
+          expect(subject[4, 0]).to be_instance_of EmptyCell
+          expect(subject[3, 3]).to be_instance_of EmptyCell
         end
       end
       context 'wrong index' do
@@ -112,12 +118,12 @@ describe Board, for: 'board' do
   describe '#get_diagonal' do
     let(:diag33) do
       [Piece::Pawn.new([6, 0], 'white'),
-       nil, nil, nil, nil,
+       ECell, ECell, ECell, ECell,
        Piece::Pawn.new([1, 5], 'black'), Piece::Knight.new([0, 6], 'black')]
     end
     let(:diag52) do
       [Piece::Rook.new([7, 0], 'white'), Piece::Pawn.new([6, 1], 'white'),
-       nil, nil, nil, nil,
+       ECell, ECell, ECell, ECell,
        Piece::Pawn.new([1, 6], 'black'), Piece::Rook.new([0, 7], 'black')]
     end
     let(:a_diag06) do
@@ -126,7 +132,7 @@ describe Board, for: 'board' do
     end
     let(:a_diag45) do
       [Piece::Knight.new([0, 1], 'black'), Piece::Pawn.new([1, 2], 'black'),
-       nil, nil, nil, nil,
+       ECell, ECell, ECell, ECell,
        Piece::Pawn.new([6, 7], 'white')]
     end
     context 'diagonal (with arg anti: false)' do

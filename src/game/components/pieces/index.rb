@@ -1,9 +1,9 @@
-require_relative './chess_pieces/king'
-require_relative './chess_pieces/queen'
-require_relative './chess_pieces/rook'
-require_relative './chess_pieces/knight'
-require_relative './chess_pieces/bishop'
-require_relative './chess_pieces/pawn'
+require_relative './childs/king'
+require_relative './childs/queen'
+require_relative './childs/rook'
+require_relative './childs/knight'
+require_relative './childs/bishop'
+require_relative './childs/pawn'
 
 # Group of the chess pieces
 module Piece
@@ -15,7 +15,7 @@ module Piece
   Pawn = Pawn
 end
 
-# An empty cell that respond true to .nil?
+# An empty cell that respond true to empty?
 class EmptyCell
   attr_reader :position, :color
 
@@ -24,7 +24,7 @@ class EmptyCell
     @color = nil
   end
 
-  def nil?
+  def empty?
     true
   end
 

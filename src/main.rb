@@ -1,7 +1,7 @@
-require_relative './game_components/board'
+require_relative './game/components/board'
 require_relative './game.rb'
-# require_relative './game_components/pieces/pieces'
-# require_relative './../test/game_components/testing_helpers'
+# require_relative './game/components/pieces/index'
+# require_relative './../test/game/components/testing_helpers'
 
 # board = TestingBoard.new rook_modified_positions: [[3, 3]], king_modified_positions: [[3, 1], [3, 5]], queenModifiedPositions: [[3, 0]]
 # puts board

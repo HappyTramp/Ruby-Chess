@@ -8,6 +8,10 @@ class BasicPiece
     @color = color
   end
 
+  def empty?
+    false
+  end
+
   private
 
   def get_grouped_sides_of(board, *orientations)
@@ -47,6 +51,13 @@ class BasicPiece
     filtered_side
   end
 
+  # identify a cell type
+  def get_cell_type(cell)
+    return nil if cell == false # out of border
+    return :empty if cell.empty?
+    cell.color == @color ? :ally : :enemy
+  end
+
   # is the cell type valid for a move
   def valid_cell?(cell)
     {
@@ -54,12 +65,5 @@ class BasicPiece
       ally: false,
       enemy: true
     }[get_cell_type(cell)]
-  end
-
-  # identify a cell type
-  def get_cell_type(cell)
-    return nil if cell == false # out of border
-    return :empty if cell.nil?
-    cell.color == @color ? :ally : :enemy
   end
 end
