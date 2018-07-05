@@ -9,8 +9,4 @@ module SpecialMoves
   def castling
     
   end
-
-  def en_passant
-
-  end
 end

@@ -6,8 +6,8 @@ describe Queen, for: 'queen' do
   describe '#get_possible_moves' do
     let(:std_tb) { Board.new '8/1k1k1k2/8/1k1q2k1/8/1K6/3K2K1/8' }
     it 'happy path' do
-      expect(std_tb[3, 3].get_possible_moves(std_tb))
-        .to contain_exactly(
+      expect([std_tb, std_tb[3, 3]])
+        .to contain_exact_positions(
           [2, 2], [2, 3], [2, 4], [3, 2], [3, 4],
           [3, 5], [4, 2], [4, 3], [4, 4], [5, 1],
           [5, 3], [5, 5], [6, 3], [6, 6]

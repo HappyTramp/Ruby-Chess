@@ -7,8 +7,7 @@ require_relative '../test_helper/h_piece'
 class Game; attr_accessor :board; end
 
 describe Game do
-  let(:game_tb) { Board.new '8/3p4/2k1p3/1p1q1p2/1NB1P3/PP1R1P2/8/8' }
-  subject { Game.new game_tb }
+  subject { Game.new Board.new '8/3p4/2k1p3/1p1q1p2/1NB1P3/PP1R1P2/8/8' }
 
   describe '#all_pieces_possible_moves' do
     it 'return all correct possible move of all pieces' do
@@ -34,44 +33,48 @@ describe Game do
   end
 
   describe '#pawn_promotion' do
-    let(:no_promo_game) { Game.new Board.new('8/8/8/3k4/8/8/8/8') }
-    it { expect(no_promo_game.pawn_promotion).to be nil }
-    let(:promo_white_game) { Game.new Board.new('3P4/8/8/8/8/8/8/8') }
-    it { expect(promo_white_game.pawn_promotion).to eql([0, 3]) }
-    let(:promo_black_game) { Game.new Board.new('8/8/8/8/8/8/8/3p4') }
-    it { expect(promo_black_game.pawn_promotion).to eql([7, 3]) }
+    let(:no_promo_g) { Game.new Board.new('8/8/8/3k4/8/8/8/8') }
+    it { expect(no_promo_g.pawn_promotion).to be nil }
+    let(:promo_white_g) { Game.new Board.new('3P4/8/8/8/8/8/8/8') }
+    it { expect(promo_white_g.pawn_promotion).to eql([0, 3]) }
+    let(:promo_black_g) { Game.new Board.new('8/8/8/8/8/8/8/3p4') }
+    it { expect(promo_black_g.pawn_promotion).to eql([7, 3]) }
   end
 
-  # describe '#add_possible_castling' do
-  #   let(:no_castling_game) { Game.new(tb_constructor(Piece::Rook.new([3, 3], 'black'), [0, 3])) }
-  #   it 'shouldnt add any possible move to the King' do
-  #     pm = no_castling_game.board[0, 3].get_possible_moves(no_castling_game.board)
-  #     no_castling_game.add_possible_castling
-  #     expect(pm).to eql(no_castling_game.board[0, 3].get_possible_moves(no_castling_game.board))
-  #   end
-  #   let(:black_little_castling_game) { Game.new tb_constructor(Piece::Rook.new([0, 7], 'black'), [0, 4]) }
-  #   it do
-  #     pm = black_little_castling_game.board[0, 4].get_possible_moves(black_little_castling_game.board)
-  #     black_little_castling_game.add_possible_castling
-  #     expect(pm).to include([0, 2])
-  #   end
-  #   let(:black_big_castling_game) { Game.new tb_constructor(Piece::Rook.new([0, 0], 'black'), [0, 4]) }
-  #   it do
-  #     pm = black_big_castling_game.board[0, 4].get_possible_moves(black_big_castling_game.board)
-  #     black_big_castling_game.add_possible_castling
-  #     expect(pm).to include([0, 6])
-  #   end
-  #   let(:white_little_castling_game) { Game.new tb_constructor(Piece::Rook.new([7, 7], 'white'), [7, 4]) }
-  #   it do
-  #     pm = white_little_castling_game.board[7, 4].get_possible_moves(white_little_castling_game.board)
-  #     white_little_castling_game.add_possible_castling
-  #     expect(pm).to include([7, 2])
-  #   end
-  #   let(:white_big_castling_game) { Game.new tb_constructor(Piece::Rook.new([7, 0], 'white'), [7, 4]) }
-  #   it do
-  #     pm = white_big_castling_game.board[7, 4].get_possible_moves(white_big_castling_game.board)
-  #     white_big_castling_game.add_possible_castling
-  #     expect(pm).to include([7, 6])
-  #   end
-  # end
+  describe '#castling' do
+    let(:no_cstl_g) { Game.new Board.new('k7/8/8/3r4/8/8/8/8') }
+    it 'don\'t add any move' do
+      pm = no_cstl_g.board[0, 0].get_possible_moves(no_cstl_g.board)
+      no_cstl_g.castling
+      expect(pm).to eql(no_cstl_g.board[0, 0].get_possible_moves(no_cstl_g.board))
+    end
+    let(:black_lt_cstl_g) { Game.new Board.new('4k2r/8/8/8/8/8/8/8') }
+    it 'add the black little castle move' do
+      black_lt_cstl_g.castling
+      expect(black_lt_cstl_g.board[0, 4]
+        .get_possible_moves(black_lt_cstl_g.board))
+        .to include([0, 6])
+    end
+    let(:black_lg_cstl_g) { Game.new Board.new('r3k3/8/8/8/8/8/8/8') }
+    it 'add the black large castle move' do
+      black_lg_cstl_g.castling
+      expect(black_lg_cstl_g.board[0, 4]
+        .get_possible_moves(black_lg_cstl_g.board))
+        .to include([0, 2])
+    end
+    let(:white_lt_cstl_g) { Game.new Board.new('8/8/8/8/8/8/8/4K2R') }
+    it 'add the white little castle move' do
+      white_lt_cstl_g.castling
+      expect(white_lt_cstl_g.board[7, 4]
+        .get_possible_moves(white_lt_cstl_g.board))
+        .to include([7, 6])
+    end
+    let(:white_lg_cstl_g) { Game.new Board.new('8/8/8/8/8/8/8/R3K3') }
+    it 'add the white large castle move' do
+      white_lg_cstl_g.castling
+      expect(white_lg_cstl_g.board[7, 4]
+        .get_possible_moves(white_lg_cstl_g.board))
+        .to include([7, 2])
+    end
+  end
 end
