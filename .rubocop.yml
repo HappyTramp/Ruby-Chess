@@ -12,6 +12,9 @@ Style/StringLiterals:
 Style/ParenthesesAroundCondition:
   Enabled: false
 
+Style/ColonMethodCall:
+  Enabled: false
+
 
 # Layout
 

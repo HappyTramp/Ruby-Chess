@@ -3,7 +3,7 @@ require_relative '../basic_piece'
 # class of a Rook
 class Bishop < BasicPiece
   def to_s
-    @color == 'white' ? '♗' : '♝'
+    @color == :w ? '♗' : '♝'
   end
 
   # @returns the list of position where the queen can move

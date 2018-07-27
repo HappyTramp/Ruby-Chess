@@ -11,11 +11,11 @@ class ECell
 end
 
 describe BasicPiece, for: 'basicpiece' do
-  subject { BasicPiece.new [3, 3], 'black' }
+  subject { BasicPiece.new [3, 3], :b }
 
   describe '#initialize' do
     it { expect(subject.position).to eql([3, 3]) }
-    it { expect(subject.color).to eql('black') }
+    it { expect(subject.color).to eql(:b) }
   end
 
   describe 'private methods' do
@@ -25,14 +25,14 @@ describe BasicPiece, for: 'basicpiece' do
     let(:vert_sides)   { subject.send(:get_sides_of, tb, :vertical)      }
     let(:diag_sides)   { subject.send(:get_sides_of, tb, :diagonal)      }
     let(:a_diag_sides) { subject.send(:get_sides_of, tb, :anti_diagonal) }
-    let(:horz_1s_side)   { [ECell, Piece::King.new([3, 1], 'black'), ECell] }
-    let(:horz_2n_side)   { [ECell, ECell, King.new([3, 6], 'black'), ECell] }
-    let(:vert_1s_side)   { [ECell, King.new([1, 3], 'black'), ECell]        }
-    let(:vert_2n_side)   { [ECell, ECell, King.new([6, 3], 'white'), ECell] }
-    let(:diag_1s_side)   { [ECell, King.new([5, 1], 'white'), ECell]        }
-    let(:diag_2n_side)   { [ECell, King.new([1, 5], 'black'), ECell]        }
-    let(:a_diag_1s_side) { [ECell, ECell, King.new([0, 0], 'black')]        }
-    let(:a_diag_2n_side) { [ECell, ECell, King.new([6, 6], 'white'), ECell] }
+    let(:horz_1s_side)   { [ECell, Piece::King.new([3, 1], :b), ECell] }
+    let(:horz_2n_side)   { [ECell, ECell, King.new([3, 6], :b), ECell] }
+    let(:vert_1s_side)   { [ECell, King.new([1, 3], :b), ECell]        }
+    let(:vert_2n_side)   { [ECell, ECell, King.new([6, 3], :w), ECell] }
+    let(:diag_1s_side)   { [ECell, King.new([5, 1], :w), ECell]        }
+    let(:diag_2n_side)   { [ECell, King.new([1, 5], :b), ECell]        }
+    let(:a_diag_1s_side) { [ECell, ECell, King.new([0, 0], :b)]        }
+    let(:a_diag_2n_side) { [ECell, ECell, King.new([6, 6], :w), ECell] }
 
     describe '#get_sides_of', getsides: true do
       context 'orientation = horizontal' do
@@ -80,28 +80,28 @@ describe BasicPiece, for: 'basicpiece' do
       it('left side') { expect(flt_horz_1s_side).to equal_piece_array([ECell]) }
       it('up side') { expect(flt_vert_2n_side).to equal_piece_array([ECell, ECell]) }
       it 'diagonal down side' do
-        expect(flt_diag_1s_side).to equal_piece_array([ECell, King.new([5, 1], 'white')])
+        expect(flt_diag_1s_side).to equal_piece_array([ECell, King.new([5, 1], :w)])
       end
       it'anti diagonal down side' do
-        expect(flt_a_diag_2n_side).to equal_piece_array([ECell, ECell, King.new([6, 6], 'white')])
+        expect(flt_a_diag_2n_side).to equal_piece_array([ECell, ECell, King.new([6, 6], :w)])
       end
     end
 
     describe '#valid_cell?' do
       context 'the cell is empty or enemy color' do
-        it { expect(subject.send(:valid_cell?, King.new([0, 0], 'white'))).to be true }
+        it { expect(subject.send(:valid_cell?, King.new([0, 0], :w))).to be true }
         it { expect(subject.send(:valid_cell?, EmptyCell.new([0, 0]))).to be true }
       end
       context 'the cell is the same color or false' do
-        it { expect(subject.send(:valid_cell?, King.new([0, 0], 'black'))).to be false }
+        it { expect(subject.send(:valid_cell?, King.new([0, 0], :b))).to be false }
         it { expect(subject.send(:valid_cell?, false)).to be nil }
       end
     end
 
     describe '#get_cell_type' do
       it { expect(subject.send(:get_cell_type, EmptyCell.new([0, 0]))).to be :empty }
-      it { expect(subject.send(:get_cell_type, BasicPiece.new([0, 0], 'black'))).to be :ally }
-      it { expect(subject.send(:get_cell_type, BasicPiece.new([0, 0], 'white'))).to be :enemy }
+      it { expect(subject.send(:get_cell_type, BasicPiece.new([0, 0], :b))).to be :ally }
+      it { expect(subject.send(:get_cell_type, BasicPiece.new([0, 0], :w))).to be :enemy }
     end
   end
 end

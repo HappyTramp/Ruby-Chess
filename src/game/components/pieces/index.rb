@@ -13,6 +13,18 @@ module Piece
   Knight = Knight
   Bishop = Bishop
   Pawn = Pawn
+
+  def self.init(type, position)
+    color = (/[A-Z]/ =~ type).nil? ? :b : :w
+    {
+      K: King,
+      Q: Queen,
+      R: Rook,
+      B: Bishop,
+      N: Knight,
+      P: Pawn
+    }[type.upcase.to_sym].new position, color
+  end
 end
 
 # An empty cell that respond true to empty?

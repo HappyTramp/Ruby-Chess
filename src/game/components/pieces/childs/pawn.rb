@@ -2,19 +2,20 @@ require_relative '../basic_piece'
 
 # class of a Rook
 class Pawn < BasicPiece
-  def initialize(position, color, first_move: true)
+  attr_accessor :first_move
+
+  def initialize(position, color, first_move=true)
     super(position, color)
     @first_move = first_move
-    @reached_end = false
   end
 
   def to_s
-    @color == 'white' ? '♙' : '♟'
+    @color == :w ? '♙' : '♟'
   end
 
   def get_possible_moves(board)
     pos_list = []
-    x_mod = @color == 'black' ? 1 : -1
+    x_mod = @color == :b ? 1 : -1
     pos_x_mod = @position[0] + x_mod
 
     cell_front = board[pos_x_mod, @position[1]]

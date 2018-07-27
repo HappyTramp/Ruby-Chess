@@ -3,7 +3,7 @@ require_relative '../basic_piece'
 # class of a Rook
 class Knight < BasicPiece
   def to_s
-    @color == 'white' ? '♘' : '♞'
+    @color == :w ? '♘' : '♞'
   end
 
   def get_possible_moves(board)

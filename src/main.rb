@@ -10,8 +10,8 @@ require_relative './game.rb'
 # out.map! { |el| el.to_s }
 # puts out.inspect
 
-# r1 = [nil, Piece::King.new([3, 1], 'black'), nil]
-# r2 = [nil, Piece::King.new([3, 1], 'black'), nil]
+# r1 = [nil, Piece::King.new([3, 1], :b), nil]
+# r2 = [nil, Piece::King.new([3, 1], :b), nil]
 
 # puts piece_array_equal?(r1, r2)
 

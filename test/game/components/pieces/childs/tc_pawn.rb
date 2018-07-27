@@ -2,8 +2,6 @@ require 'game/components/pieces/childs/pawn.rb'
 require 'game/components/board.rb'
 require_relative '../../../../test_helper/h_piece.rb'
 
-class Pawn; attr_accessor :first_move; end
-
 describe Pawn, for: 'pawn' do
   describe '#get_possible_moves' do
     let(:white_start_tb) { Board.new '8/8/8/8/8/8/P7/8' }

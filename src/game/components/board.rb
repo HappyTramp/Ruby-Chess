@@ -1,4 +1,3 @@
-require 'colorize'
 require_relative './pieces/index'
 
 # the chess board
@@ -7,18 +6,9 @@ class Board
   def initialize(positions='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
     @grid = positions.split('/').map.with_index do |row, i|
       row
-        .chars.flat_map { |c| c.to_i == 0 ? c : Array.new(c.to_i) { '' } }
+        .chars.flat_map { |c| c.to_i == 0 ? c : Array.new(c.to_i) { nil } }
         .map.with_index do |p_type, j|
-          color = /[A-Z]/.match(p_type).nil? ? 'black' : 'white'
-          case p_type.upcase
-          when 'K' then Piece::King.new [i, j], color
-          when 'Q' then Piece::Queen.new [i, j], color
-          when 'R' then Piece::Rook.new [i, j], color
-          when 'N' then Piece::Knight.new [i, j], color
-          when 'B' then Piece::Bishop.new [i, j], color
-          when 'P' then Piece::Pawn.new [i, j], color
-          else EmptyCell.new [i, j]
-          end
+          p_type.nil? ? EmptyCell.new([i, j]) : Piece::init(p_type, [i, j])
         end
     end
 

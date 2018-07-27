@@ -1,4 +1,4 @@
-require 'game/components/board.rb'
+require 'game/components/board'
 require 'game/components/pieces/index'
 require_relative '../../test_helper/h_board'
 require_relative '../../test_helper/h_piece'
@@ -16,22 +16,22 @@ describe Board, for: 'board' do
     let(:initial_grid) do
       [
         [
-          Piece::Rook.new([0, 0], 'black'), Piece::Knight.new([0, 1], 'black'),
-          Piece::Bishop.new([0, 2], 'black'), Piece::Queen.new([0, 3], 'black'),
-          Piece::King.new([0, 4], 'black'), Piece::Bishop.new([0, 5], 'black'),
-          Piece::Knight.new([0, 6], 'black'), Piece::Rook.new([0, 7], 'black')
+          Piece::Rook.new([0, 0], :b), Piece::Knight.new([0, 1], :b),
+          Piece::Bishop.new([0, 2], :b), Piece::Queen.new([0, 3], :b),
+          Piece::King.new([0, 4], :b), Piece::Bishop.new([0, 5], :b),
+          Piece::Knight.new([0, 6], :b), Piece::Rook.new([0, 7], :b)
         ],
-        (1..8).map.with_index { |_, i| Piece::Pawn.new([1, i], 'black') },
+        (1..8).map.with_index { |_, i| Piece::Pawn.new([1, i], :b) },
         [ECell, ECell, ECell, ECell, ECell, ECell, ECell, ECell],
         [ECell, ECell, ECell, ECell, ECell, ECell, ECell, ECell],
         [ECell, ECell, ECell, ECell, ECell, ECell, ECell, ECell],
         [ECell, ECell, ECell, ECell, ECell, ECell, ECell, ECell],
-        (1..8).map.with_index { |_, i| Piece::Pawn.new([6, i], 'white') },
+        (1..8).map.with_index { |_, i| Piece::Pawn.new([6, i], :w) },
         [
-          Piece::Rook.new([7, 0], 'white'), Piece::Knight.new([7, 1], 'white'),
-          Piece::Bishop.new([7, 2], 'white'), Piece::Queen.new([7, 3], 'white'),
-          Piece::King.new([7, 4], 'white'), Piece::Bishop.new([7, 5], 'white'),
-          Piece::Knight.new([7, 6], 'white'), Piece::Rook.new([7, 7], 'white')
+          Piece::Rook.new([7, 0], :w), Piece::Knight.new([7, 1], :w),
+          Piece::Bishop.new([7, 2], :w), Piece::Queen.new([7, 3], :w),
+          Piece::King.new([7, 4], :w), Piece::Bishop.new([7, 5], :w),
+          Piece::Knight.new([7, 6], :w), Piece::Rook.new([7, 7], :w)
         ]
       ]
     end
@@ -53,7 +53,7 @@ describe Board, for: 'board' do
         initial_grid.map! do |row|
           row.map! { |cell| [Piece::Queen, Piece::Rook].include?(cell.class) ? ECell : cell }
         end
-        initial_grid[0][0] = Piece::Queen.new [0, 0], 'black'
+        initial_grid[0][0] = Piece::Queen.new [0, 0], :b
 
         modified_grid.each.with_index do |row, i|
           expect(row).to equal_piece_array(initial_grid[i])
@@ -66,8 +66,8 @@ describe Board, for: 'board' do
     describe '#[]' do
       context 'happy path' do
         it 'return a piece or ECell if empty' do
-          expect(subject[0, 0]).to equal_piece(Piece::Rook.new([0, 0], 'black'))
-          expect(subject[6, 5]).to equal_piece(Piece::Pawn.new([6, 5], 'white'))
+          expect(subject[0, 0]).to equal_piece(Piece::Rook.new([0, 0], :b))
+          expect(subject[6, 5]).to equal_piece(Piece::Pawn.new([6, 5], :w))
         end
         it 'return EmptyCell if the cell is empty' do
           expect(subject[4, 0]).to be_instance_of EmptyCell
@@ -87,7 +87,7 @@ describe Board, for: 'board' do
         it 'set the cell to the given value' do
           subject[0, 0] = nil
           expect(subject.grid[0][0]).to be_nil
-          test_piece = Piece::Queen.new [6, 2], 'black'
+          test_piece = Piece::Queen.new [6, 2], :b
           subject[6, 2] = test_piece
           expect(subject.grid[6][2]).to equal_piece(test_piece)
         end
@@ -117,23 +117,23 @@ describe Board, for: 'board' do
 
   describe '#get_diagonal' do
     let(:diag33) do
-      [Piece::Pawn.new([6, 0], 'white'),
+      [Piece::Pawn.new([6, 0], :w),
        ECell, ECell, ECell, ECell,
-       Piece::Pawn.new([1, 5], 'black'), Piece::Knight.new([0, 6], 'black')]
+       Piece::Pawn.new([1, 5], :b), Piece::Knight.new([0, 6], :b)]
     end
     let(:diag52) do
-      [Piece::Rook.new([7, 0], 'white'), Piece::Pawn.new([6, 1], 'white'),
+      [Piece::Rook.new([7, 0], :w), Piece::Pawn.new([6, 1], :w),
        ECell, ECell, ECell, ECell,
-       Piece::Pawn.new([1, 6], 'black'), Piece::Rook.new([0, 7], 'black')]
+       Piece::Pawn.new([1, 6], :b), Piece::Rook.new([0, 7], :b)]
     end
     let(:a_diag06) do
-      [Piece::Knight.new([0, 6], 'black'),
-       Piece::Pawn.new([1, 7], 'black')]
+      [Piece::Knight.new([0, 6], :b),
+       Piece::Pawn.new([1, 7], :b)]
     end
     let(:a_diag45) do
-      [Piece::Knight.new([0, 1], 'black'), Piece::Pawn.new([1, 2], 'black'),
+      [Piece::Knight.new([0, 1], :b), Piece::Pawn.new([1, 2], :b),
        ECell, ECell, ECell, ECell,
-       Piece::Pawn.new([6, 7], 'white')]
+       Piece::Pawn.new([6, 7], :w)]
     end
     context 'diagonal (with arg anti: false)' do
       it { expect(subject.get_diagonal(3, 3)).to equal_piece_array(diag33) }
@@ -189,8 +189,8 @@ describe Board, for: 'board' do
     context 'some pieces moved' do
       it 'return an accurate stringified grid according to the changes' do
         subject[0, 0] = EmptyCell.new [0, 0]
-        subject[1, 1] = Piece::Rook.new [1, 1], 'white'
-        subject[3, 3] = Piece::King.new [3, 3], 'black'
+        subject[1, 1] = Piece::Rook.new [1, 1], :w
+        subject[3, 3] = Piece::King.new [3, 3], :b
         expect(subject.to_s).to eql(
           "     a   b   c   d   e   f   g   h  \n"\
           "   ┌───┬───┬───┬───┬───┬───┬───┬───┐\n"\
