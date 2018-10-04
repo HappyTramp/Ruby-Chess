@@ -1,3 +1,5 @@
+require_relative '../helpers.rb'
+
 # apply edge case over the board
 module SpecialMoves
   def pawn_promotion
@@ -6,7 +8,14 @@ module SpecialMoves
     nil
   end
 
+  # ni le roi ni la tour n'ont bougé
+  # le roi n'est pas en échec
+  # les cases sur lesquels il doit passer ne sont pas controlé par des pieces enemies
+  # pas de piece entre le roi et la tour
   def castling
-    
+    #
+  end
+
+  def en_passant
   end
 end

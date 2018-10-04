@@ -1,4 +1,4 @@
-# Basic Piece Class meant to be inherited by the Real Pieces
+# BasicPiece Class meant to be inherited by the Real Pieces
 class BasicPiece
   attr_reader :position, :color
 

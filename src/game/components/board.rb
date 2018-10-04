@@ -1,4 +1,5 @@
 require_relative './pieces/index'
+require_relative '../../helpers'
 
 # the chess board
 class Board
@@ -78,12 +79,5 @@ class Board
 
     grid_to_string[-1] = "   └#{'───┴' * 7}───┘"
     grid_to_string.join("\n")
-  end
-
-  private
-
-  # @returns true if the index [x, y] is in of the borders
-  def index_in_border?(x, y)
-    x.between?(0, 7) && y.between?(0, 7)
   end
 end

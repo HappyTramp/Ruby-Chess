@@ -145,23 +145,6 @@ describe Board, for: 'board' do
     end
   end
 
-  describe 'private methods' do
-    describe '#index_in_border?' do
-      context 'out of borders indexes' do
-        it { expect(subject.send(:index_in_border?, -1, 0)).to be false }
-        it { expect(subject.send(:index_in_border?, 0, -1)).to be false }
-        it { expect(subject.send(:index_in_border?, 8, 0)).to be false }
-        it { expect(subject.send(:index_in_border?, 0, 8)).to be false }
-      end
-
-      context 'in borders indexes' do
-        it { expect(subject.send(:index_in_border?, 0, 0)).to be true }
-        it { expect(subject.send(:index_in_border?, 7, 0)).to be true }
-        it { expect(subject.send(:index_in_border?, 0, 7)).to be true }
-      end
-    end
-  end
-
   describe '#to_s' do
     subject = Board.new
     it 'initial configuration' do

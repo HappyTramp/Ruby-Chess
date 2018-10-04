@@ -25,7 +25,7 @@ describe BasicPiece, for: 'basicpiece' do
     let(:vert_sides)   { subject.send(:get_sides_of, tb, :vertical)      }
     let(:diag_sides)   { subject.send(:get_sides_of, tb, :diagonal)      }
     let(:a_diag_sides) { subject.send(:get_sides_of, tb, :anti_diagonal) }
-    let(:horz_1s_side)   { [ECell, Piece::King.new([3, 1], :b), ECell] }
+    let(:horz_1s_side)   { [ECell, King.new([3, 1], :b), ECell] }
     let(:horz_2n_side)   { [ECell, ECell, King.new([3, 6], :b), ECell] }
     let(:vert_1s_side)   { [ECell, King.new([1, 3], :b), ECell]        }
     let(:vert_2n_side)   { [ECell, ECell, King.new([6, 3], :w), ECell] }

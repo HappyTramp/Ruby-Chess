@@ -1,5 +1,6 @@
 require_relative './components/board'
 require_relative './special_moves'
+require_relative './history.rb'
 
 # class that supervise a game exectution
 class Game
@@ -7,7 +8,7 @@ class Game
 
   def initialize(board)
     @board = board
-    @moves_historic = []
+    @history = History.new
   end
 
   def all_pieces_possible_moves
