@@ -11,17 +11,25 @@ module Check
   end
 
   def is_checkmate?(color)
-    return false unless is_in_check?(color)
-    return true if filter_legal_moves().length == 0
-    false
+    legal_moves(color).length == 0
   end
 
-  def filter_legal_moves(color)
+  def legal_moves(color)
+    legal_moves = []
+
     all_possible_moves(color).each do |p|
-      p[:possible_moves].each do |pm|
-        # si en échec après le coup -> false
+      p[:possible_moves].each do |m|
+        position_origin = p[:piece].position
+        move_square = @board[*m]
+
+        @board.move_piece(p[:piece].position, m)
+        legal_moves.push([p[:piece], m]) unless is_in_check?(color)
+        @board.move_piece(m, position_origin)
+        @board[*m] = move_square
       end
     end
+
+    legal_moves
   end
 
 end
