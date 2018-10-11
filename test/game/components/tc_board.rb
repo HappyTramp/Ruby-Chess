@@ -87,7 +87,7 @@ describe Board, for: 'board' do
         it 'set the cell to the given value' do
           subject[0, 0] = nil
           expect(subject.grid[0][0]).to be_nil
-          test_piece = Piece::Queen.new [6, 2], :b
+          test_piece = Piece::init(:Q, [6, 2])
           subject[6, 2] = test_piece
           expect(subject.grid[6][2]).to equal_piece(test_piece)
         end
@@ -101,6 +101,14 @@ describe Board, for: 'board' do
           expect(subject_copy.grid).to eql subject.grid
         end
       end
+    end
+  end
+
+  describe '#move_piece' do
+    it 'moves a piece to a square' do
+      subject.move_piece([0, 1], [2, 2])
+      expect(subject[2, 2]).to equal_piece(Piece::init(:n, [2, 2]))
+      expect(subject[0, 1].empty?).to be true
     end
   end
 

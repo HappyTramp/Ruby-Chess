@@ -17,17 +17,22 @@ describe 'Helpers', for: 'helpers' do
   end
 
   describe '#index_in_border?' do
-      context 'out of borders indexes' do
-        it { expect(subject.send(:index_in_border?, -1, 0)).to be false }
-        it { expect(subject.send(:index_in_border?, 0, -1)).to be false }
-        it { expect(subject.send(:index_in_border?, 8, 0)).to be false }
-        it { expect(subject.send(:index_in_border?, 0, 8)).to be false }
-      end
-
-      context 'in borders indexes' do
-        it { expect(subject.send(:index_in_border?, 0, 0)).to be true }
-        it { expect(subject.send(:index_in_border?, 7, 0)).to be true }
-        it { expect(subject.send(:index_in_border?, 0, 7)).to be true }
-      end
+    context 'out of borders indexes' do
+      it { expect(index_in_border?(-1, 0)).to be false }
+      it { expect(index_in_border?(0, -1)).to be false }
+      it { expect(index_in_border?(8, 0)).to be false }
+      it { expect(index_in_border?(0, 8)).to be false }
     end
+
+    context 'in borders indexes' do
+      it { expect(index_in_border?(0, 0)).to be true }
+      it { expect(index_in_border?(7, 0)).to be true }
+      it { expect(index_in_border?(0, 7)).to be true }
+    end
+  end
+
+  describe '#reverse_color' do
+    it { expect(reverse_color(:w)).to eql(:b) }
+    it { expect(reverse_color(:b)).to eql(:w) }
+  end
 end

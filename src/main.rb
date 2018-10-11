@@ -1,5 +1,5 @@
 require_relative './game/components/board'
-require_relative './game.rb'
+# require_relative './game.rb'
 # require_relative './game/components/pieces/index'
 # require_relative './../test/game/components/testing_helpers'
 

@@ -31,6 +31,12 @@ class Board
     @grid[x][y] = value if index_in_border?(x, y)
   end
 
+  def move_piece(from, to)
+    self[*to] = self[*from]
+    self[*to].position = to
+    self[*from] = EmptyCell.new(from)
+  end
+
   # get the row at the x index
   def get_row(x)
     @grid[x]

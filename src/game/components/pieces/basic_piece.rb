@@ -1,6 +1,6 @@
 # BasicPiece Class meant to be inherited by the Real Pieces
 class BasicPiece
-  attr_reader :position, :color
+  attr_accessor :position, :color
 
   # init the piece with a position and a color
   def initialize(position, color)

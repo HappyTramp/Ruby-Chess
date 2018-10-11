@@ -10,3 +10,7 @@ end
 def index_in_border?(x, y)
   x.between?(0, 7) && y.between?(0, 7)
 end
+
+def reverse_color(color)
+  color == :w ? :b : :w
+end

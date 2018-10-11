@@ -20,9 +20,9 @@ describe History, for: 'history' do
     end
   end
 
-  describe '#search_entry' do
+  # describe '#search_entry' do
 
-  end
+  # end
 
   describe '#self.correct_move?' do
     context 'incorrect move syntaxe -> false' do
