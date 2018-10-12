@@ -8,11 +8,11 @@ describe 'Helpers', for: 'helpers' do
       expect { pos_nt(:a9) }.to raise_error 'incorrect notation syntax'
     end
     it 'return an index' do
-      expect(pos_nt(:a1)).to eql [0, 0]
-      expect(pos_nt(:h8)).to eql [7, 7]
-      expect(pos_nt(:h1)).to eql [0, 7]
-      expect(pos_nt(:a8)).to eql [7, 0]
-      expect(pos_nt(:e5)).to eql [4, 4]
+      expect(pos_nt(:a1)).to eql [7, 0]
+      expect(pos_nt(:h8)).to eql [0, 7]
+      expect(pos_nt(:h1)).to eql [7, 7]
+      expect(pos_nt(:a8)).to eql [0, 0]
+      expect(pos_nt(:e5)).to eql [3, 4]
     end
   end
 

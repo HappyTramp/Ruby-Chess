@@ -3,6 +3,8 @@ require_relative './components/pieces/basic_piece'
 
 # Game history
 class History
+  attr_reader :moves
+
   def initialize
     @moves = []
   end
