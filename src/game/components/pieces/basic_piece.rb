@@ -30,19 +30,18 @@ class BasicPiece
 
     index = line.index(self)
     [
-      line.reverse[index == 0 ? -1 : -index, 7],
+      line.reverse[index == 0 ? line.length : -index, 7],
       line[index + 1, 7]
     ]
   end
 
-  # @returns the cell that are accessible from the piece position
-  def filter_side(side)
+  # @returns the squares that are accessible from the piece position
+  def filter_accessibility(side)
     filtered_side = []
     side.each do |cell|
       case get_cell_type(cell)
       when :empty then filtered_side << cell
-      when :ally  then break
-      when :enemy then
+      when :ally, :enemy then
         filtered_side << cell
         break
       end

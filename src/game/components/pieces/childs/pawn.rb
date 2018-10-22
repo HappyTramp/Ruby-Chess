@@ -13,7 +13,7 @@ class Pawn < BasicPiece
     @color == :w ? '♙' : '♟'
   end
 
-  def get_possible_moves(board)
+  def controlled_squares(board)
     pos_list = []
     x_mod = @color == :b ? 1 : -1
     pos_x_mod = @position[0] + x_mod

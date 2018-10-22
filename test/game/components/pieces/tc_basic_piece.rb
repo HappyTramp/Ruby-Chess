@@ -10,7 +10,7 @@ class ECell
   end
 end
 
-describe BasicPiece, for: 'basicpiece' do
+describe BasicPiece, for: 'basic_piece' do
   subject { BasicPiece.new [3, 3], :b }
 
   describe '#initialize' do
@@ -72,11 +72,11 @@ describe BasicPiece, for: 'basicpiece' do
       end
     end
 
-    describe '#filter_side' do
-      let(:flt_horz_1s_side)   { subject.send(:filter_side, horz_1s_side) }
-      let(:flt_vert_2n_side)   { subject.send(:filter_side, vert_2n_side) }
-      let(:flt_diag_1s_side)   { subject.send(:filter_side, diag_1s_side) }
-      let(:flt_a_diag_2n_side) { subject.send(:filter_side, a_diag_2n_side) }
+    describe '#filter_accessibility' do
+      let(:flt_horz_1s_side)   { subject.send(:filter_accessibility, horz_1s_side) }
+      let(:flt_vert_2n_side)   { subject.send(:filter_accessibility, vert_2n_side) }
+      let(:flt_diag_1s_side)   { subject.send(:filter_accessibility, diag_1s_side) }
+      let(:flt_a_diag_2n_side) { subject.send(:filter_accessibility, a_diag_2n_side) }
       it('left side') { expect(flt_horz_1s_side).to equal_piece_array([ECell]) }
       it('up side') { expect(flt_vert_2n_side).to equal_piece_array([ECell, ECell]) }
       it 'diagonal down side' do

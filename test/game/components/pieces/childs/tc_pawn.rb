@@ -3,7 +3,7 @@ require 'game/components/board.rb'
 require_relative '../../../../test_helper/h_piece.rb'
 
 describe Pawn, for: 'pawn' do
-  describe '#get_possible_moves' do
+  describe '#controlled_squares' do
     let(:white_start_tb) { Board.new '8/8/8/8/8/8/P7/8' }
     it 'white start' do
       expect([white_start_tb, white_start_tb[6, 0]])

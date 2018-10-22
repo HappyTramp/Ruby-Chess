@@ -6,7 +6,7 @@ require_relative './game/components/board'
 # board = TestingBoard.new rook_modified_positions: [[3, 3]], king_modified_positions: [[3, 1], [3, 5]], queenModifiedPositions: [[3, 0]]
 # puts board
 
-# out = board[3, 3].get_possible_moves(board)
+# out = board[3, 3].controlled_squares(board)
 # out.map! { |el| el.to_s }
 # puts out.inspect
 

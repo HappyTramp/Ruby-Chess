@@ -4,13 +4,13 @@ require_relative './h_board'
 RSpec::Matchers.define :contain_exact_positions do |*positions|
   match do |tb_and_piece|
     tb, piece = tb_and_piece
-    piece.get_possible_moves(tb).sort == positions.sort
+    piece.controlled_squares(tb).sort == positions.sort
   end
 
   # print expected and actual board side by side
   failure_message do |tb_and_piece|
     tb, piece = tb_and_piece
-    actual_pos = piece.get_possible_moves(tb)
+    actual_pos = piece.controlled_squares(tb)
     "expected: #{positions}\ngot:      #{actual_pos}\n\n" + \
       board_to_s_positions_highlight(tb, *positions)
       .split("\n")

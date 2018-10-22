@@ -25,7 +25,7 @@ class Game
 
         pieces_possible_moves << {
           piece: cell,
-          possible_moves: cell.get_possible_moves(@board)
+          possible_moves: cell.controlled_squares(@board)
         }
       end
     end
