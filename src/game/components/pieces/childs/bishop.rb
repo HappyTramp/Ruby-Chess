@@ -9,7 +9,7 @@ class Bishop < BasicPiece
   # @returns the list of position where the queen can move
   def controlled_square(board)
     get_grouped_sides_of(board, :diagonal, :anti_diagonal)
-      .flat_map { |side| filter_side(side) }
+      .flat_map { |side| filter_accessibility(side) }
       .map(&:position)
   end
 end

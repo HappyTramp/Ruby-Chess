@@ -8,20 +8,20 @@ describe Bishop, for: 'bishop' do
     it 'happy path' do
       expect([std_tb, std_tb[3, 3]])
         .to contain_exact_positions(
-          [2, 2], [2, 4], [4, 4], [5, 5], [6, 6], [4, 2], [5, 1]
+          [4, 2], [5, 1], [2, 4], [1, 5], [2, 2], [1, 1], [4, 4], [5, 5], [6, 6]
         )
     end
 
     let(:corner_UL_tb) { Board.new 'b7/8/8/3k4/8/8/8/8' }
     it 'corner up left' do
       expect([corner_UL_tb, corner_UL_tb[0, 0]])
-        .to contain_exact_positions([1, 1], [2, 2])
+        .to contain_exact_positions([1, 1], [2, 2], [3, 3])
     end
 
     let(:corner_UR_tb) { Board.new '7b/8/8/4k3/8/8/8/8' }
     it 'corner up right' do
       expect([corner_UR_tb, corner_UR_tb[0, 7]])
-        .to contain_exact_positions([1, 6], [2, 5])
+        .to contain_exact_positions([1, 6], [2, 5], [3, 4])
     end
 
     let(:corner_DL_tb) { Board.new '8/8/8/4k3/8/8/8/B7' }
