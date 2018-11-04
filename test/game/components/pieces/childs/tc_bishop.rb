@@ -3,7 +3,7 @@ require 'game/components/board'
 require_relative '../../../../test_helper/h_piece'
 
 describe Bishop, for: 'bishop' do
-  describe '#get_possible_moves' do
+  describe '#controlled_square' do
     let(:std_tb) { Board.new '8/1k3k2/8/3b4/8/1K6/6K1/8' }
     it 'happy path' do
       expect([std_tb, std_tb[3, 3]])

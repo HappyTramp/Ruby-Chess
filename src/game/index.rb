@@ -15,21 +15,21 @@ class Game
     @history = History.new
   end
 
-  def all_possible_moves(color)
-    pieces_possible_moves = []
+  def all_controlled_square(color)
+    pieces_controlled_square = []
 
     # on peut surement utiliser reduce
     (0..7).each do |i|
-      @board.get_row(i).each do |cell|
-        next if cell.empty? || cell.color != color
+      @board.get_row(i).each do |sq|
+        next if sq.empty? || sq.color != color
 
-        pieces_possible_moves << {
-          piece: cell,
-          possible_moves: cell.get_possible_moves(@board)
+        pieces_controlled_square << {
+          piece: sq,
+          controlled_square: sq.controlled_square(@board)
         }
       end
     end
 
-    pieces_possible_moves
+    pieces_controlled_square
   end
 end

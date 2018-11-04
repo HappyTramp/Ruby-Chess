@@ -2,7 +2,7 @@ require 'game/components/pieces/childs/rook'
 require 'game/components/board'
 
 describe Rook, for: 'rook' do
-  describe '#get_possible_moves' do
+  describe '#controlled_square' do
     let(:std_tb) { Board.new '8/3k4/8/1k1r2k1/8/8/3K4/8' }
     it 'happy path' do
       expect([std_tb, std_tb[3, 3]])

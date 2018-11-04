@@ -4,8 +4,8 @@ require_relative './components/pieces/childs/king'
 module Check
 
   def is_in_check?(color)
-    all_possible_moves(reverse_color(color)).each do |p|
-      p[:possible_moves].each { |pos| return true if @board[*pos].is_a? King }
+    all_controlled_square(reverse_color(color)).each do |p|
+      p[:controlled_square].each { |pos| return true if @board[*pos].is_a?(King) && @board[*pos].color != color}
     end
     false
   end
@@ -17,8 +17,8 @@ module Check
   def legal_moves(color)
     legal_moves = []
 
-    all_possible_moves(color).each do |p|
-      p[:possible_moves].each do |m|
+    all_controlled_square(color).each do |p|
+      p[:controlled_square].each do |m|
         position_origin = p[:piece].position
         move_square = @board[*m]
 

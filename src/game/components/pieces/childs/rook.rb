@@ -7,7 +7,7 @@ class Rook < BasicPiece
   end
 
   # @returns the list of position where the rook can move
-  def get_possible_moves(board)
+  def controlled_square(board)
     get_grouped_sides_of(board, :horizontal, :vertical)
       .flat_map { |side| filter_side(side) }
       .map(&:position)

@@ -14,6 +14,10 @@ class BasicPiece
 
   private
 
+  def possible_move(board)
+    controlled_square(board).select { |p| p.color != @color }
+  end
+
   def get_grouped_sides_of(board, *orientations)
     orientations.flat_map do |orientation|
       get_sides_of(board, orientation)

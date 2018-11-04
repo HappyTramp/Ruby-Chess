@@ -18,6 +18,14 @@ describe BasicPiece, for: 'basicpiece' do
     it { expect(subject.color).to eql(:b) }
   end
 
+  describe '#possible_move' do
+    it 'filter ally out of the controlled square' do
+
+    end
+
+
+  end
+
   describe 'private methods' do
     let(:tb) { Board.new 'k7/3k1k2/8/1k1r2k1/8/1K6/3K2K1/8' }
     subject { tb[3, 3] }

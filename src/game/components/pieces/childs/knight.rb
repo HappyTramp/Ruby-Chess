@@ -6,7 +6,7 @@ class Knight < BasicPiece
     @color == :w ? '♘' : '♞'
   end
 
-  def get_possible_moves(board)
+  def controlled_square(board)
     ([-1, 1].product([-2, 2]) + [-2, 2].product([-1, 1]))
       .map { |mod| [@position[0] + mod[0], @position[1] + mod[1]] }
       .select { |pos| valid_cell?(board[*pos]) }
