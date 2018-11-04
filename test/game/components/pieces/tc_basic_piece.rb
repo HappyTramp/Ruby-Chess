@@ -95,21 +95,10 @@ describe BasicPiece, for: 'basic_piece' do
       end
     end
 
-    describe '#valid_cell?' do
-      context 'the cell is empty or enemy color' do
-        it { expect(subject.send(:valid_cell?, King.new([0, 0], :w))).to be true }
-        it { expect(subject.send(:valid_cell?, EmptyCell.new([0, 0]))).to be true }
-      end
-      context 'the cell is the same color or false' do
-        it { expect(subject.send(:valid_cell?, King.new([0, 0], :b))).to be false }
-        it { expect(subject.send(:valid_cell?, false)).to be nil }
-      end
-    end
-
-    describe '#get_cell_type' do
-      it { expect(subject.send(:get_cell_type, EmptyCell.new([0, 0]))).to be :empty }
-      it { expect(subject.send(:get_cell_type, BasicPiece.new([0, 0], :b))).to be :ally }
-      it { expect(subject.send(:get_cell_type, BasicPiece.new([0, 0], :w))).to be :enemy }
+    describe '#square_type' do
+      it { expect(subject.send(:square_type, EmptySquare.new([0, 0]))).to be :empty }
+      it { expect(subject.send(:square_type, BasicPiece.new([0, 0], :b))).to be :ally }
+      it { expect(subject.send(:square_type, BasicPiece.new([0, 0], :w))).to be :enemy }
     end
   end
 end

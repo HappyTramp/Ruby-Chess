@@ -41,7 +41,7 @@ describe Check, for: 'check' do
     end
   end
 
-  describe '#legal_moves' do
+  describe '#legal_move', for: 't' do
     let(:move_king_white_g) { Game.new Board.new '8/8/3qr3/8/3K4/8/8/8' }
     let(:move_king_black_g) { Game.new Board.new '8/8/4k3/8/4QR2/8/8/8' }
     let(:take_piece_white_g) { Game.new Board.new '8/8/8/8/8/8/6qP/2r3bK' }
@@ -51,27 +51,27 @@ describe Check, for: 'check' do
 
     context 'in check' do
       it 'moves the king' do
-        expect(move_king_white_g.legal_moves(:w)).to equal_move_array([
-          [Piece::init(:K, [4, 3]), [5, 2]], [Piece::init(:K, [4, 3]), [4, 2]]
+        expect(move_king_white_g.legal_move(:w)).to equal_move_array([
+          [Pieces::init(:K, [4, 3]), [5, 2]], [Pieces::init(:K, [4, 3]), [4, 2]]
         ])
-        expect(move_king_black_g.legal_moves(:b)).to equal_move_array([
-          [Piece::init(:k, [2, 4]), [1, 3]], [Piece::init(:k, [2, 4]), [2, 3]]
+        expect(move_king_black_g.legal_move(:b)).to equal_move_array([
+          [Pieces::init(:k, [2, 4]), [1, 3]], [Pieces::init(:k, [2, 4]), [2, 3]]
         ])
       end
       it 'capture the piece wich is checking the king' do
-        expect(take_piece_white_g.legal_moves(:w)).to equal_move_array([
-          [Piece::init(:K, [7, 7]), [6, 6]]
+        expect(take_piece_white_g.legal_move(:w)).to equal_move_array([
+          [Pieces::init(:K, [7, 7]), [6, 6]]
         ])
-        expect(take_piece_black_g.legal_moves(:b)).to equal_move_array([
-          [Piece::init(:k, [0, 0]), [1, 1]]
+        expect(take_piece_black_g.legal_move(:b)).to equal_move_array([
+          [Pieces::init(:k, [0, 0]), [1, 1]]
         ])
       end
       it 'moves to block with ally piece' do
-        expect(block_white_g.legal_moves(:w)).to equal_move_array([
-          [Piece::init(:Q, [4, 0]), [4, 4]]
+        expect(block_white_g.legal_move(:w)).to equal_move_array([
+          [Pieces::init(:Q, [4, 0]), [4, 4]]
         ])
-        expect(block_black_g.legal_moves(:b)).to equal_move_array([
-          [Piece::init(:n, [1, 4]), [3, 3]], [Piece::init(:r, [2, 7]), [2, 3]]
+        expect(block_black_g.legal_move(:b)).to equal_move_array([
+          [Pieces::init(:n, [1, 4]), [3, 3]], [Pieces::init(:r, [2, 7]), [2, 3]]
         ])
       end
     end
@@ -79,11 +79,11 @@ describe Check, for: 'check' do
     let(:pin_white_g) { Game.new Board.new '7K/7N/8/8/8/7q/8/8' }
     let(:pin_black_g) { Game.new Board.new '8/Q7/8/8/8/8/b7/k7' }
     it 'piece pined' do
-      expect(pin_white_g.legal_moves(:w)).to equal_move_array([
-        [Piece::init(:K, [0, 7]), [0, 6]], [Piece::init(:K, [0, 7]), [1, 6]]
+      expect(pin_white_g.legal_move(:w)).to equal_move_array([
+        [Pieces::init(:K, [0, 7]), [0, 6]], [Pieces::init(:K, [0, 7]), [1, 6]]
       ])
-      expect(pin_black_g.legal_moves(:b)).to equal_move_array([
-        [Piece::init(:k, [7, 0]), [7, 1]], [Piece::init(:k, [7, 0]), [6, 1]]
+      expect(pin_black_g.legal_move(:b)).to equal_move_array([
+        [Pieces::init(:k, [7, 0]), [7, 1]], [Pieces::init(:k, [7, 0]), [6, 1]]
       ])
     end
   end

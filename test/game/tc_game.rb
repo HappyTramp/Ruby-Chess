@@ -23,12 +23,11 @@ describe Game, for: 'game' do
     end
 
     it 'return all correct possible move for black' do
-      puts subject.board
       subject.all_controlled_square(:w).each do |pm|
         case pm[:piece].position
         when [5, 3] then
           expect(pm[:controlled_square])
-            .to contain_exactly([3, 3], [4, 3], [5, 2], [5, 4], [6, 3], [7, 3])
+            .to contain_exactly([3, 3], [4, 3], [5, 2], [5, 4], [6, 3], [7, 3], [5, 1], [5, 5])
         when [4, 2] then expect(pm[:controlled_square]).to contain_exactly([3, 1], [3, 3], [5, 1], [5, 3])
         when [4, 1] then
           expect(pm[:controlled_square])

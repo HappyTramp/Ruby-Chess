@@ -6,7 +6,8 @@ class Rook < BasicPiece
     @color == :w ? '♖' : '♜'
   end
 
-  # @returns the list of position where the rook can move
+  # position list of the controlled square
+  # horizontal + vertical
   def controlled_square(board)
     get_grouped_sides_of(board, :horizontal, :vertical)
       .flat_map { |side| filter_accessibility(side) }

@@ -31,7 +31,7 @@ describe VerifySpecialMoves, for: 'special_moves' do
     let(:right_condition_white_g) { Game.new Board.new '8/8/8/8/8/8/8/R3K2R' }
     let(:right_condition_black_g) { Game.new Board.new 'r3k2r/8/8/8/8/8/8/8' }
 
-    let(:no_castle) { {king_side: false, queen_side: false} }
+    let(:no_castle) { {short: false, long: false} }
 
 
     it 'false if king in check' do
@@ -53,24 +53,24 @@ describe VerifySpecialMoves, for: 'special_moves' do
     end
 
     it 'false if king as moved before' do
-      king_moved_white_g.history.add_entry({piece: Piece::init(:K, [7, 4]), from: [6, 4], to: [7, 4]})
-      king_moved_black_g.history.add_entry({piece: Piece::init(:k, [0, 4]), from: [1, 4], to: [0, 4]})
+      king_moved_white_g.history.add_entry({piece: Pieces::init(:K, [7, 4]), from: [6, 4], to: [7, 4]})
+      king_moved_black_g.history.add_entry({piece: Pieces::init(:k, [0, 4]), from: [1, 4], to: [0, 4]})
       expect(king_moved_white_g.can_castle?(:w)).to eq no_castle
       expect(king_moved_black_g.can_castle?(:b)).to eq no_castle
     end
 
-    it 'false king_side if king rook as moved before' do
-      king_rook_moved_white_g.history.add_entry({piece: Piece::init(:R, [6, 7]), from: [7, 7], to: [6, 7]})
-      king_rook_moved_black_g.history.add_entry({piece: Piece::init(:r, [1, 7]), from: [0, 7], to: [1, 7]})
-      expect(king_rook_moved_white_g.can_castle?(:w)).to eq({king_side: false, queen_side: true})
-      expect(king_rook_moved_black_g.can_castle?(:b)).to eq({king_side: false, queen_side: true})
+    it 'false short if king rook as moved before' do
+      king_rook_moved_white_g.history.add_entry({piece: Pieces::init(:R, [6, 7]), from: [7, 7], to: [6, 7]})
+      king_rook_moved_black_g.history.add_entry({piece: Pieces::init(:r, [1, 7]), from: [0, 7], to: [1, 7]})
+      expect(king_rook_moved_white_g.can_castle?(:w)).to eq({short: false, long: true})
+      expect(king_rook_moved_black_g.can_castle?(:b)).to eq({short: false, long: true})
     end
     
-    it 'false queen_side if queen rook as moved before' do
-      queen_rook_moved_white_g.history.add_entry({piece: Piece::init(:R, [6, 0]), from: [7, 0], to: [6, 0]})
-      queen_rook_moved_black_g.history.add_entry({piece: Piece::init(:r, [1, 0]), from: [0, 0], to: [1, 0]})
-      expect(queen_rook_moved_white_g.can_castle?(:w)).to eq({king_side: true, queen_side: false})
-      expect(queen_rook_moved_black_g.can_castle?(:b)).to eq({king_side: true, queen_side: false})
+    it 'false long if queen rook as moved before' do
+      queen_rook_moved_white_g.history.add_entry({piece: Pieces::init(:R, [6, 0]), from: [7, 0], to: [6, 0]})
+      queen_rook_moved_black_g.history.add_entry({piece: Pieces::init(:r, [1, 0]), from: [0, 0], to: [1, 0]})
+      expect(queen_rook_moved_white_g.can_castle?(:w)).to eq({short: true, long: false})
+      expect(queen_rook_moved_black_g.can_castle?(:b)).to eq({short: true, long: false})
     end
 
     it 'true if all condition are right' do

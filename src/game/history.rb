@@ -9,6 +9,7 @@ class History
     @moves = []
   end
 
+  # add an entry to the moves list
   def add_entry(move)
     return unless History.correct_move?(move)
     @moves.push(move)
@@ -22,6 +23,7 @@ class History
   #   end
   # end
 
+  # test if a move is correctly formated
   def self.correct_move?(move)
     return false unless (index_in_border?(*move[:from]) &&
       index_in_border?(*move[:to]) &&

@@ -14,8 +14,8 @@ def board_to_s_positions_highlight(board, *positions, cells: false)
         line[0..3].red + \
           line[4, 40]
           .split('│')
-          .map.with_index do |cell, j|
-            positions.include?([i / 2, j]) ? cell.to_s.on_blue.bold : cell.to_s.red
+          .map.with_index do |s, j|
+            positions.include?([i / 2, j]) ? s.to_s.on_blue.bold : s.to_s.red
           end
           .join('│'.red) + (i.odd? ? '│'.red : '')
       end

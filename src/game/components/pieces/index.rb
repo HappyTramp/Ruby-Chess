@@ -5,8 +5,8 @@ require_relative './childs/knight'
 require_relative './childs/bishop'
 require_relative './childs/pawn'
 
-# Group of the chess pieces
-module Piece
+# Grouped pieces
+module Pieces
   King = King
   Queen = Queen
   Rook = Rook
@@ -14,6 +14,7 @@ module Piece
   Bishop = Bishop
   Pawn = Pawn
 
+  # initialize a piece with the associated letter and a position
   def self.init(type, position)
     color = (/[A-Z]/ =~ type).nil? ? :b : :w
     {
@@ -27,8 +28,8 @@ module Piece
   end
 end
 
-# An empty cell that respond true to empty?
-class EmptyCell
+# An empty square that respond true to empty?
+class EmptySquare
   attr_reader :position, :color
 
   def initialize(position)

@@ -1,7 +1,7 @@
 require 'rspec/expectations'
 require_relative './h_board'
 
-RSpec::Matchers.define :contain_exact_positions do |*positions|
+RSpec::Matchers.define :control_position do |*positions|
   match do |tb_and_piece|
     tb, piece = tb_and_piece
 
@@ -13,6 +13,32 @@ RSpec::Matchers.define :contain_exact_positions do |*positions|
     tb, piece = tb_and_piece
 
     actual_pos = piece.controlled_square(tb)
+
+    "expected: #{positions}\ngot:      #{actual_pos}\n\n" + \
+      board_to_s_positions_highlight(tb, *positions)
+      .split("\n")
+      .zip(board_to_s_positions_highlight(tb, *actual_pos).split("\n"))
+      .map { |lines| "#{lines[0]}   #{lines[1]}" }
+      .join("\n")
+  end
+
+  description do
+    "exactly contain positions: #{positions}"
+  end
+end
+
+RSpec::Matchers.define :possible_move_position do |*positions|
+  match do |tb_and_piece|
+    tb, piece = tb_and_piece
+
+    piece.possible_move(tb).sort == positions.sort
+  end
+
+  # print expected and actual board side by side
+  failure_message do |tb_and_piece|
+    tb, piece = tb_and_piece
+
+    actual_pos = piece.possible_move(tb)
 
     "expected: #{positions}\ngot:      #{actual_pos}\n\n" + \
       board_to_s_positions_highlight(tb, *positions)
@@ -56,7 +82,7 @@ RSpec::Matchers.define :equal_piece do |expected|
   failure_message { "fail: #{expected} != #{actual}" }
 end
 
-# compare two instance of BasicPiece or EmptyCell
+# compare two instance of BasicPiece or EmptySquare
 def pieces_equal?(piece1, piece2)
   return true if piece1.empty? && piece2.empty?
   return false if piece1.empty? || piece2.empty?

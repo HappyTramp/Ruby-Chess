@@ -6,7 +6,8 @@ class Queen < BasicPiece
     @color == :w ? '♕' : '♛'
   end
 
-  # @returns the list of position where the queen can move
+  # position list of the controlled square
+  # horizontal + vertical + diagonal + anti_diagonal
   def controlled_square(board)
     get_grouped_sides_of(
       board, :horizontal, :vertical, :diagonal, :anti_diagonal
