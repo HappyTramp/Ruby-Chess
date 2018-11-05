@@ -1,6 +1,7 @@
 require 'game/components/pieces/basic_piece'
 require 'game/components/pieces/childs/king'
 require 'game/components/pieces/index'
+require 'game/components/board'
 require_relative '../../../test_helper/h_board'
 require_relative '../../../test_helper/h_piece'
 
@@ -19,11 +20,11 @@ describe BasicPiece, for: 'basic_piece' do
   end
 
   describe '#possible_move' do
-    it 'filter ally out of the controlled square' do
-
+    let(:possible_move_tb) { Board.new '8/8/8/3q4/1P1R1r2/3B4/8/8' }
+    it 'filter out ally of the controlled square' do
+      expect([possible_move_tb, possible_move_tb[4, 3]])
+        .to possible_move_position([4, 2], [4, 4], [4, 5], [3, 3])
     end
-
-
   end
 
   describe 'private methods' do
@@ -85,8 +86,8 @@ describe BasicPiece, for: 'basic_piece' do
       let(:flt_vert_2n_side)   { subject.send(:filter_accessibility, vert_2n_side) }
       let(:flt_diag_1s_side)   { subject.send(:filter_accessibility, diag_1s_side) }
       let(:flt_a_diag_2n_side) { subject.send(:filter_accessibility, a_diag_2n_side) }
-      it('left side') { expect(flt_horz_1s_side).to equal_piece_array([ECell]) }
-      it('up side') { expect(flt_vert_2n_side).to equal_piece_array([ECell, ECell]) }
+      it('left side') { expect(flt_horz_1s_side).to equal_piece_array([ECell, King.new([3, 1], :b)]) }
+      it('up side') { expect(flt_vert_2n_side).to equal_piece_array([ECell, ECell, King.new([6, 3], :w)]) }
       it 'diagonal down side' do
         expect(flt_diag_1s_side).to equal_piece_array([ECell, King.new([5, 1], :w)])
       end

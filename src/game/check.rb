@@ -4,7 +4,7 @@ require_relative './components/pieces/childs/king'
 module Check
   # detect if a color is in check -> the square of the king is controlled by the enemy
   def is_in_check?(color)
-    all_possible_move(reverse_color(color)).each do |p|
+    all_possible_move(opposite_color(color)).each do |p|
       p[:possible_move].each do |p|
         return true if @board[*p].is_a?(King)
       end

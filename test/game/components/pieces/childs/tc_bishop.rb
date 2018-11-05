@@ -6,10 +6,8 @@ describe Bishop, for: 'bishop' do
   describe '#controlled_square' do
     let(:std_tb) { Board.new '8/1k3k2/8/3b4/8/1K6/6K1/8' }
     it 'happy path' do
-      expect([std_tb, std_tb[3, 3]])
-        .to control_position(
-          [4, 2], [5, 1], [2, 4], [1, 5], [2, 2], [1, 1], [4, 4], [5, 5], [6, 6]
-        )
+      expect([std_tb, std_tb[3, 3]]).to control_position(
+          [4, 2], [5, 1], [2, 4], [1, 5], [2, 2], [1, 1], [4, 4], [5, 5], [6, 6])
     end
 
     let(:corner_UL_tb) { Board.new 'b7/8/8/3k4/8/8/8/8' }

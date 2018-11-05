@@ -31,8 +31,8 @@ describe 'Helpers', for: 'helpers' do
     end
   end
 
-  describe '#reverse_color' do
-    it { expect(reverse_color(:w)).to eql(:b) }
-    it { expect(reverse_color(:b)).to eql(:w) }
+  describe '#opposite_color' do
+    it { expect(opposite_color(:w)).to eql(:b) }
+    it { expect(opposite_color(:b)).to eql(:w) }
   end
 end

@@ -56,6 +56,7 @@ end
 # deeply compare two array of pieces.
 RSpec::Matchers.define :equal_piece_array do |expected|
   match do |actual|
+    return false if expected.length != actual.length
     expected.zip(actual).each do |zipped_pieces|
       return false unless pieces_equal?(*zipped_pieces)
     end

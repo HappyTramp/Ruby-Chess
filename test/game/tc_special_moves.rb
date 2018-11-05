@@ -18,7 +18,7 @@ describe VerifySpecialMoves, for: 'special_moves' do
   describe '#can_castle?' do
     let(:in_check_white_g) { Game.new Board.new '8/8/8/8/4q3/8/8/R3K2R' }
     let(:in_check_black_g) { Game.new Board.new 'r3k2r/8/8/4Q3/8/8/8/8' }
-    let(:cast_controlled_white_g) { Game.new Board.new '' }
+    let(:cast_controlled_white_g) { Game.new Board.new '8/8/8/8/3r4/8/6p1/R3K2R' }
     let(:cast_controlled_black_g) { Game.new Board.new 'r3k2r/8/6N1/5B2/8/8/8/8' }
     let(:piece_between_white_g) { Game.new Board.new '8/8/8/8/8/8/8/RN2KB1R' }
     let(:piece_between_black_g) { Game.new Board.new 'r2qk1nr/8/8/8/8/8/8/8' }
@@ -39,12 +39,8 @@ describe VerifySpecialMoves, for: 'special_moves' do
       expect(in_check_black_g.can_castle?(:b)).to eq no_castle
     end
     it 'false if castling square are controlled by the enemy' do
-      ###############################
-      # ne fonctionne pas avec un pion a cause de mon système de coup possible
-      # penser a comment le transformer en case controllé par piece et déduire si un coup est possible
-      # en fonction de ce qui ce trouve sur la case coutrollé selectionné
-      # -> retirer le filtrage des allié dans le corp des pieces
-      ###############################
+      expect(cast_controlled_white_g.can_castle?(:w)).to eq no_castle
+      expect(cast_controlled_black_g.can_castle?(:b)).to eq no_castle
     end
 
     it 'false if piece between the king and rook' do
@@ -74,6 +70,8 @@ describe VerifySpecialMoves, for: 'special_moves' do
     end
 
     it 'true if all condition are right' do
+      expect(right_condition_white_g.can_castle?(:w)).to eq({short: true, long: true})
+      expect(right_condition_black_g.can_castle?(:b)).to eq({short: true, long: true})
     end
   end
 
