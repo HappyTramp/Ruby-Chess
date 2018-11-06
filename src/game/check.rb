@@ -29,7 +29,7 @@ module Check
 
         # make the move, test if it result in a self check, undo the move
         @board.move(p[:piece].position, m)
-        moves.push([p[:piece], m]) unless is_in_check?(color)
+        moves << [p[:piece], m] unless is_in_check?(color)
         @board.move(m, position_origin)
         @board[*m] = move_square
       end

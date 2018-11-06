@@ -15,11 +15,11 @@ class Pawn < BasicPiece
     x_mod = @color == :w ? -1 : 1
 
     destination = board[@position[0] + x_mod, @position[1]]
-    p_move.push(destination.position) if square_type(destination) == :empty
+    p_move << destination.position if square_type(destination) == :empty
 
     if @position[0] == first_rank
       destination = board[@position[0] + 2 * x_mod, @position[1]]
-      p_move.push(destination.position) if square_type(destination) == :empty
+      p_move << destination.position if square_type(destination) == :empty
     end
 
     p_move
@@ -32,8 +32,8 @@ class Pawn < BasicPiece
     x_mod = @color == :w ? -1 : 1
     left = [@position[0] + x_mod, @position[1] - 1]
     right = [@position[0] + x_mod, @position[1] + 1]
-    controlled.push(left) if index_in_border?(*left)
-    controlled.push(right) if index_in_border?(*right)
+    controlled << left if index_in_border?(*left)
+    controlled << right if index_in_border?(*right)
     controlled
   end
 end

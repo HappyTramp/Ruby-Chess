@@ -1,4 +1,5 @@
 require_relative '../helpers'
+require_relative './components/pieces/index'
 require_relative './components/pieces/childs/king'
 require_relative './components/pieces/childs/rook'
 require_relative './components/pieces/childs/pawn'
@@ -69,16 +70,16 @@ module VerifySpecialMoves
     neighbour_pos = []
     pos_left = [last_move[:to][0], last_move[:to][1] -1]
     pos_right = [last_move[:to][0], last_move[:to][1] + 1]
-    neighbour_pos.push(pos_left) if index_in_border?(*pos_left)
-    neighbour_pos.push(pos_right) if index_in_border?(*pos_right)
+    neighbour_pos << pos_left if index_in_border?(*pos_left)
+    neighbour_pos << pos_right if index_in_border?(*pos_right)
 
 
     neighbour_pos.each do |p|
       if @board[*p].is_a? Pawn
-        en_passant_moves.push({
+        en_passant_moves << {
           from: p,
           to: [p[0] + (color == :w ? -1 : 1), last_move[:to][1]],
-          capture: last_move[:to]})
+          capture: last_move[:to]}
       end
     end
 
@@ -89,16 +90,22 @@ end
 
 # apply special moves
 module ExecuteSpecialMoves
-
-  def exec_pawn_promotion(position)
-    
+  def exec_pawn_promotion(position, replacement)
+    @board[*position] = Pieces::init(replacement, position)
   end
 
   def exec_castle(color, side)
-    
+    rank = color == :w ? 7 : 0
+    king_pos, rook_pos = [rank, side == :short ? 6 : 2],
+      [rank, side == :short ? 5 : 3]
+    init_king_pos, init_rook_pos = [rank, 4], [rank, side == :short ? 7 : 0]
+
+    @board.move(init_king_pos, king_pos)
+    @board.move(init_rook_pos, rook_pos)
   end
 
-  def exec_en_passant(from, to)
-    
+  def exec_en_passant(en_pass_infos)
+    @board.move(en_pass_infos[:from], en_pass_infos[:to])
+    @board[*en_pass_infos[:capture]] = EmptySquare.new(en_pass_infos[:capture])
   end
 end

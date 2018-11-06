@@ -12,7 +12,7 @@ class History
   # add an entry to the moves list
   def add_entry(move)
     return unless History.correct_move?(move)
-    @moves.push(move)
+    @moves << move
   end
 
   def last_entry
