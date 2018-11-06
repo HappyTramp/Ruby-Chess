@@ -1,3 +1,4 @@
+require_relative '../../../../helpers'
 require_relative '../basic_piece'
 
 class Bishop < BasicPiece

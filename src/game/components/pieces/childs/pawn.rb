@@ -11,8 +11,8 @@ class Pawn < BasicPiece
   def possible_move(board)
     p_move = controlled_square(board).select { |p| square_type(board[*p]) == :enemy }
 
-    first_rank = @color == :b ? 1 : 6
-    x_mod = @color == :b ? 1 : -1
+    first_rank = @color == :w ? 6 : 1
+    x_mod = @color == :w ? -1 : 1
 
     destination = board[@position[0] + x_mod, @position[1]]
     p_move.push(destination.position) if square_type(destination) == :empty
@@ -29,7 +29,7 @@ class Pawn < BasicPiece
   # the attacked one: +1 in diagonal
   def controlled_square(board)
     controlled = []
-    x_mod = @color == :b ? 1 : -1
+    x_mod = @color == :w ? -1 : 1
     left = [@position[0] + x_mod, @position[1] - 1]
     right = [@position[0] + x_mod, @position[1] + 1]
     controlled.push(left) if index_in_border?(*left)

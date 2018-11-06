@@ -1,4 +1,5 @@
 require_relative '../basic_piece'
+require_relative '../../../../helpers'
 
 # class of a Rook
 class Rook < BasicPiece

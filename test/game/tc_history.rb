@@ -20,9 +20,16 @@ describe History, for: 'history' do
     end
   end
 
-  # describe '#search_entry' do
-
-  # end
+  describe '#last_entry' do
+    it 'return last entry of the moves list' do
+      subject.add_entry({from: [0, 0], to: [1, 1], piece: Pieces::init(:K, [1, 1])})
+      expect(subject.last_entry[:from]).to eq [0, 0]
+      expect(subject.last_entry[:to]).to eq [1, 1]
+    end
+    it 'return a nil filled move if the moves list is empty' do
+      expect(subject.last_entry).to eq({from: nil, to: nil, piece: nil})
+    end
+  end
 
   describe '#self.correct_move?' do
     context 'incorrect move syntaxe -> false' do

@@ -15,13 +15,10 @@ class History
     @moves.push(move)
   end
 
-  # def search_entry(color, piece)
-  #   @moves.each do |m|
-  #     if m.color == color && m.piece == piece
-  #       return m
-  #     end
-  #   end
-  # end
+  def last_entry
+    return {piece: nil, from: nil, to: nil} if @moves.length == 0
+    @moves.last
+  end
 
   # test if a move is correctly formated
   def self.correct_move?(move)

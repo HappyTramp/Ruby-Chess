@@ -6,11 +6,12 @@ def pos_nt(n)
   [(0..7).to_a.reverse[n[1].to_i - 1], n[0].ord - 97]
 end
 
-# @returns true if the index [x, y] is in of the borders
+# true if the index [x, y] is in of the borders
 def index_in_border?(x, y)
   x.between?(0, 7) && y.between?(0, 7)
 end
 
+# return the opposite color
 def opposite_color(color)
   color == :w ? :b : :w
 end

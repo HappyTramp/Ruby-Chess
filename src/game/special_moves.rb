@@ -1,6 +1,7 @@
 require_relative '../helpers'
 require_relative './components/pieces/childs/king'
 require_relative './components/pieces/childs/rook'
+require_relative './components/pieces/childs/pawn'
 
 # verify if special moves are applicable
 module VerifySpecialMoves
@@ -34,23 +35,23 @@ module VerifySpecialMoves
     end
 
     # 3.
-    short_piece_square, long_piece_square =
+    short_piece_pos, long_piece_pos =
       color == :w ? [[[7, 5], [7, 6]], [[7, 1], [7, 2], [7, 3]]]
       : [[[0, 5], [0, 6]], [[0, 1], [0, 2], [0, 3]]]
-    short_piece_square.each do |pos|
-      possible_castle[:short] = false unless @board[*pos].empty?
+    short_piece_pos.each do |p|
+      possible_castle[:short] = false unless @board[*p].empty?
     end
-    long_piece_square.each do |pos|
-      possible_castle[:long] = false unless @board[*pos].empty?
+    long_piece_pos.each do |p|
+      possible_castle[:long] = false unless @board[*p].empty?
     end
 
     # 4.
-    short_check_square, long_check_square =
-      short_piece_square, long_piece_square - (color == :w ? [7, 1] : [0, 1])
-    all_controlled_square(opposite_color(color)).each do |c_square|
-      c_square[:controlled_square].each do |p|
-        possible_castle[:short] = false if short_check_square.include?(p)
-        possible_castle[:long] = false if long_check_square.include?(p)
+    short_check_pos, long_check_pos =
+      short_piece_pos, long_piece_pos - (color == :w ? [7, 1] : [0, 1])
+    all_controlled_square(opposite_color(color)).each do |c_pos|
+      c_pos[:controlled_square].each do |p|
+        possible_castle[:short] = false if short_check_pos.include?(p)
+        possible_castle[:long] = false if long_check_pos.include?(p)
       end
     end
 
@@ -59,6 +60,29 @@ module VerifySpecialMoves
 
   # detect if a pawn can en passant an other one
   def can_en_passant?(color)
+    en_passant_moves = []
+
+    last_move = @history.last_entry
+    return false unless last_move[:piece].is_a? Pawn
+    return false unless (last_move[:to][0] - last_move[:from][0]).abs == 2
+
+    neighbour_pos = []
+    pos_left = [last_move[:to][0], last_move[:to][1] -1]
+    pos_right = [last_move[:to][0], last_move[:to][1] + 1]
+    neighbour_pos.push(pos_left) if index_in_border?(*pos_left)
+    neighbour_pos.push(pos_right) if index_in_border?(*pos_right)
+
+
+    neighbour_pos.each do |p|
+      if @board[*p].is_a? Pawn
+        en_passant_moves.push({
+          from: p,
+          to: [p[0] + (color == :w ? -1 : 1), last_move[:to][1]],
+          capture: last_move[:to]})
+      end
+    end
+
+    en_passant_moves
   end
 
 end
