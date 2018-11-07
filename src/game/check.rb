@@ -1,20 +1,20 @@
-require_relative '../helpers'
+require_relative '../helper'
 require_relative './components/pieces/childs/king'
+require_relative './history'
 
+# check related method
 module Check
   # detect if a color is in check -> the square of the king is controlled by the enemy
-  def is_in_check?(color)
-    all_possible_move(opposite_color(color)).each do |p|
-      p[:possible_move].each do |p|
-        return true if @board[*p].is_a?(King)
-      end
-    end
+  def in_check?(color)
+    all_possible_move(Helper::opposite_color(color),
+                      only_position: true)
+      .each { |p| return true if @board[*p].is_a?(King) }
     false
   end
 
-  # detect if a color is checkmate == no legal moves
-  def is_checkmate?(color)
-    legal_move(color).length == 0
+  # detect if a color is checkmate(== no legal moves)
+  def checkmate?(color)
+    legal_move(color).empty?
   end
 
   # filter the legal moves from all the possible moves
@@ -22,20 +22,16 @@ module Check
   def legal_move(color)
     moves = []
 
-    all_possible_move(color).each do |p|
-      p[:possible_move].each do |m|
-        position_origin = p[:piece].position
-        move_square = @board[*m]
+    all_possible_move(color).each do |m|
+      move_square = @board[*m.to]
 
-        # make the move, test if it result in a self check, undo the move
-        @board.move(p[:piece].position, m)
-        moves << [p[:piece], m] unless is_in_check?(color)
-        @board.move(m, position_origin)
-        @board[*m] = move_square
-      end
+      # make the move, test if it result in a self check, undo the move
+      @board.move(m.from, m.to)
+      moves << m unless in_check?(color)
+      @board.move(m.to, m.from)
+      @board[*m.to] = move_square
     end
 
     moves
   end
-
 end

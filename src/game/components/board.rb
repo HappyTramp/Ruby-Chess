@@ -1,11 +1,11 @@
 require_relative './pieces/index'
-require_relative '../../helpers'
+require_relative '../../helper'
 
 # the chess board
 class Board
   # init the board with a grid on which the piece are placed
   # according to the FEN code
-  def initialize(positions='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
+  def initialize(positions = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
     @grid = positions.split('/').map.with_index do |row, i|
       row
         .chars.flat_map { |c| c.to_i == 0 ? c : Array.new(c.to_i) { nil } }
@@ -25,12 +25,12 @@ class Board
 
   # square at the position [x, y]
   def [](x, y)
-    index_in_border?(x, y) ? @grid[x][y] : false
+    Helper::in_border?(x, y) ? @grid[x][y] : false
   end
 
   # set square at position [x, y] to value
   def []=(x, y, value)
-    @grid[x][y] = value if index_in_border?(x, y)
+    @grid[x][y] = value if Helper::in_border?(x, y)
   end
 
   # move a piece from position to an other
@@ -69,6 +69,10 @@ class Board
     end
 
     diag
+  end
+
+  def map_every_square
+    @grid.flat_map { |r| r.map { |s| yield s } }
   end
 
   ROW_SEPARATION = "   ├#{'───┼' * 7}───┤".freeze

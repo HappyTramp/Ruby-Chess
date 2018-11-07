@@ -1,5 +1,5 @@
 require_relative '../basic_piece'
-require_relative '../../../../helpers'
+require_relative '../../../../helper'
 
 # class of a Rook
 class Rook < BasicPiece
@@ -10,7 +10,7 @@ class Rook < BasicPiece
   # position list of the controlled square
   # horizontal + vertical
   def controlled_square(board)
-    get_grouped_sides_of(board, :horizontal, :vertical)
+    grouped_sides(board, :horizontal, :vertical)
       .flat_map { |side| filter_accessibility(side) }
       .map(&:position)
   end

@@ -5,10 +5,8 @@ require_relative './check'
 
 # class that supervise a game execution
 class Game
-  include VerifySpecialMoves
-  include ExecuteSpecialMoves
+  include SpecialMoves
   include Check
-
 
   def initialize(board)
     @board = board
@@ -17,37 +15,22 @@ class Game
 
   # all pieces controlled square of a color
   def all_controlled_square(color)
-    pieces_controlled_square = []
+    @board.map_every_square do |s|
+      next [] unless s.color == color
 
-    (0..7).each do |i|
-      @board.row(i).each do |s|
-        next if s.empty? || s.color != color
-
-        pieces_controlled_square << {
-          piece: s,
-          controlled_square: s.controlled_square(@board)
-        }
-      end
-    end
-
-    pieces_controlled_square
+      s.controlled_square(@board)
+    end.flatten(1).uniq
   end
-  
-  # all pieces controlled square of a color
-  def all_possible_move(color)
-    pieces_possible_move = []
 
-    (0..7).each do |i|
-      @board.row(i).each do |s|
-        next if s.empty? || s.color != color
+  # all pieces possible moves position of a color
+  def all_possible_move(color, only_position: false)
+    @board.map_every_square do |s|
+      next [] unless s.color == color
+      next s.possible_move(@board) if only_position
 
-        pieces_possible_move << {
-          piece: s,
-          possible_move: s.possible_move(@board)
-        }
+      s.possible_move(@board).map do |pm|
+        History::Move.new(s.position, pm, s)
       end
-    end
-
-    pieces_possible_move
+    end.flatten(1).uniq
   end
 end

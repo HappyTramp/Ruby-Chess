@@ -1,3 +1,5 @@
+require: rubocop-rspec
+
 # Styles
 
 Style/NumericPredicate:
@@ -17,10 +19,6 @@ Style/ColonMethodCall:
 
 
 # Layout
-
-Layout/SpaceAroundEqualsInParameterDefault:
-  Enabled: false
-
 
 # Metrics
 

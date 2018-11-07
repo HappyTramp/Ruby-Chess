@@ -15,7 +15,7 @@ require_relative './game/components/board'
 
 # puts piece_array_equal?(r1, r2)
 
-b = Board.new 
+b = Board.new
 puts b
 
 # g = Game.new
