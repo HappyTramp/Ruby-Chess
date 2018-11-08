@@ -1,6 +1,7 @@
 require_relative './components/board'
 require_relative './special_moves'
-require_relative './history'
+require_relative './history/history'
+require_relative './history/move'
 require_relative './check'
 
 # class that supervise a game execution
@@ -29,7 +30,7 @@ class Game
       next s.possible_move(@board) if only_position
 
       s.possible_move(@board).map do |pm|
-        History::Move.new(s.position, pm, s)
+        Move.new(s.position, pm, s)
       end
     end.flatten(1).uniq
   end

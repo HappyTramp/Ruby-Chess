@@ -48,3 +48,8 @@ Metrics/PerceivedComplexity:
 
 Metrics/BlockLength:
   Enabled: false
+
+#RSpec
+
+RSpec/DescribedClass:
+  EnforcedStyle: explicit

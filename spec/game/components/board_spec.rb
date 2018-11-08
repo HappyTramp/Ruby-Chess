@@ -2,6 +2,7 @@ require 'game/components/board'
 require 'game/components/pieces/index'
 require_relative '../../test_helper/h_board'
 require_relative '../../test_helper/h_piece'
+require_relative '../../test_helper/shortcut'
 
 class Board; attr_accessor :grid; end
 
@@ -40,15 +41,15 @@ describe Board, for: 'board' do
     context 'with modified pieces configuration' do
       let(:m_board) { Board.new '8/8/4k3/2r5/3P4/8/8/8' }
 
-      it { expect(m_board[2, 4]).to eq Pieces::init(:k, [2, 4]) }
-      it { expect(m_board[3, 2]).to eq Pieces::init(:r, [3, 2]) }
-      it { expect(m_board[4, 3]).to eq Pieces::init(:P, [4, 3]) }
+      it { expect(m_board[2, 4]).to eq sc_piece(:k24) }
+      it { expect(m_board[3, 2]).to eq sc_piece(:r32) }
+      it { expect(m_board[4, 3]).to eq sc_piece(:P43) }
     end
   end
 
   describe '#[]' do
     it 'return the piece at the index' do
-      expect(board[0, 0]).to eq Pieces::init(:r, [0, 0])
+      expect(board[0, 0]).to eq sc_piece(:r00)
     end
     it 'return the empty square at the index' do
       expect(board[4, 0]).to be_empty
@@ -57,8 +58,8 @@ describe Board, for: 'board' do
 
   describe '#[]=' do
     it 'set the square at the index to a piece' do
-      board[0, 0] = Pieces::init(:Q, [0, 0])
-      expect(board[0, 0]).to eq Pieces::init(:Q, [0, 0])
+      board[0, 0] = sc_piece(:Q00)
+      expect(board[0, 0]).to eq sc_piece(:Q00)
     end
     it 'set the square at the index to an empty square' do
       board[1, 1] = EmptySquare.new([1, 1])
@@ -70,7 +71,7 @@ describe Board, for: 'board' do
     before { board.move([0, 0], [1, 1]) }
 
     it 'moves a piece to a square and change its position' do
-      expect(board[1, 1]).to eq Pieces::init(:r, [1, 1])
+      expect(board[1, 1]).to eq sc_piece(:r11)
     end
     it 'empty the square where it was' do
       expect(board[0, 0]).to be_empty
@@ -171,8 +172,8 @@ describe Board, for: 'board' do
 
     it 'return an accurate stringified grid according to the changes' do
       board[0, 0] = EmptySquare.new [0, 0]
-      board[1, 1] = Pieces::init(:R, [1, 1])
-      board[3, 3] = Pieces::init(:k, [3, 3])
+      board[1, 1] = sc_piece(:R11)
+      board[3, 3] = sc_piece(:k33)
       expect(board.to_s).to eq piece_moved_board_to_s
     end
   end

@@ -1,6 +1,6 @@
 require_relative '../helper'
 require_relative './components/pieces/childs/king'
-require_relative './history'
+require_relative './history/history'
 
 # check related method
 module Check
@@ -22,6 +22,7 @@ module Check
   def legal_move(color)
     moves = []
 
+    # can use #select
     all_possible_move(color).each do |m|
       move_square = @board[*m.to]
 

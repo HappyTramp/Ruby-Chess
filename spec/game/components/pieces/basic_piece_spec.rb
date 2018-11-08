@@ -4,6 +4,7 @@ require 'game/components/pieces/index'
 require 'game/components/board'
 require_relative '../../../test_helper/h_board'
 require_relative '../../../test_helper/h_piece'
+require_relative '../../../test_helper/shortcut'
 
 class ESquare
   def self.empty?
@@ -20,12 +21,12 @@ describe BasicPiece, for: 'basic_piece' do
   end
 
   describe '#==' do
-    let(:compared_piece) { Pieces::init(:R, [0, 0]) }
+    let(:compared_piece) { sc_piece(:R00) }
 
-    it { expect(compared_piece == Pieces::init(:R, [0, 0])).to be true }
-    it { expect(compared_piece == Pieces::init(:R, [1, 1])).to be false }
-    it { expect(compared_piece == Pieces::init(:r, [0, 0])).to be false }
-    it { expect(compared_piece == Pieces::init(:K, [0, 0])).to be false }
+    it { expect(compared_piece == sc_piece(:R00)).to be true }
+    it { expect(compared_piece == sc_piece(:R11)).to be false }
+    it { expect(compared_piece == sc_piece(:r00)).to be false }
+    it { expect(compared_piece == sc_piece(:K00)).to be false }
   end
 
   describe '#possible_move' do

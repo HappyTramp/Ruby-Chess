@@ -1,28 +1,8 @@
-require_relative '../helper'
-require_relative './components/pieces/basic_piece'
+require_relative '../../helper'
+require_relative '../components/pieces/basic_piece'
 
 # Game history
 class History
-  # class of a move
-  class Move
-    attr_reader :from, :to, :piece
-
-    def initialize(from, to, piece)
-      @from  = from
-      @to    = to
-      @piece = piece
-    end
-
-    def init_special(type) end
-
-    def ==(other)
-      other.is_a?(Move)      &&
-        other.from  == @from &&
-        other.to    == @to   &&
-        other.piece == @piece
-    end
-  end
-
   attr_reader :moves
 
   def initialize

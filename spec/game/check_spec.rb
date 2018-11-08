@@ -1,8 +1,8 @@
 require 'game/check'
 require 'game/index'
 require 'game/components/pieces/index'
-require 'game/history'
-require_relative '../test_helper/h_move'
+require 'game/history/history'
+require_relative '../test_helper/shortcut'
 
 describe Check, for: 'check' do
   let(:Move) { History::Move }
@@ -58,14 +58,15 @@ describe Check, for: 'check' do
     context 'when the king need to move' do
       specify do
         expect(move_king_white_g.legal_move(:w)).to contain_exactly(
-          Move.new([4, 3], [5, 2], Pieces::init(:K, [4, 3])),
-          Move.new([4, 3], [4, 2], Pieces::init(:K, [4, 3]))
+          sc_move(:K43to52),
+          # sc_move(:K43to52),
+          sc_move(:K43to42)
         )
       end
       specify do
         expect(move_king_black_g.legal_move(:b)).to contain_exactly(
-          Move.new([2, 4], [1, 3], Pieces::init(:k, [2, 4])),
-          Move.new([2, 4], [2, 3], Pieces::init(:k, [2, 4]))
+          sc_move(:k24to13),
+          sc_move(:k24to23)
         )
       end
     end
@@ -73,23 +74,23 @@ describe Check, for: 'check' do
     context 'when the checking piece need to be captured' do
       specify do
         expect(take_piece_white_g.legal_move(:w))
-          .to contain_exactly Move.new([7, 7], [6, 6], Pieces::init(:K, [7, 7]))
+          .to contain_exactly sc_move(:K77to66)
       end
       specify do
         expect(take_piece_black_g.legal_move(:b))
-          .to contain_exactly Move.new([0, 0], [1, 1], Pieces::init(:k, [0, 0]))
+          .to contain_exactly sc_move(:k00to11)
       end
     end
 
     context 'when the check needs to be blocked with an ally piece' do
       specify do
         expect(block_white_g.legal_move(:w))
-          .to contain_exactly Move.new([4, 0], [4, 4], Pieces::init(:Q, [4, 0]))
+          .to contain_exactly sc_move(:Q40to44)
       end
       specify do
         expect(block_black_g.legal_move(:b)).to contain_exactly(
-          Move.new([1, 4], [3, 3], Pieces::init(:n, [1, 4])),
-          Move.new([2, 7], [2, 3], Pieces::init(:r, [2, 7]))
+          sc_move(:n14to33),
+          sc_move(:r27to23)
         )
       end
     end
@@ -97,14 +98,14 @@ describe Check, for: 'check' do
     context 'with piece pined' do
       specify do
         expect(pin_white_g.legal_move(:w)).to contain_exactly(
-          Move.new([0, 7], [0, 6], Pieces::init(:K, [0, 7])),
-          Move.new([0, 7], [1, 6], Pieces::init(:K, [0, 7]))
+          sc_move(:K07to06),
+          sc_move(:K07to16)
         )
       end
       specify do
         expect(pin_black_g.legal_move(:b)).to contain_exactly(
-          Move.new([7, 0], [7, 1], Pieces::init(:k, [7, 0])),
-          Move.new([7, 0], [6, 1], Pieces::init(:k, [7, 0]))
+          sc_move(:k70to71),
+          sc_move(:k70to61)
         )
       end
     end

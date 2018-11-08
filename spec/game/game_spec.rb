@@ -1,9 +1,10 @@
 require 'game/index'
-require 'game/history'
+require 'game/history/history'
 require 'game/components/pieces/index'
 require 'game/components/board'
 require_relative '../test_helper/h_board'
 require_relative '../test_helper/h_piece'
+require_relative '../test_helper/shortcut'
 
 class Game; attr_accessor :board; end
 # Move = History::Move
@@ -28,16 +29,16 @@ describe Game, for: 'game' do
   describe '#all_possible_move' do
     context 'with only_position flag off' do
       let(:white_poss_move) do
-        [Move.new([2, 3], [1, 3], Pieces::init(:P, [2, 3])),
-         Move.new([3, 2], [2, 1], Pieces::init(:P, [3, 2]))]
+        [sc_move(:P23to13),
+         sc_move(:P32to21)]
       end
       let(:black_poss_move) do
-        [Move.new([2, 1], [3, 1], Pieces::init(:p, [2, 1])),
-         Move.new([2, 1], [3, 2], Pieces::init(:p, [2, 1])),
-         Move.new([2, 2], [3, 2], Pieces::init(:r, [2, 2])),
-         Move.new([2, 2], [2, 3], Pieces::init(:r, [2, 2])),
-         Move.new([2, 2], [0, 2], Pieces::init(:r, [2, 2])),
-         Move.new([2, 2], [1, 2], Pieces::init(:r, [2, 2]))]
+        [sc_move(:p21to31),
+         sc_move(:p21to32),
+         sc_move(:r22to32),
+         sc_move(:r22to23),
+         sc_move(:r22to02),
+         sc_move(:r22to12)]
       end
 
       it 'return all the possible moves position of all pieces for white' do
