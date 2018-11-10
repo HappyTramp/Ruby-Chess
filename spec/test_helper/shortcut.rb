@@ -1,4 +1,4 @@
-require_relative '../../src/game/components/pieces/index'
+require_relative '../../src/game/components/pieces/pieces'
 require_relative '../../src/game/history/move'
 
 # replace 'sc_piece(:Q00)' by 'sc_piece(:Q00)'

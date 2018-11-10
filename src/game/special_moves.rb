@@ -1,6 +1,6 @@
 require_relative '../helper'
 require_relative './history/move'
-require_relative './components/pieces/index'
+require_relative './components/pieces/pieces'
 require_relative './components/pieces/childs/king'
 require_relative './components/pieces/childs/rook'
 require_relative './components/pieces/childs/pawn'
@@ -19,18 +19,18 @@ module SpecialMoves
   # 2. king nor rook have moved
   # 3. no piece between king and rook
   # 4. squares of the king move arent controlled by the enemy
-  def detect_castle(color)
-    back_rank = color == :w ? 7 : 0
+  def detect_castle
+    back_rank = @turn_color == :w ? 7 : 0
     castle = { short: true, long: true }
 
     # 1.
-    return [] if in_check?(color)
+    return [] if in_check?
 
     # 2.
     short_rook_pos = [back_rank, 7]
     long_rook_pos = [back_rank, 0]
     @history.moves.each do |m|
-      next if m.piece.color != color
+      next if m.piece.color != @turn_color
       return [] if m.piece.is_a? King
 
       castle[:long] = false if m.piece.is_a?(Rook) && m.from == long_rook_pos
@@ -50,19 +50,19 @@ module SpecialMoves
     # 4.
     short_control_pos = short_piece_pos
     long_control_pos = long_piece_pos - [back_rank, 1]
-    all_controlled_square(Helper::opposite_color(color)).each do |p|
+    all_controlled_square(Helper::opposite_color(@turn_color)).each do |p|
       castle[:short] = false if short_control_pos.include?(p)
       castle[:long] = false if long_control_pos.include?(p)
     end
 
     possible = []
-    possible << Move.new(type_: :castle, color: color, side: :short) if castle[:short]
-    possible << Move.new(type_: :castle, color: color, side: :long) if castle[:long]
+    possible << Move.new(type_: :castle, side: :short) if castle[:short]
+    possible << Move.new(type_: :castle, side: :long) if castle[:long]
     possible
   end
 
   # detect if a pawn can en passant an other one
-  def detect_en_passant(color)
+  def detect_en_passant
     last_move = @history.last_entry
     return [] unless last_move.piece.is_a? Pawn
     return [] unless (last_move.to[0] - last_move.from[0]).abs == 2
@@ -76,7 +76,7 @@ module SpecialMoves
     neighbour_pos.map do |p|
       next unless @board[*p].is_a? Pawn
 
-      Move.new(p, [p[0] + (color == :w ? -1 : 1), last_move.to[1]],
+      Move.new(p, [p[0] + (@turn_color == :w ? -1 : 1), last_move.to[1]],
                type_: :en_passant, capture: last_move.to)
     end.compact
   end
@@ -86,7 +86,7 @@ module SpecialMoves
   end
 
   def exec_castle(move)
-    back_rank = move.color == :w ? 7 : 0
+    back_rank = @turn_color == :w ? 7 : 0
     king_pos = [back_rank, move.side == :short ? 6 : 2]
     rook_pos = [back_rank, move.side == :short ? 5 : 3]
     init_king_pos = [back_rank, 4]

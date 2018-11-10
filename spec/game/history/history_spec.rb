@@ -1,5 +1,5 @@
 require 'game/history/history'
-require 'game/components/pieces/index'
+require 'game/components/pieces/pieces'
 require_relative '../../test_helper/h_piece'
 require_relative '../../test_helper/shortcut'
 

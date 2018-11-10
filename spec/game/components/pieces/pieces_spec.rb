@@ -1,4 +1,4 @@
-require 'game/components/pieces/index'
+require 'game/components/pieces/pieces'
 require_relative '../../../test_helper/h_piece'
 
 describe Pieces, for: 'pieces' do

@@ -1,6 +1,6 @@
-require 'game/index'
+require 'game/game'
 require 'game/history/history'
-require 'game/components/pieces/index'
+require 'game/components/pieces/pieces'
 require 'game/components/board'
 require_relative '../test_helper/h_board'
 require_relative '../test_helper/h_piece'
@@ -10,7 +10,7 @@ class Game; attr_accessor :board; end
 # Move = History::Move
 
 describe Game, for: 'game' do
-  subject(:game) { Game.new Board.new '8/8/1prP4/2P5/8/8/8/8' }
+  subject(:game) { Game.new '8/8/1prP4/2P5/8/8/8/8 w' }
 
   let(:Move) { History::Move }
 

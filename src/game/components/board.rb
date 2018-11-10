@@ -1,4 +1,4 @@
-require_relative './pieces/index'
+require_relative './pieces/pieces'
 require_relative '../../helper'
 
 # the chess board
@@ -76,6 +76,7 @@ class Board
   end
 
   ROW_SEPARATION = "   ├#{'───┼' * 7}───┤".freeze
+  INVERSE_INDEXS = (1..8).to_a.reverse.freeze
   # string representation of the board
   def to_s
     grid_to_string = [
@@ -84,7 +85,7 @@ class Board
     ]
 
     @grid.each.with_index do |row, i|
-      row_to_string = " #{i + 1} │"
+      row_to_string = " #{INVERSE_INDEXS[i]} │"
       row.each { |s| row_to_string << " #{s} │" }
 
       grid_to_string.push(row_to_string, ROW_SEPARATION)

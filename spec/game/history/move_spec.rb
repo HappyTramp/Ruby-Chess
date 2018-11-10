@@ -12,11 +12,10 @@ describe Move, for: 'move' do
     end
 
     context 'with a special move' do
-      let(:castle_move)     { Move.new(type_: :castle, color: :w, side: :short)             }
+      let(:castle_move)     { Move.new(type_: :castle, side: :short)                        }
       let(:en_passant_move) { Move.new([3, 1], [2, 0], type_: :en_passant, capture: [3, 0]) }
 
       it { expect(castle_move.type_).to be :castle         }
-      it { expect(castle_move.color).to be :w              }
       it { expect(castle_move.side).to be :short           }
       it { expect(en_passant_move.type_).to be :en_passant }
       it { expect(en_passant_move.capture).to eq [3, 0]    }
@@ -24,14 +23,14 @@ describe Move, for: 'move' do
   end
 
   describe '#==' do
-    let(:compared_move)    { Move.new([0, 1], [0, 1], sc_piece(:R01))         }
-    let(:compared_special) { Move.new(type_: :castle, color: :b, side: :long) }
+    let(:compared_move)    { Move.new([0, 1], [0, 1], sc_piece(:R01)) }
+    let(:compared_special) { Move.new(type_: :castle, side: :long)    }
 
     it { expect(compared_move == Move.new([0, 1], [0, 1], sc_piece(:R01))).to be true              }
     it { expect(compared_move == Move.new([0, 0], [0, 1], sc_piece(:R01))).to be false             }
     it { expect(compared_move == Move.new([0, 1], [0, 3], sc_piece(:R01))).to be false             }
     it { expect(compared_move == Move.new([0, 1], [0, 1], sc_piece(:k01))).to be false             }
-    it { expect(compared_special == Move.new(type_: :castle, color: :b, side: :long)).to be true   }
-    it { expect(compared_special == Move.new(type_: :castle, color: :b, side: :short)).to be false }
+    it { expect(compared_special == Move.new(type_: :castle, side: :long)).to be true              }
+    it { expect(compared_special == Move.new(type_: :castle, side: :short)).to be false            }
   end
 end

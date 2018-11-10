@@ -1,6 +1,6 @@
 require 'game/components/pieces/basic_piece'
 require 'game/components/pieces/childs/king'
-require 'game/components/pieces/index'
+require 'game/components/pieces/pieces'
 require 'game/components/board'
 require_relative '../../../test_helper/h_board'
 require_relative '../../../test_helper/h_piece'
