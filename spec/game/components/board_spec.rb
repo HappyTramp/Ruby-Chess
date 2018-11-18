@@ -32,7 +32,7 @@ describe Board, for: 'board' do
           expect(row).to equal_piece_array(initial_grid[i])
         end
       end
-      it 'the rows are NOT from same instance' do
+      it 'the rows arent from same instance' do
         board[0, 0] = true
         expect(board.grid[1][0]).not_to be true
       end
@@ -68,57 +68,46 @@ describe Board, for: 'board' do
   end
 
   describe '#move' do
-    before { board.move([0, 0], [1, 1]) }
+    before { @capture = board.move([0, 0], [1, 1]) }
 
-    it 'moves a piece to a square and change its position' do
-      expect(board[1, 1]).to eq sc_piece(:r11)
-    end
-    it 'empty the square where it was' do
-      expect(board[0, 0]).to be_empty
-    end
+    it { expect(board[0, 0]).to be_empty }
+    it { expect(board[1, 1]).to eq sc_piece(:r11) }
+    it { expect(@capture).to eq sc_piece(:p11) } # rubocop:disable RSpec/InstanceVariable
   end
 
   describe '#row' do
-    it 'return the row at the index' do
-      expect(board.row(0)).to eql(board.grid[0])
-    end
+    it { expect(board.row(0)).to eql(board.grid[0]) }
   end
 
   describe '#column' do
-    it 'return the col at the index' do
-      expect(board.column(0)).to eql(board.grid.transpose[0])
-    end
+    it { expect(board.column(0)).to eql(board.grid.transpose[0]) }
   end
 
   describe '#diagonal' do
     let(:diag33) do
-      [Pieces::Pawn.new([6, 0], :w),
-       ESquare, ESquare, ESquare, ESquare,
-       Pieces::Pawn.new([1, 5], :b), Pieces::Knight.new([0, 6], :b)]
+      [sc_piece(:P60), *Array.new(4) { |i| EmptySquare.new([5 - i, 1 + i]) },
+       sc_piece(:p15), sc_piece(:n06)]
     end
     let(:diag52) do
-      [Pieces::Rook.new([7, 0], :w), Pieces::Pawn.new([6, 1], :w),
-       ESquare, ESquare, ESquare, ESquare,
-       Pieces::Pawn.new([1, 6], :b), Pieces::Rook.new([0, 7], :b)]
-    end
-    let(:a_diag06) do
-      [Pieces::Knight.new([0, 6], :b),
-       Pieces::Pawn.new([1, 7], :b)]
+      [sc_piece(:R70), sc_piece(:P61),
+       *Array.new(4) { |i| EmptySquare.new([5 - i, 2 + i]) },
+       sc_piece(:p16), sc_piece(:r07)]
     end
     let(:a_diag45) do
-      [Pieces::Knight.new([0, 1], :b), Pieces::Pawn.new([1, 2], :b),
-       ESquare, ESquare, ESquare, ESquare,
-       Pieces::Pawn.new([6, 7], :w)]
+      [sc_piece(:n01), sc_piece(:p12),
+       *Array.new(4) { |i| EmptySquare.new([2 + i, 3 + i]) },
+       sc_piece(:P67)]
+    end
+    let(:a_diag06) { [sc_piece(:n06), sc_piece(:p17)] }
+
+    context 'with normal diagonal' do
+      it { expect(board.diagonal(3, 3)).to eq(diag33) }
+      it { expect(board.diagonal(5, 2)).to eq(diag52) }
     end
 
-    context 'with diagonal (with arg anti: false)' do
-      it { expect(board.diagonal(3, 3)).to equal_piece_array(diag33) }
-      it { expect(board.diagonal(5, 2)).to equal_piece_array(diag52) }
-    end
-
-    context 'with anti diagonal (with arg anti: true)' do
-      it { expect(board.diagonal(0, 6, anti: true)).to equal_piece_array(a_diag06) }
-      it { expect(board.diagonal(4, 5, anti: true)).to equal_piece_array(a_diag45) }
+    context 'with anti diagonal' do
+      it { expect(board.diagonal(4, 5, anti: true)).to eq(a_diag45) }
+      it { expect(board.diagonal(0, 6, anti: true)).to eq(a_diag06) }
     end
   end
 

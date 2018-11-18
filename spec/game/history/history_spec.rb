@@ -10,17 +10,17 @@ describe History, for: 'history' do
 
   describe '#add_entry' do
     before do
-      history.add_entry(from: [0, 0], to: [1, 1], piece: sc_piece(:K00))
-      history.add_entry(from: [1, 6], to: [7, 6], piece: sc_piece(:r16))
+      history.add_entry([0, 0], [1, 1], sc_piece(:K00))
+      history.add_entry([1, 6], [7, 6], sc_piece(:r16))
     end
 
-    it { expect(history.moves[0]).to eq sc_move(:K00to11) }
-    it { expect(history.moves[1]).to eq sc_move(:r16to76) }
+    it { expect(history.moves[0]).to eq sc_move('K00>11') }
+    it { expect(history.moves[1]).to eq sc_move('r16>76') }
   end
 
   describe '#last_entry' do
     it 'return last entry of the moves list' do
-      history.add_entry(from: [0, 0], to: [1, 1], piece: sc_piece(:K11))
+      history.add_entry([0, 0], [1, 1], sc_piece(:K11))
       expect(history.last_entry).to eq Move.new [0, 0], [1, 1], sc_piece(:K11)
     end
     it 'return a nil filled move if the moves list is empty' do

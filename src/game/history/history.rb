@@ -10,9 +10,9 @@ class History
   end
 
   # add an entry to the moves list
-  def add_entry(move)
+  def add_entry(from, to, piece)
     # return unless History.correct_move?(move_infos)
-    @moves << Move.new(move[:from], move[:to], move[:piece])
+    @moves << Move.new(from, to, piece)
   end
 
   # the last entry of the moves list

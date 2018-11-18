@@ -7,6 +7,10 @@ class Knight < BasicPiece
     @color == :w ? '♘' : '♞'
   end
 
+  def type
+    :N
+  end
+
   # position list of the controlled square
   # move in 'L' shape: (+/-2, +/-1) and (+/-1, +/-2)
   def controlled_square(_)

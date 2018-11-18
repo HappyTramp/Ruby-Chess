@@ -35,9 +35,11 @@ class Board
 
   # move a piece from position to an other
   def move(from, to)
+    capture = self[*to]
     self[*to] = self[*from]
     self[*to].position = to
     self[*from] = EmptySquare.new(from)
+    capture
   end
 
   # row at the x index

@@ -41,6 +41,11 @@ class EmptySquare
     true
   end
 
+  def ==(other)
+    self.class == other.class &&
+      @position == other.position
+  end
+
   def to_s
     ' '
   end

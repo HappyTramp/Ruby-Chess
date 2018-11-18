@@ -8,10 +8,14 @@ require_relative './components/pieces/childs/pawn'
 # verify if special moves are applicable
 module SpecialMoves
   # detect if a pawn have reached the end of the board
-  def detect_promotion
-    (@board.row(0) + @board.row(7))
-      .each { |s| return s.position if s.is_a? Pawn }
-    false
+  def parse_normal_moves_promotion
+    all_normal_moves.map do |m|
+      if m.piece.type == :P && (m.to[0] == 0 || m.to[0] == 7)
+        Move.new(m.from, m.to, m.piece, replacement: :unknown)
+      else
+        m
+      end
+    end
   end
 
   # detect if a color can castle (short/long) with the following rules:
@@ -50,14 +54,14 @@ module SpecialMoves
     # 4.
     short_control_pos = short_piece_pos
     long_control_pos = long_piece_pos - [back_rank, 1]
-    all_controlled_square(Helper::opposite_color(@turn_color)).each do |p|
+    all_controlled_square(enemy: true).each do |p|
       castle[:short] = false if short_control_pos.include?(p)
       castle[:long] = false if long_control_pos.include?(p)
     end
 
     possible = []
-    possible << Move.new(type_: :castle, side: :short) if castle[:short]
-    possible << Move.new(type_: :castle, side: :long) if castle[:long]
+    possible << Move.new(side: :short) if castle[:short]
+    possible << Move.new(side: :long)  if castle[:long]
     possible
   end
 
@@ -77,27 +81,33 @@ module SpecialMoves
       next unless @board[*p].is_a? Pawn
 
       Move.new(p, [p[0] + (@turn_color == :w ? -1 : 1), last_move.to[1]],
-               type_: :en_passant, capture: last_move.to)
+               @board[*p], en_pass_capture: last_move.to)
     end.compact
   end
 
-  def exec_promotion(pos, replacement)
-    @board[*pos] = Pieces::init(replacement, pos)
-  end
+  # def exec_promotion(move)
+  #   @board.move(move.from, move.to)
+  #   @board[*move.to] = {
+  #     Q: Pieces::init(@turn_color == :w ? :Q : :q, move.to),
+  #     R: Pieces::init(@turn_color == :w ? :R : :r, move.to),
+  #     B: Pieces::init(@turn_color == :w ? :B : :b, move.to),
+  #     N: Pieces::init(@turn_color == :w ? :N : :n, move.to)
+  #   }[move.replacement]
+  # end
 
-  def exec_castle(move)
-    back_rank = @turn_color == :w ? 7 : 0
-    king_pos = [back_rank, move.side == :short ? 6 : 2]
-    rook_pos = [back_rank, move.side == :short ? 5 : 3]
-    init_king_pos = [back_rank, 4]
-    init_rook_pos = [back_rank, move.side == :short ? 7 : 0]
+  # def exec_castle(move)
+  #   back_rank = @turn_color == :w ? 7 : 0
+  #   king_pos = [back_rank, move.side == :short ? 6 : 2]
+  #   rook_pos = [back_rank, move.side == :short ? 5 : 3]
+  #   init_king_pos = [back_rank, 4]
+  #   init_rook_pos = [back_rank, move.side == :short ? 7 : 0]
 
-    @board.move(init_king_pos, king_pos)
-    @board.move(init_rook_pos, rook_pos)
-  end
+  #   @board.move(init_king_pos, king_pos)
+  #   @board.move(init_rook_pos, rook_pos)
+  # end
 
-  def exec_en_passant(move)
-    @board.move(move.from, move.to)
-    @board[*move.capture] = EmptySquare.new(move.capture)
-  end
+  # def exec_en_passant(move)
+  #   @board.move(move.from, move.to)
+  #   @board[*move.en_pass_capture] = EmptySquare.new(move.en_pass_capture)
+  # end
 end

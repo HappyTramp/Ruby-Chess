@@ -8,6 +8,10 @@ class BasicPiece
     @color = color
   end
 
+  def type
+    self.class.to_s[0].to_sym
+  end
+
   # EmptySquare return true to this method
   def empty?
     false

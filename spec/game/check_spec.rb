@@ -18,8 +18,8 @@ describe Check, for: 'check' do
     context 'when king is attacked' do
       it { expect(bishop_attack_white_g.in_check?).to be true }
       it { expect(knight_attack_white_g.in_check?).to be true }
-      it { expect(queen_attack_black_g.in_check?).to be true  }
-      it { expect(pawn_attack_black_g.in_check?).to be true   }
+      it { expect(queen_attack_black_g.in_check?) .to be true }
+      it { expect(pawn_attack_black_g.in_check?)  .to be true }
     end
 
     context 'when king is not attacked' do
@@ -45,7 +45,7 @@ describe Check, for: 'check' do
     end
   end
 
-  describe '#legal_move' do
+  describe '#legal_moves' do
     let(:move_king_white_g)  { Game.new '8/8/3qr3/8/3K4/8/8/8 w'           }
     let(:move_king_black_g)  { Game.new '8/8/4k3/8/4QR2/8/8/8 b'           }
     let(:take_piece_white_g) { Game.new '8/8/8/8/8/8/6qP/2r3bK w'          }
@@ -57,54 +57,51 @@ describe Check, for: 'check' do
 
     context 'when the king need to move' do
       specify do
-        expect(move_king_white_g.legal_move).to contain_exactly(
-          sc_move(:K43to52),
-          sc_move(:K43to42)
+        expect(move_king_white_g.legal_moves).to contain_exactly(
+          sc_move('K43>52'),
+          sc_move('K43>42')
         )
       end
       specify do
-        expect(move_king_black_g.legal_move).to contain_exactly(
-          sc_move(:k24to13),
-          sc_move(:k24to23)
+        expect(move_king_black_g.legal_moves).to contain_exactly(
+          sc_move('k24>13'),
+          sc_move('k24>23')
         )
       end
     end
 
     context 'when the checking piece need to be captured' do
       specify do
-        expect(take_piece_white_g.legal_move)
-          .to contain_exactly sc_move(:K77to66)
+        expect(take_piece_white_g.legal_moves)
+          .to contain_exactly sc_move('K77>66')
       end
       specify do
-        expect(take_piece_black_g.legal_move)
-          .to contain_exactly sc_move(:k00to11)
+        expect(take_piece_black_g.legal_moves)
+          .to contain_exactly sc_move('k00>11')
       end
     end
 
     context 'when the check needs to be blocked with an ally piece' do
+      it { expect(block_white_g.legal_moves).to contain_exactly sc_move('Q40>44') }
       specify do
-        expect(block_white_g.legal_move)
-          .to contain_exactly sc_move(:Q40to44)
-      end
-      specify do
-        expect(block_black_g.legal_move).to contain_exactly(
-          sc_move(:n14to33),
-          sc_move(:r27to23)
+        expect(block_black_g.legal_moves).to contain_exactly(
+          sc_move('n14>33'),
+          sc_move('r27>23')
         )
       end
     end
 
     context 'with piece pined' do
       specify do
-        expect(pin_white_g.legal_move).to contain_exactly(
-          sc_move(:K07to06),
-          sc_move(:K07to16)
+        expect(pin_white_g.legal_moves).to contain_exactly(
+          sc_move('K07>06'),
+          sc_move('K07>16')
         )
       end
       specify do
-        expect(pin_black_g.legal_move).to contain_exactly(
-          sc_move(:k70to71),
-          sc_move(:k70to61)
+        expect(pin_black_g.legal_moves).to contain_exactly(
+          sc_move('k70>71'),
+          sc_move('k70>61')
         )
       end
     end
