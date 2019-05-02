@@ -5,8 +5,8 @@ require_relative './history/history'
 # check related method
 module Check
   # detect if a color is in check -> the square of the king is controlled by the enemy
-  def in_check?(check_enemy = false)
-    all_normal_moves(!check_enemy, only_position: true)
+  def in_check?(enemy = false)
+    all_normal_moves(!enemy, only_pos: true)
       .each { |p| return true if @board[*p].is_a?(King) }
     false
   end
@@ -20,6 +20,9 @@ module Check
   # -> in check or a piece pined to the king
   def legal_moves(enemy = false)
     moves = []
+
+    # do on all_moves instead of all_normal_moves
+    # check each piece replacement for unknown promotion
 
     # can use #select on all_possible_moves
     all_normal_moves(enemy).each do |m|

@@ -8,14 +8,14 @@ require_relative '../test_helper/shortcut'
 class Game; attr_accessor :history, :board; end
 
 describe SpecialMoves, for: 'special_moves' do
-  describe '#parse_normal_moves_promotion' do
+  describe '#detect_promotion' do
     let(:no_promo_g)    { Game.new '8/8/8/3k4/8/8/8/8 w' }
     let(:promo_white_g) { Game.new '8/3P4/8/8/8/8/8/8 w' }
     let(:promo_black_g) { Game.new '8/8/8/8/8/8/3p4/8 b' }
 
-    it { expect(no_promo_g.parse_normal_moves_promotion).to be_empty }
-    it { expect(promo_white_g.parse_normal_moves_promotion).to eq([Move.new([1, 3], [0, 3], sc_piece(:P13), replacement: :unknown)]) }
-    it { expect(promo_black_g.parse_normal_moves_promotion).to eq([Move.new([6, 3], [7, 3], sc_piece(:p63), replacement: :unknown)]) }
+    it { expect(no_promo_g.detect_promotion).to be_empty }
+    it { expect(promo_white_g.detect_promotion).to eq([Move.new([1, 3], [0, 3], sc_piece(:P13), replacement: :unknown)]) }
+    it { expect(promo_black_g.detect_promotion).to eq([Move.new([6, 3], [7, 3], sc_piece(:p63), replacement: :unknown)]) }
   end
 
   describe '#detect_castle' do

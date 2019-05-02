@@ -6,62 +6,62 @@ module Analyse
     ([a-h1-8])?(x)?
     ([a-h][1-8])(\+|\#)?
     (=[QRBN])?$
-    /x
+    /x.freeze
 
-  def pgn_syntax(string_move)
-    all_poss = all_possible_moves
+  # def pgn_syntax(string_move)
+  #   all_poss = all_possible_moves
 
-    return Move.new(side: :short) if string_move == 'O-O' && all_poss.include?(Move.new(side: :short))
-    return Move.new(side: :long) if string_move == 'O-O-O' && all_poss.include?(Move.new(side: :long))
+  #   return Move.new(side: :short) if string_move == 'O-O' && all_poss.include?(Move.new(side: :short))
+  #   return Move.new(side: :long) if string_move == 'O-O-O' && all_poss.include?(Move.new(side: :long))
 
-    PGN_MOVE_REGEX.match(string_move) do |pgn_match|
-      piece_type, position_specifier, capture, to, check, replacement =
-        pgn_match.captures
+  #   PGN_MOVE_REGEX.match(string_move) do |pgn_match|
+  #     piece_type, position_specifier, capture, to, check, replacement =
+  #       pgn_match.captures
 
-      to = Analyse::notation_to_index(to)
-      capture = !capture.nil?
-      replacement = replacement.nil? ? nil : replacement[1]
-      piece_type = piece_type.nil? ? :P : piece_type.to_sym
+  #     to = Analyse::notation_to_index(to)
+  #     capture = !capture.nil?
+  #     replacement = replacement.nil? ? nil : replacement[1]
+  #     piece_type = piece_type.nil? ? :P : piece_type.to_sym
 
-      guess = false
-      all_poss.each do |m|
-        case m.type
-        when :normal, :en_passant
-          if m.to == to && m.piece.type == piece_type
-            if position_specifier.nil?
-              guess = m
-            elsif m.piece.position[1] == position_specifier.ord - 97
-              guess = m
-            end
-          end
-        when :promotion
-          if m.to == to
-            m.replacement = replacement.to_sym
-            guess = m
-          end
-        end
-      end
+  #     guess = false
+  #     all_poss.each do |m|
+  #       case m.type
+  #       when :normal, :en_passant
+  #         if m.to == to && m.piece.type == piece_type
+  #           if position_specifier.nil?
+  #             guess = m
+  #           elsif m.piece.position[1] == position_specifier.ord - 97
+  #             guess = m
+  #           end
+  #         end
+  #       when :promotion
+  #         if m.to == to
+  #           m.replacement = replacement.to_sym
+  #           guess = m
+  #         end
+  #       end
+  #     end
 
-      return false unless guess
+  #     return false unless guess
 
-      guess_clone = guess.clone
+  #     guess_clone = guess.clone
 
-      if capture && guess.type != :en_passant
-        return false if @board[*guess.to].empty?
-      elsif check == '+'
-        guess_clone.make(@board, @turn_color)
-        guess = false unless in_check?(true)
-        guess_clone.make(@board, @turn_color, true)
-      elsif check == '#'
-        guess_clone.make(@board, @turn_color)
-        guess = false unless checkmate?(true)
-        guess_clone.make(@board, @turn_color, true)
-      end
-      return guess
-    end
+  #     if capture && guess.type != :en_passant
+  #       return false if @board[*guess.to].empty?
+  #     elsif check == '+'
+  #       guess_clone.make(@board, @turn_color)
+  #       guess = false unless in_check?(true)
+  #       guess_clone.make(@board, @turn_color, true)
+  #     elsif check == '#'
+  #       guess_clone.make(@board, @turn_color)
+  #       guess = false unless checkmate?(true)
+  #       guess_clone.make(@board, @turn_color, true)
+  #     end
+  #     return guess
+  #   end
 
-    false
-  end
+  #   false
+  # end
 
   def self.notation_to_index(n)
     [(0..7).to_a.reverse[n[1].to_i - 1], n[0].ord - 97]

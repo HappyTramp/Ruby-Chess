@@ -9,6 +9,7 @@ group :developement do
   gem 'fuubar'
   gem 'guard'
   gem 'guard-rspec', require: false
+  gem "guard-rubocop"
   gem 'rspec'
   gem "rubocop", "~> 0.56.0"
   gem "rubocop-rspec", "~> 1.27"

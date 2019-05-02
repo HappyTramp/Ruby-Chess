@@ -17,6 +17,7 @@ class Move
     return :castle     unless side.nil?
     return :en_passant unless en_pass_capture.nil?
     return :promotion  unless replacement.nil?
+
     :normal
   end
 
@@ -78,7 +79,12 @@ class Move
     true
   end
 
-  # def to_s
-  #   "#@piece - #@from:#@to"
-  # end
+  def to_s
+    case type
+    when :castle then "castle: #{@side}"
+    when :en_passant then "#{@piece} : #{@from}>#{@to} en_pass:#{@en_pass_capture}"
+    when :promotion then "#{@piece} : #{@from}>#{@to} promo:#{@replacement}"
+    when :normal then "#{@piece} : #{@from}>#{@to}"
+    end
+  end
 end

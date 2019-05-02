@@ -8,40 +8,36 @@ require_relative './components/pieces/childs/pawn'
 # verify if special moves are applicable
 module SpecialMoves
   # detect if a pawn have reached the end of the board
-  def parse_normal_moves_promotion
-    all_normal_moves.map do |m|
-      if m.piece.type == :P && (m.to[0] == 0 || m.to[0] == 7)
-        Move.new(m.from, m.to, m.piece, replacement: :unknown)
-      else
-        m
-      end
-    end
+  def detect_promotion
+    all_normal_moves
+      .select { |m| m.piece.type == :P && (m.to[0] == 0 || m.to[0] == 7) }
+      .map { |m| Move.new(m.from, m.to, m.piece, replacement: :unknown) }
   end
 
-  # detect if a color can castle (short/long) with the following rules:
-  # 1. king isnt in check
-  # 2. king nor rook have moved
-  # 3. no piece between king and rook
-  # 4. squares of the king move arent controlled by the enemy
+  # detect if a color can castle (short/long):
   def detect_castle
     back_rank = @turn_color == :w ? 7 : 0
     castle = { short: true, long: true }
 
-    # 1.
+    # king isnt in check
     return [] if in_check?
 
-    # 2.
+    # king nor rook have moved
+    return [] if @board[back_rank, 4].empty?
+
     short_rook_pos = [back_rank, 7]
-    long_rook_pos = [back_rank, 0]
+    long_rook_pos  = [back_rank, 0]
+    castle[:long]  = false if @board[*long_rook_pos].empty?
+    castle[:short] = false if @board[*short_rook_pos].empty?
     @history.moves.each do |m|
       next if m.piece.color != @turn_color
       return [] if m.piece.is_a? King
 
-      castle[:long] = false if m.piece.is_a?(Rook) && m.from == long_rook_pos
+      castle[:long]  = false if m.piece.is_a?(Rook) && m.from == long_rook_pos
       castle[:short] = false if m.piece.is_a?(Rook) && m.from == short_rook_pos
     end
 
-    # 3.
+    # no piece between king and rook
     short_piece_pos = [[back_rank, 5], [back_rank, 6]]
     long_piece_pos = [[back_rank, 1], [back_rank, 2], [back_rank, 3]]
     short_piece_pos.each do |p|
@@ -51,7 +47,7 @@ module SpecialMoves
       castle[:long] = false unless @board[*p].empty?
     end
 
-    # 4.
+    # squares of the king move arent controlled by the enemy
     short_control_pos = short_piece_pos
     long_control_pos = long_piece_pos - [back_rank, 1]
     all_controlled_square(enemy: true).each do |p|

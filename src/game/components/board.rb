@@ -5,8 +5,8 @@ require_relative '../../helper'
 class Board
   # init the board with a grid on which the piece are placed
   # according to the FEN code
-  def initialize(positions = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
-    @grid = positions.split('/').map.with_index do |row, i|
+  def initialize(fen_code = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
+    @grid = fen_code.split('/').map.with_index do |row, i|
       row
         .chars.flat_map { |c| c.to_i == 0 ? c : Array.new(c.to_i) { nil } }
         .map.with_index do |p_type, j|
