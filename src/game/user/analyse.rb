@@ -1,72 +1,67 @@
 require_relative '../../helper'
+require_relative '../history/move'
 
 module Analyse
-  PGN_MOVE_REGEX = /
-    ^(K|Q|R|B|N)?
-    ([a-h1-8])?(x)?
-    ([a-h][1-8])(\+|\#)?
-    (=[QRBN])?$
-    /x.freeze
+  SAN_MOVE = /^([KQRBN])?([a-h1-8])?(x)?([a-h][1-8])(=[QRBN])?(\+|#)?$/
 
-  # def pgn_syntax(string_move)
-  #   all_poss = all_possible_moves
+  # parse a move in the SAN (Standard Algebraic Notation)
+  # https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
+  def self.parse_san(str_move)
+    str_move.strip!
+    return Move.new(side: :short) if str_move == 'O-O'
+    return Move.new(side: :long)  if str_move == 'O-O-O'
 
-  #   return Move.new(side: :short) if string_move == 'O-O' && all_poss.include?(Move.new(side: :short))
-  #   return Move.new(side: :long) if string_move == 'O-O-O' && all_poss.include?(Move.new(side: :long))
+    move_match = SAN_MOVE.match(str_move)
+    return false if move_match.nil?
+    piece_type, from_specifier, is_capture, to, replacement, check =
+      move_match.captures
 
-  #   PGN_MOVE_REGEX.match(string_move) do |pgn_match|
-  #     piece_type, position_specifier, capture, to, check, replacement =
-  #       pgn_match.captures
+    to = Analyse::notation_index(to)
+    return false unless to
+    is_capture = !is_capture.nil?
+    piece_type = piece_type.nil? ? :P : piece_type.to_sym
+    replacement = replacement.nil? ? nil : replacement[1].to_sym
 
-  #     to = Analyse::notation_to_index(to)
-  #     capture = !capture.nil?
-  #     replacement = replacement.nil? ? nil : replacement[1]
-  #     piece_type = piece_type.nil? ? :P : piece_type.to_sym
+    unless from_specifier.nil?
+      row_from = Analyse::row_notation_index(from_specifier)
+      col_from = Analyse::col_notation_index(from_specifier)
+      from_specifier = [row_from, nil] if row_from != false
+      from_specifier = [nil, col_from] if col_from != false
+    end
 
-  #     guess = false
-  #     all_poss.each do |m|
-  #       case m.type
-  #       when :normal, :en_passant
-  #         if m.to == to && m.piece.type == piece_type
-  #           if position_specifier.nil?
-  #             guess = m
-  #           elsif m.piece.position[1] == position_specifier.ord - 97
-  #             guess = m
-  #           end
-  #         end
-  #       when :promotion
-  #         if m.to == to
-  #           m.replacement = replacement.to_sym
-  #           guess = m
-  #         end
-  #       end
-  #     end
+    check = (check == '+' ? :check : :checkmate) unless check.nil?
 
-  #     return false unless guess
-
-  #     guess_clone = guess.clone
-
-  #     if capture && guess.type != :en_passant
-  #       return false if @board[*guess.to].empty?
-  #     elsif check == '+'
-  #       guess_clone.make(@board, @turn_color)
-  #       guess = false unless in_check?(true)
-  #       guess_clone.make(@board, @turn_color, true)
-  #     elsif check == '#'
-  #       guess_clone.make(@board, @turn_color)
-  #       guess = false unless checkmate?(true)
-  #       guess_clone.make(@board, @turn_color, true)
-  #     end
-  #     return guess
-  #   end
-
-  #   false
-  # end
-
-  def self.notation_to_index(n)
-    [(0..7).to_a.reverse[n[1].to_i - 1], n[0].ord - 97]
+    SANParsedMove.new(piece_type, from_specifier, is_capture, to, replacement, check)
   end
 
+  def self.notation_index(n)
+    n.strip!
+    return false if n.length != 2
+    col = col_notation_index(n[0])
+    row = row_notation_index(n[1])
+    return false unless col && row
+    [row, col]
+  end
+
+  def self.col_notation_index(col_n)
+    col_o = col_n.ord
+    return false unless col_o >= 97 && col_o <= 104
+    col_o - 97
+  end
+
+  def self.row_notation_index(row_n)
+    row_o = row_n.ord
+    return false unless row_o >= 49 && row_o <= 56
+    (0..7).to_a.reverse[row_o - 49]
+  end
+
+  # def self.correct_replacement(replacement)
+  #   ['Q', 'R', 'B', 'N'].include?(replacement)
+  # end
+
+  # def self.correct_piece_type
+
+  # UCI
   # alternative format from:to -> 'a1:a4' to PGN
   # def simple_syntax(string_move)
   #   return { type: :castle, side: :short } if string_move == 'O-O'

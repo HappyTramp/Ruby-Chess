@@ -80,11 +80,37 @@ class Move
   end
 
   def to_s
-    case type
-    when :castle then "castle: #{@side}"
-    when :en_passant then "#{@piece} : #{@from}>#{@to} en_pass:#{@en_pass_capture}"
-    when :promotion then "#{@piece} : #{@from}>#{@to} promo:#{@replacement}"
-    when :normal then "#{@piece} : #{@from}>#{@to}"
+    {
+      normal:     "#{@piece} : #{@from}>#{@to}",
+      castle:     "#{@side} castle",
+      promotion:  "#{@piece} : #{@from}>#{@to} promo:#{@replacement}",
+      en_passant: "#{@piece} : #{@from}>#{@to} en_pass:#{@en_pass_capture}"
+    }[type]
+  end
+end
+
+class SANParsedMove
+  def initialize(piece_type, from_specifier, is_capture, to, replacement, check)
+    @piece_type     = piece_type
+    @from_specifier = from_specifier
+    @is_capture     = is_capture
+    @to             = to
+    @check          = check
+    @replacement    = replacement
+  end
+
+  def ==(other)
+    return false unless other.is_a? SANParsedMove
+
+    instance_variables.zip(other.instance_variables).each do |n, o_n|
+      return false if n != o_n
+      return false if instance_variable_get(n) != other.instance_variable_get(o_n)
     end
+
+    true
+  end
+
+  def to_s
+    "#{@piece_type} #{@from_specifier} #{'x' if @is_capture} #{to} #{replacement} #{check}"
   end
 end

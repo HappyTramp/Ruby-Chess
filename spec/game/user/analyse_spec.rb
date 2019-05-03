@@ -5,60 +5,66 @@ require 'game/components/board'
 require_relative '../../test_helper/shortcut'
 
 class Game; attr_accessor :history, :board; end
+A = Analyse
+SPM = SANParsedMove
 
 describe Analyse do
-  # describe '.pgn_syntax' do
-  #   subject(:game) do
-  #     g = Game.new 'R5n1/4k2P/8/ppP2Q2/8/2p1N3/rPp4N/R3K2R w'
-  #     g.history.add_entry([1, 1], [3, 1], sc_piece(:p31))
-  #     g
-  #   end
+  describe '.parse_san' do
+    subject(:game) do
+      g = Game.new 'R5n1/4k2P/8/ppP2Q2/8/2p1N3/rPp4N/R3K2R w'
+      # g.history.add_entry([1, 1], [3, 1], sc_piece(:p31))
+      g
+    end
 
-  #   context 'when syntax is incorrect' do
-  #     it { expect(game.pgn_syntax('Qh9')) .to be false }
-  #     it { expect(game.pgn_syntax('Ha1')) .to be false }
-  #     it { expect(game.pgn_syntax('O-O-')).to be false }
-  #     it { expect(game.pgn_syntax('a8=P')).to be false }
-  #   end
+    context 'when syntax is incorrect' do
+      it { expect(A::parse_san('Qh9')) .to be false }
+      it { expect(A::parse_san('Ha1')) .to be false }
+      it { expect(A::parse_san('O-O-')).to be false }
+      it { expect(A::parse_san('a8=P')).to be false }
+      it { expect(A::parse_san('az*f')).to be false }
+      it { expect(A::parse_san('  g ')).to be false }
+    end
 
-  #   context 'when the move isnt legal' do
-  #     it { expect(game.pgn_syntax('Qa1'))  .to be false }
-  #     it { expect(game.pgn_syntax('Kxe7')) .to be false }
-  #     it { expect(game.pgn_syntax('Rxh2')) .to be false }
-  #     it { expect(game.pgn_syntax('O-O-O')).to be false }
-  #     it { expect(game.pgn_syntax('Rxb1')) .to be false }
-  #     it { expect(game.pgn_syntax('Rb1+')) .to be false }
-  #     it { expect(game.pgn_syntax('Rd1#')) .to be false }
-  #   end
+    context 'when syntax is correct' do
+      let(:castle_short)   { Move.new(side: :short)                           }
+      let(:castle_long)    { Move.new(side: :long)                            }
+      let(:pawn_advance)   { SPM.new(:P, nil, false, [3, 3], nil, nil)        }
+      let(:pawn_capture)   { SPM.new(:P, [nil, 1], true, [3, 0], nil, nil)    }
+      let(:en_passant)     { SPM.new(:P, [nil, 4], true, [2, 3], nil, nil)    }
+      let(:promotion)      { SPM.new(:P, nil, false, [0, 0], :N, nil)         }
+      let(:capture_promo)  { SPM.new(:P, [nil, 2], true, [0, 3], :Q, nil)     }
+      let(:piece_move)     { SPM.new(:Q, nil, false, [2, 6], nil, nil)        }
+      let(:piece_capture)  { SPM.new(:R, nil, true, [6, 0], nil, nil)         }
+      let(:from_specifier) { SPM.new(:N, [5, nil], false, [7, 5], nil, nil)   }
+      let(:check)          { SPM.new(:B, nil, false, [3, 6], nil, :check)     }
+      let(:checkmate)      { SPM.new(:N, nil, false, [4, 4], nil, :checkmate) }
 
-  #   context 'when syntax is correct' do
-  #     let(:castle_short)  { Move.new(side: :short) }
-  #     let(:pawn_advance)  { sc_move('P32>22') }
-  #     let(:pawn_capture)  { sc_move('P61>52') }
-  #     let(:en_passant)    { Move.new([3, 2], [2, 1], sc_piece(:P32), en_pass_capture: [3, 1]) }
-  #     let(:piece_move)    { sc_move('Q35>26') }
-  #     let(:piece_capture) { sc_move('R70>60') }
-  #     let(:pos_spe)       { sc_move('N67>75') }
-  #     let(:check)         { sc_move('Q35>36') }
-  #     let(:checkmate)     { sc_move('N54>33') }
-  #     let(:promotion)     { Move.new([1, 7], [0, 7], sc_piece(:P17), replacement: :R) }
-  #     let(:capture_promo) { Move.new([1, 7], [0, 6], sc_piece(:P17), replacement: :B) }
-
-  #     it { expect(game.pgn_syntax('O-O'))   .to eq castle_short  }
-  #     it { expect(game.pgn_syntax('c6'))    .to eq pawn_advance  }
-  #     it { expect(game.pgn_syntax('bxc3'))  .to eq pawn_capture  }
-  #     it { expect(game.pgn_syntax('cxb6'))  .to eq en_passant    }
-  #     it { expect(game.pgn_syntax('Qg6'))   .to eq piece_move    }
-  #     it { expect(game.pgn_syntax('Rxa2'))  .to eq piece_capture }
-  #     it { expect(game.pgn_syntax('Nhf1'))  .to eq pos_spe       }
-  #     it { expect(game.pgn_syntax('Qg5+'))  .to eq check         }
-  #     it { expect(game.pgn_syntax('Nd5#'))  .to eq checkmate     }
-  #     it { expect(game.pgn_syntax('h8=R'))  .to eq promotion     }
-  #     it { expect(game.pgn_syntax('hxg8=B')).to eq capture_promo }
-  #   end
-  # end
+      it { expect(A::parse_san('O-O'))   .to eq castle_short   }
+      it { expect(A::parse_san('O-O-O')) .to eq castle_long    }
+      it { expect(A::parse_san('d5'))    .to eq pawn_advance   }
+      it { expect(A::parse_san('bxa5'))  .to eq pawn_capture   }
+      it { expect(A::parse_san('exd6'))  .to eq en_passant     }
+      it { expect(A::parse_san('a8=N'))  .to eq promotion      }
+      it { expect(A::parse_san('cxd8=Q')).to eq capture_promo  }
+      it { expect(A::parse_san('Qg6'))   .to eq piece_move     }
+      it { expect(A::parse_san('Rxa2'))  .to eq piece_capture  }
+      it { expect(A::parse_san('N3f1'))  .to eq from_specifier }
+      it { expect(A::parse_san('Bg5+'))  .to eq check          }
+      it { expect(A::parse_san('Ne4#'))  .to eq checkmate      }
+    end
+  end
 
   # describe '.pgn_move_validity' do
+
+  # context 'when the move isnt legal' do
+  #   it { expect(game.pgn_syntax('Qa1'))  .to be false }
+  #   it { expect(game.pgn_syntax('Kxe7')) .to be false }
+  #   it { expect(game.pgn_syntax('Rxh2')) .to be false }
+  #   it { expect(game.pgn_syntax('O-O-O')).to be false }
+  #   it { expect(game.pgn_syntax('Rxb1')) .to be false }
+  #   it { expect(game.pgn_syntax('Rb1+')) .to be false }
+  #   it { expect(game.pgn_syntax('Rd1#')) .to be false }
+  # end
 
   #   context 'when move isnt in the possible moves list' do
   #     let(:wrong_input)   { nm.merge(type: :normal, piece_type: 'R', to: [3, 3])     }
@@ -134,11 +140,44 @@ describe Analyse do
   #   end
   # end
 
-  describe '.notation_to_index' do
-    it { expect(Analyse::notation_to_index('a1')).to eq [7, 0] }
-    it { expect(Analyse::notation_to_index('h8')).to eq [0, 7] }
-    it { expect(Analyse::notation_to_index('h1')).to eq [7, 7] }
-    it { expect(Analyse::notation_to_index('a8')).to eq [0, 0] }
-    it { expect(Analyse::notation_to_index('e5')).to eq [3, 4] }
+  describe '.notation_index' do
+    it { expect(A::notation_index('a1')).to eq [7, 0] }
+    it { expect(A::notation_index('h8')).to eq [0, 7] }
+    it { expect(A::notation_index('h1')).to eq [7, 7] }
+    it { expect(A::notation_index('a8')).to eq [0, 0] }
+    it { expect(A::notation_index('e5')).to eq [3, 4] }
+    it { expect(A::notation_index(' a')).to be false }
+    it { expect(A::notation_index('a0')).to be false }
+    it { expect(A::notation_index(' 1')).to be false }
+    it { expect(A::notation_index('bo')).to be false }
+    it { expect(A::notation_index('bonjour ')).to be false }
+  end
+
+  describe '.col_notation_index' do
+    it { expect(A::col_notation_index('a')).to eq 0 }
+    it { expect(A::col_notation_index('b')).to eq 1 }
+    it { expect(A::col_notation_index('c')).to eq 2 }
+    it { expect(A::col_notation_index('d')).to eq 3 }
+    it { expect(A::col_notation_index('e')).to eq 4 }
+    it { expect(A::col_notation_index('f')).to eq 5 }
+    it { expect(A::col_notation_index('g')).to eq 6 }
+    it { expect(A::col_notation_index('h')).to eq 7 }
+    it { expect(A::col_notation_index('i')).to be false }
+    it { expect(A::col_notation_index('(')).to be false }
+    it { expect(A::col_notation_index('$')).to be false }
+  end
+
+  describe '.row_notation_index' do
+    it { expect(A::row_notation_index('1')).to eq 7 }
+    it { expect(A::row_notation_index('2')).to eq 6 }
+    it { expect(A::row_notation_index('3')).to eq 5 }
+    it { expect(A::row_notation_index('4')).to eq 4 }
+    it { expect(A::row_notation_index('5')).to eq 3 }
+    it { expect(A::row_notation_index('6')).to eq 2 }
+    it { expect(A::row_notation_index('7')).to eq 1 }
+    it { expect(A::row_notation_index('8')).to eq 0 }
+    it { expect(A::row_notation_index('9')).to be false }
+    it { expect(A::row_notation_index(']')).to be false }
+    it { expect(A::row_notation_index('*')).to be false }
   end
 end
