@@ -9,7 +9,7 @@ group :red_green_refactor, halt_on_fail: true do
   end
 
   # cli: %w(--format fuubar --format html -o ./tmp/rubocop_results.html), launchy: './tmp/rubocop_results.html'
-  guard :rubocop, notification: false, all_on_start: false do
+  guard :rubocop, notification: false, all_on_start: false, cli: %w[--format html -o ./tmp/rubocop_results.html] do
     watch(%r{^spec/.+_spec\.rb$})
     watch(%r{^src/(.+)\.rb$})
     watch('spec/spec_helper.rb')

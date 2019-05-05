@@ -5,94 +5,78 @@ require 'game/components/board'
 require_relative '../test_helper/h_board'
 require_relative '../test_helper/h_piece'
 require_relative '../test_helper/shortcut'
+require_relative '../matchers'
 
 class Game; attr_accessor :board; end
 
 describe Game, for: 'game_rp' do
-  let(:game_rp) { Game.new '8/8/1prP4/2P5/8/8/8/8 w' }
+  let(:rook_pawn_g) { Game.new '8/8/1prP4/2P5/8/8/8/8 w' }
+  let(:bish_knig_g) { Game.new 'n7/1B6/2p5/8/8/8/8/8 w'  }
 
   describe '#all_controlled_square' do
-    let(:game_rp_cs_w) { [[2, 1], [2, 3], [1, 2], [1, 4]] }
-    let(:game_rp_cs_b) { [[3, 0], [3, 2], [2, 3], [0, 2], [1, 2], [2, 1]] }
-
-    it { expect(game_rp.all_controlled_square).to contain_exactly(*game_rp_cs_w) }
-    it { expect(game_rp.all_controlled_square(true)).to contain_exactly(*game_rp_cs_b) }
+    it { expect(rook_pawn_g.all_controlled_square(:w)).to eq_index_array('b6 c7 e7 d6')       }
+    it { expect(rook_pawn_g.all_controlled_square(:b)).to eq_index_array('c5 d6 b6 c7 c8 a5') }
+    it { expect(bish_knig_g.all_controlled_square(:w)).to eq_index_array('a8 a6 c8 c6')       }
+    it { expect(bish_knig_g.all_controlled_square(:b)).to eq_index_array('b6 c7 b5 d5')       }
   end
 
   describe '#all_normal_moves' do
     context 'with only_pos flag off' do
-      let(:game_rp_nm_w) { sc_move_list('P23>13 P32>21') }
-      let(:game_rp_nm_b) { sc_move_list('p21>31 p21>32 r22>32 r22>23 r22>02 r22>12') }
-
-      it { expect(game_rp.all_normal_moves).to contain_exactly(*game_rp_nm_w) }
-      it { expect(game_rp.all_normal_moves(true)).to contain_exactly(*game_rp_nm_b) }
+      it { expect(rook_pawn_g.all_normal_moves(:w)).to eq_move_array('Pc5>b6 Pd6>d7')                             }
+      it { expect(rook_pawn_g.all_normal_moves(:b)).to eq_move_array('pb6>b5 pb6>c5 rc6>c5 rc6>d6 rc6>c7 rc6>c8') }
+      it { expect(bish_knig_g.all_normal_moves(:w)).to eq_move_array('Bb7>a8 Bb7>a6 Bb7>c8 Bb7>c6')               }
+      it { expect(bish_knig_g.all_normal_moves(:b)).to eq_move_array('na8>b6 na8>c7 pc6>c5')                      }
     end
 
     context 'with only_pos flag on' do
-      let(:game_rp_nm_p_w) { [[1, 3], [2, 1]] }
-      let(:game_rp_nm_p_b) { [[3, 1], [3, 2], [2, 3], [0, 2], [1, 2]] }
-
-      it 'return the normal possible move end squares positions for white' do
-        expect(game_rp.all_normal_moves(only_pos: true)).to contain_exactly(*game_rp_nm_p_w)
-      end
-      it 'return the normal possible move end squares positions for black' do
-        expect(game_rp.all_normal_moves(true, only_pos: true)).to contain_exactly(*game_rp_nm_p_b)
-      end
+      it { expect(rook_pawn_g.all_normal_moves(:w, only_pos: true)).to eq_index_array('d7 b6')          }
+      it { expect(rook_pawn_g.all_normal_moves(:b, only_pos: true)).to eq_index_array('b5 c5 d6 c7 c8') }
+      it { expect(bish_knig_g.all_normal_moves(:w, only_pos: true)).to eq_index_array('a8 a6 c8 c6')    }
+      it { expect(bish_knig_g.all_normal_moves(:b, only_pos: true)).to eq_index_array('b6 c7 c5')       }
     end
   end
 
   describe '#all_moves' do
-    let(:normal_gw)    { Game.new 'NqB5/1ppp4/8/8/8/8/8/8 w' }
-    let(:normal_gb)    { Game.new 'NqB5/1ppp4/8/8/8/8/8/8 b' }
-    let(:castle_gw)    { Game.new 'r3k3/p7/2p5/8/8/4P3/7P/4K2R w' }
-    let(:castle_gb)    { Game.new 'r3k3/p7/2p5/8/8/4P3/7P/4K2R b' }
-    let(:en_pass_gw)   { Game.new 'k7/8/8/2pP4/5pP1/8/8/7N w' }
-    let(:en_pass_gb)   { Game.new 'k7/8/8/2pP4/5pP1/8/8/7N b' }
-    let(:promo_gw)     { Game.new 'n7/2P5/8/8/8/8/3p4/7K w' }
-    let(:promo_gb)     { Game.new 'n7/2P5/8/8/8/8/3p4/7K b' }
-    let(:all_gw)       { Game.new '4k2r/P6p/8/4pP2/2Pp4/8/P6p/R3K3 w' }
-    let(:all_gb)       { Game.new '4k2r/P6p/8/4pP2/2Pp4/8/P6p/R3K3 b' }
-    let(:normal_m_gw)  { sc_move_list('N00>12 N00>21 B02>11 B02>13') }
-    let(:normal_m_gb)  { sc_move_list('q01>00 q01>02 q01>10 p11>21 p11>31 p12>22 p12>32 p13>23 p13>33') }
-    let(:castle_m_gw)  { sc_move_list('P54>44 P67>57 P67>47 R77>76 R77>75 K74>75 K74>65 K74>64 K74>63 K74>73') + [Move.new(side: :short)] }
-    let(:castle_m_gb)  { sc_move_list('r00>01 r00>02 r00>03 p10>20 p10>30 p22>32 k04>03 k04>13 k04>14 k04>15 k04>05') + [Move.new(side: :long)] }
-    let(:en_pass_m_gw) { sc_move_list('N77>56 N77>65 P46>36 P33>23') + [Move.new([3, 3], [2, 2], sc_piece(:P33), en_pass_capture: [3, 2])] }
-    let(:en_pass_m_gb) { sc_move_list('p45>55 p32>42 k00>01 k00>11 k00>10') + [Move.new([4, 5], [5, 6], sc_piece(:p45), en_pass_capture: [4, 6])] }
-    let(:promo_m_gw)   { sc_move_list('K77>67 K77>76 K77>66') + [Move.new([1, 2], [0, 2], sc_piece(:P12), replacement: :unknown)] }
-    let(:promo_m_gb)   { sc_move_list('n00>12 n00>21') + [Move.new([6, 3], [7, 3], sc_piece(:p63), replacement: :unknown)] }
-    let(:all_m_gw) do
-      sc_move_list('R70>71 R70>72 R70>73 K74>73 K74>63 K74>64 K74>65 K74>75 P42>32 P35>25 P60>50 P60>40') +
-        [Move.new(side: :long), Move.new([1, 0], [0, 0], sc_piece(:P10), replacement: :unknown),
-         Move.new([3, 5], [2, 4], sc_piece(:P35), en_pass_capture: [3, 4])]
+    let(:normal_g)   { Game.new 'NqB5/1ppp4/8/8/8/8/8/8 w'          }
+    let(:castle_g)   { Game.new 'r3k3/p7/2p5/8/8/4P3/7P/4K2R w'     }
+    let(:promo_g)    { Game.new 'n7/2P5/8/8/8/8/3p4/7K w'           }
+    let(:en_pass_gw) { Game.new 'k7/8/8/2pP4/5pP1/8/8/7N w'         }
+    let(:en_pass_gb) { Game.new 'k7/8/8/2pP4/5pP1/8/8/7N b'         }
+    let(:all_gw)     { Game.new '4k2r/P6p/8/4pP2/2Pp4/8/P6p/R3K3 w' }
+    let(:all_gb)     { Game.new '4k2r/P6p/8/4pP2/2Pp4/8/P6p/R3K3 b' }
+    let(:normal_mw)  { 'Na8>c7 Na8>b6 Bc8>b7 Bc8>d7'                                    }
+    let(:normal_mb)  { 'qb8>a8 qb8>c8 qb8>a7 pb7>b6 pb7>b5 pc7>c6 pc7>c5 pd7>d6 pd7>d5' }
+    let(:castle_mw)  { 'Pe3>e4 Ph2>h3 Ph2>h4 Rh1>g1 Rh1>f1 Ke1>f1 Ke1>f2 Ke1>e2 Ke1>d2 Ke1>d1 KO-O' }
+    let(:castle_mb)  { 'ra8>b8 ra8>c8 ra8>d8 pa7>a6 pa7>a5 pc6>c5 ke8>d8 ke8>d7 ke8>e7 ke8>f7 ke8>f8 kO-O-O' }
+    let(:en_pass_mw) { 'Nh1>g3 Nh1>f2 Pg4>g5 Pd5>d6 Pd5>c6:c5'        }
+    let(:en_pass_mb) { 'pf4>f3 pc5>c4 ka8>b8 ka8>b7 ka8>a7 pf4>g3:g4' }
+    let(:promo_mw)   { 'Kh1>h2 Kh1>g1 Kh1>g2 Pc7>c8=u'                }
+    let(:promo_mb)   { 'na8>c7 na8>b6 pd2>d1=u'                       }
+    let(:all_mw) do
+      'Ra1>b1 Ra1>c1 Ra1>d1 Ke1>d1 Ke1>d2 Ke1>e2 Ke1>f2 Ke1>f1 '\
+      'Pc4>c5 Pf5>f6 Pa2>a3 Pa2>a4 KO-O-O Pa7>a8=u Pf5>e6:e5'
     end
-    let(:all_m_gb) do
-      sc_move_list('r07>06 r07>05 k04>05 k04>15 k04>14 k04>13 k04>03 p17>27 p17>37 p34>44 p43>53') +
-        [Move.new(side: :short), Move.new([6, 7], [7, 7], sc_piece(:p67), replacement: :unknown),
-         Move.new([4, 3], [5, 2], sc_piece(:p43), en_pass_capture: [4, 2])]
+    let(:all_mb) do
+      'rh8>g8 rh8>f8 ke8>f8 ke8>f7 ke8>e7 ke8>d7 ke8>d8 '\
+      'ph7>h6 ph7>h5 pe5>e4 pd4>d3 kO-O ph2>h1=u pd4>c3:c4'
     end
 
-    it { expect(normal_gw.all_moves).to contain_exactly(*normal_m_gw) }
-    it { expect(normal_gb.all_moves).to contain_exactly(*normal_m_gb) }
+    before do
+      en_pass_gw.history.add_entry([1, 2], [3, 2], Pieces.fmt('pc5'))
+      en_pass_gb.history.add_entry([6, 6], [4, 6], Pieces.fmt('Pg4'))
+      all_gw.history.add_entry([1, 4], [3, 4], Pieces.fmt('pe5'))
+      all_gb.history.add_entry([6, 2], [4, 2], Pieces.fmt('Pc4'))
+    end
 
-    it { expect(castle_gw.all_moves).to contain_exactly(*castle_m_gw) }
-    it { expect(castle_gb.all_moves).to contain_exactly(*castle_m_gb) }
-    specify do
-      en_pass_gw.history.add_entry([1, 2], [3, 2], sc_piece(:p32))
-      expect(en_pass_gw.all_moves).to contain_exactly(*en_pass_m_gw)
-    end
-    specify do
-      en_pass_gb.history.add_entry([6, 6], [4, 6], sc_piece(:P46))
-      expect(en_pass_gb.all_moves).to contain_exactly(*en_pass_m_gb)
-    end
-    it { expect(promo_gw.all_moves).to contain_exactly(*promo_m_gw) }
-    it { expect(promo_gb.all_moves).to contain_exactly(*promo_m_gb) }
-    specify do
-      all_gw.history.add_entry([1, 4], [3, 4], sc_piece(:p34))
-      expect(all_gw.all_moves).to contain_exactly(*all_m_gw)
-    end
-    specify do
-      all_gb.history.add_entry([6, 2], [4, 2], sc_piece(:P42))
-      expect(all_gb.all_moves).to contain_exactly(*all_m_gb)
-    end
+    it { expect(normal_g.all_moves(:w)) .to eq_move_array(normal_mw)   }
+    it { expect(normal_g.all_moves(:b)) .to eq_move_array(normal_mb)   }
+    it { expect(castle_g.all_moves(:w)) .to eq_move_array(castle_mw)   }
+    it { expect(castle_g.all_moves(:b)) .to eq_move_array(castle_mb)   }
+    it { expect(promo_g.all_moves(:w))  .to eq_move_array(promo_mw)    }
+    it { expect(promo_g.all_moves(:b))  .to eq_move_array(promo_mb)    }
+    it { expect(en_pass_gw.all_moves(:w)).to eq_move_array(en_pass_mw) }
+    it { expect(en_pass_gb.all_moves(:b)).to eq_move_array(en_pass_mb) }
+    it { expect(all_gw.all_moves(:w))    .to eq_move_array(all_mw)     }
+    it { expect(all_gb.all_moves(:b))    .to eq_move_array(all_mb)     }
   end
 end

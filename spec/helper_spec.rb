@@ -20,4 +20,13 @@ describe Helper, for: 'helper' do
     it { expect(Helper::opposite_color(:w)).to be(:b) }
     it { expect(Helper::opposite_color(:b)).to be(:w) }
   end
+
+  describe '.index_to_notation' do
+    it { expect(Helper.index_to_notation([0, 0])).to eq 'a8' }
+    it { expect(Helper.index_to_notation([3, 3])).to eq 'd5' }
+    it { expect(Helper.index_to_notation([7, 0])).to eq 'a1' }
+    it { expect(Helper.index_to_notation([7, 6])).to eq 'g1' }
+    it { expect(Helper.index_to_notation([5, 4])).to eq 'e3' }
+    it { expect(Helper.index_to_notation([2, 3])).to eq 'd6' }
+  end
 end

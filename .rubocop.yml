@@ -59,3 +59,6 @@ Metrics/BlockLength:
 
 RSpec/DescribedClass:
   EnforcedStyle: explicit
+
+RSpec/InstanceVariable:
+  Enabled: false

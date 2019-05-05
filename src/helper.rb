@@ -9,4 +9,9 @@ module Helper
   def self.opposite_color(color)
     color == :w ? :b : :w
   end
+
+  def self.index_to_notation(index)
+    y, x = index
+    "#{(x + 97).chr}#{(1..8).to_a.reverse[y]}"
+  end
 end

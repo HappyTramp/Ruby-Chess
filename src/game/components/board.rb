@@ -1,5 +1,6 @@
 require_relative './pieces/pieces'
 require_relative '../../helper'
+require_relative '../user/analyse'
 
 # the chess board
 class Board
@@ -31,6 +32,15 @@ class Board
   # set square at position [x, y] to value
   def []=(x, y, value)
     @grid[x][y] = value if Helper::in_border?(x, y)
+  end
+
+  def get_at(a_notation)
+    self[*Analyse::notation_index(a_notation)]
+  end
+
+  def set_at(a_notation, value)
+    index = Analyse::notation_index(a_notation)
+    self[*index] = value
   end
 
   # move a piece from position to an other
@@ -77,6 +87,7 @@ class Board
     @grid.flat_map { |r| r.map { |s| yield s } }
   end
 
+  # TODO: list of index to highlight
   ROW_SEPARATION = "   ├#{'───┼' * 7}───┤".freeze
   INVERSE_INDEXS = (1..8).to_a.reverse.freeze
   # string representation of the board

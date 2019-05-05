@@ -28,6 +28,10 @@ class Game
     @turn_color == :w ? :b : :w
   end
 
+  def color_choice(enemy)
+    enemy ? enemy_color : @turn_color
+  end
+
   # def start
   #   loop do
   #     puts @board
@@ -63,34 +67,37 @@ class Game
   # end
 
   # all pieces controlled square of a color
-  def all_controlled_square(enemy = false)
+  def all_controlled_square(color)
     @board.map_every_square do |s|
-      next [] unless s.color == (enemy ? enemy_color : @turn_color)
+      next [] unless s.color == color
 
       s.controlled_square(@board)
     end.flatten(1).uniq
   end
 
   # all pieces possible moves position of a color
-  def all_normal_moves(enemy = false, only_pos: false)
+  def all_normal_moves(color, only_pos: false)
     @board.map_every_square do |s|
-      next [] unless s.color == (enemy ? enemy_color : @turn_color)
+      next [] unless s.color == color
       next s.possible_move(@board) if only_pos
 
       s.possible_move(@board).map do |pm|
-        Move.new(s.position, pm, s)
+        Move.new(from: s.position, to: pm, piece: s)
       end
     end.flatten(1).uniq
   end
 
-  def all_moves
-    # promo = detect_promotion
-    all_normal_moves.map do |m|
-      if m.piece.type == :P && (m.to[0] == 0 || m.to[0] == 7)
-        Move.new(m.from, m.to, m.piece, replacement: :unknown)
-      else
-        m
-      end
-    end + detect_castle + detect_en_passant
+  def all_moves(color)
+    replace_promotion(color) + detect_castle(color) + detect_en_passant(color)
+  end
+
+  def san_move_legal?(san_move)
+    # legal_moves.each do |m|
+    #   if san_move.is_a? Move
+    #     return true if san_move.side == m.side
+    #   end
+    #   # if san_move.to == m.to
+    # end
+    # false
   end
 end

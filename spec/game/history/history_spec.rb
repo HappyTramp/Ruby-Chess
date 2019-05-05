@@ -2,6 +2,7 @@ require 'game/history/history'
 require 'game/components/pieces/pieces'
 require_relative '../../test_helper/h_piece'
 require_relative '../../test_helper/shortcut'
+require_relative '../../matchers'
 
 class History; attr_accessor :moves; end
 
@@ -10,21 +11,21 @@ describe History, for: 'history' do
 
   describe '#add_entry' do
     before do
-      history.add_entry([0, 0], [1, 1], sc_piece(:K00))
-      history.add_entry([1, 6], [7, 6], sc_piece(:r16))
+      history.add_entry([0, 0], [1, 1], Pieces.fmt('Ka8'))
+      history.add_entry([1, 6], [7, 6], Pieces.fmt('rg7'))
     end
 
-    it { expect(history.moves[0]).to eq sc_move('K00>11') }
-    it { expect(history.moves[1]).to eq sc_move('r16>76') }
+    it { expect(history.moves[0]).to eq_move('Ka8>b7') }
+    it { expect(history.moves[1]).to eq_move('rg7>g1') }
   end
 
   describe '#last_entry' do
     it 'return last entry of the moves list' do
-      history.add_entry([0, 0], [1, 1], sc_piece(:K11))
-      expect(history.last_entry).to eq Move.new [0, 0], [1, 1], sc_piece(:K11)
+      history.add_entry([0, 0], [1, 1], Pieces.fmt('Ka8'))
+      expect(history.last_entry).to eq_move('Ka8>b7')
     end
     it 'return a nil filled move if the moves list is empty' do
-      expect(history.last_entry).to eq Move.new(nil, nil, nil)
+      expect(history.last_entry).to eq Move.new(from: nil, to: nil, piece: nil)
     end
   end
 

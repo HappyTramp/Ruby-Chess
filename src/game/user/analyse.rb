@@ -46,20 +46,20 @@ module Analyse
   def self.col_notation_index(col_n)
     col_o = col_n.ord
     return false unless col_o >= 97 && col_o <= 104
+
     col_o - 97
   end
 
   def self.row_notation_index(row_n)
     row_o = row_n.ord
     return false unless row_o >= 49 && row_o <= 56
+
     (0..7).to_a.reverse[row_o - 49]
   end
 
-  # def self.correct_replacement(replacement)
-  #   ['Q', 'R', 'B', 'N'].include?(replacement)
-  # end
-
-  # def self.correct_piece_type
+  def self.index_array(str_indexs)
+    str_indexs.split.map { |s| notation_index(s) }
+  end
 
   # UCI
   # alternative format from:to -> 'a1:a4' to PGN

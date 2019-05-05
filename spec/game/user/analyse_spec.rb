@@ -180,4 +180,21 @@ describe Analyse do
     it { expect(A::row_notation_index(']')).to be false }
     it { expect(A::row_notation_index('*')).to be false }
   end
+
+  describe '.index_array' do
+    let(:a5_d6_b8)    { [A.notation_index('a5'), A.notation_index('d6'), A.notation_index('b8')] }
+    let(:f3_g5_a2)    { [A.notation_index('f3'), A.notation_index('g5'), A.notation_index('a2')] }
+    let(:b6_c3_a1)    { [A.notation_index('b6'), A.notation_index('c3'), A.notation_index('a1')] }
+    let(:h2_h1)       { [A.notation_index('h2'), A.notation_index('h1')] }
+    let(:e3_e4_e5_g7) do
+      [A.notation_index('e3'), A.notation_index('e4'),
+       A.notation_index('e5'), A.notation_index('g7')]
+    end
+
+    it { expect(A.index_array('a5 d6 b8'))   .to contain_exactly(*a5_d6_b8) }
+    it { expect(A.index_array('f3 g5 a2'))   .to contain_exactly(*f3_g5_a2) }
+    it { expect(A.index_array('b6 c3 a1'))   .to contain_exactly(*b6_c3_a1) }
+    it { expect(A.index_array('h2 h1'))      .to contain_exactly(*h2_h1) }
+    it { expect(A.index_array('e3 e4 e5 g7')).to contain_exactly(*e3_e4_e5_g7) }
+  end
 end
